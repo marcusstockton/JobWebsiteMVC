@@ -55,7 +55,7 @@ namespace JobWebsiteMVC.Controllers
         public IActionResult Create()
         {
             var job = new JobCreateViewModel();
-            ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description }).ToList();
+            ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
             return View(job);
         }
 
@@ -100,12 +100,17 @@ namespace JobWebsiteMVC.Controllers
                 .Include(x => x.Job_JobBenefits)
                 .ThenInclude(x=>x.JobBenefit)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (job == null)
             {
                 return NotFound();
             }
-            return View(job);
+
+            var jobVM = _mapper.Map<JobEditViewModel>(job);
+            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s=>s.JobBenefitId).ToList();
+            
+            ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
+            return View(jobVM);
         }
 
         // POST: Jobs/Edit/5

@@ -14,6 +14,7 @@ namespace JobWebsiteMVC.Profiles
         {
             CreateMap<Job, JobCreateViewModel>().ReverseMap();
             CreateMap<Job, JobDetailsViewModel>().ReverseMap();
+            CreateMap<Job, JobEditViewModel>().ReverseMap();
         }
     }
 }
