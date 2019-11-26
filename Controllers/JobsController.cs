@@ -108,7 +108,7 @@ namespace JobWebsiteMVC.Controllers
 
             var jobVM = _mapper.Map<JobEditViewModel>(job);
             jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s=>s.JobBenefitId).ToList();
-            
+
             ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
             return View(jobVM);
         }
@@ -118,9 +118,9 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive")] Job job)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive,JobBenefitsIds")] JobEditViewModel jobVM)
         {
-            if (id != job.Id)
+            if (id != jobVM.Id)
             {
                 return NotFound();
             }
@@ -129,13 +129,35 @@ namespace JobWebsiteMVC.Controllers
             {
                 try
                 {
-                    job.UpdatedDate = DateTime.Now;
-                    _context.Update(job);
-                    await _context.SaveChangesAsync();
+                    var jobToUpdate = await _context.Jobs
+                                    .Include(x => x.Job_JobBenefits)
+                                    .ThenInclude(x=>x.JobBenefit)
+                                    .FirstOrDefaultAsync(m => m.Id == id);
+
+                    if(await TryUpdateModelAsync<Job>(jobToUpdate, "", 
+                        x=>x.MaxSalary, 
+                        x=>x.MinSalary, 
+                        x=>x.PublishDate, 
+                        x=>x.Title, 
+                        x=>x.WorkingHoursEnd, 
+                        x=>x.WorkingHoursStart, 
+                        x=>x.Description, 
+                        x=>x.HolidayEntitlement,
+                        x=>x.HoursPerWeek,
+                        x=>x.IsActive,
+                        x=>x.IsDraft,
+                        x=>x.ClosingDate))
+                    {
+                        jobToUpdate.UpdatedDate = DateTime.Now;
+                        UpdateJobBenefits(jobVM.JobBenefitsIds, jobToUpdate);
+
+                        _context.Update(jobToUpdate);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!JobExists(job.Id))
+                    if (!JobExists(jobVM.Id))
                     {
                         return NotFound();
                     }
@@ -146,7 +168,20 @@ namespace JobWebsiteMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(job);
+            return View(jobVM);
+        }
+
+        private void UpdateJobBenefits(List<Guid> jobBenefitsIds, Job jobToUpdate)
+        {
+            var tagLinksToDelete =
+                _context.Job_JobBenefits.Where(x => !jobBenefitsIds.Contains(x.JobBenefitId) && x.JobId == jobToUpdate.Id).ToList();
+
+            var tagLinksToAdd = jobBenefitsIds
+                .Where(x => !_context.Job_JobBenefits.Any(y => y.JobBenefitId == x && y.JobId == jobToUpdate.Id))
+                .Select(z => new Job_JobBenefit {JobId = jobToUpdate.Id, JobBenefitId = z}).ToList();
+
+            tagLinksToDelete.ForEach(x => _context.Job_JobBenefits.Remove(x));
+            tagLinksToAdd.ForEach(x => _context.Job_JobBenefits.Add(x));
         }
 
         // GET: Jobs/Delete/5
