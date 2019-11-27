@@ -23,11 +23,11 @@ namespace JobWebsiteMVC.Data.Migrations
             //    name: "JobBenefitsId",
             //    table: "Job_JobBenefits");
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "JobBenefitId",
-                table: "Job_JobBenefits",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+            // migrationBuilder.AddColumn<Guid>(
+            //     name: "JobBenefitId",
+            //     table: "Job_JobBenefits",
+            //     nullable: false,
+            //     defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
             //migrationBuilder.AddPrimaryKey(
             //    name: "PK_Job_JobBenefits",

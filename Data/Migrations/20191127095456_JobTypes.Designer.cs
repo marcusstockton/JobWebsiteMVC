@@ -3,14 +3,16 @@ using System;
 using JobWebsiteMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JobWebsiteMVC.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191127095456_JobTypes")]
+    partial class JobTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,12 +123,6 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.Property<bool>("IsDraft")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("JobTypeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("JobTypeId1")
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("MaxSalary")
                         .HasColumnType("TEXT");
 
@@ -154,10 +150,6 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedById");
-
-                    b.HasIndex("JobTypeId");
-
-                    b.HasIndex("JobTypeId1");
 
                     b.HasIndex("UpdatedById");
 
@@ -379,16 +371,6 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById");
-
-                    b.HasOne("JobWebsiteMVC.Models.Job.JobType", "JobType")
-                        .WithMany()
-                        .HasForeignKey("JobTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobWebsiteMVC.Models.Job.JobType", null)
-                        .WithMany()
-                        .HasForeignKey("JobTypeId1");
 
                     b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "UpdatedBy")
                         .WithMany()

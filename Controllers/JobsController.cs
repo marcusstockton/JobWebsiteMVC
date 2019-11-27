@@ -56,6 +56,15 @@ namespace JobWebsiteMVC.Controllers
         {
             var job = new JobCreateViewModel();
             ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
+            job.JobTypesList =  _context.JobTypes.AsNoTracking()
+                    .OrderBy(n => n.Description)
+                        .Select(n =>
+                        new SelectListItem
+                        {
+                            Value = n.Id.ToString(),
+                            Text = n.Description
+                        }).ToList();
+                        
             return View(job);
         }
 
@@ -77,10 +86,10 @@ namespace JobWebsiteMVC.Controllers
                 {
                     jjb.Add(new Job_JobBenefit { JobId = job.Id, JobBenefitId = item });
                 }
-
-                _context.Add(job);
-                _context.AddRange(jjb);
-
+                job.Job_JobBenefits = jjb;
+                await _context.AddRangeAsync(jjb);
+                await _context.AddAsync(job);
+                
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JobWebsiteMVC.Models.Job
 {
@@ -26,5 +27,10 @@ namespace JobWebsiteMVC.Models.Job
         public DateTime PublishDate { get; set; }
 
         public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
+
+        public Guid JobTypeId { get; set; }
+
+        [ForeignKey("JobTypeId")]
+        public virtual JobType JobType{get;set;}
     }
 }

@@ -97,14 +97,14 @@ namespace JobWebsiteMVC.Data.Migrations
                 columns: table => new
                 {
                     JobId = table.Column<Guid>(nullable: false),
-                    JobBenefitsId = table.Column<Guid>(nullable: false)
+                    JobBenefitId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Job_JobBenefits", x => new { x.JobId, x.JobBenefitsId });
+                    table.PrimaryKey("PK_Job_JobBenefits", x => new { x.JobId, x.JobBenefitId });
                     table.ForeignKey(
-                        name: "FK_Job_JobBenefits_JobBenefits_JobBenefitsId",
-                        column: x => x.JobBenefitsId,
+                        name: "FK_Job_JobBenefits_JobBenefits_JobBenefitId",
+                        column: x => x.JobBenefitId,
                         principalTable: "JobBenefits",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -117,9 +117,9 @@ namespace JobWebsiteMVC.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Job_JobBenefits_JobBenefitsId",
+                name: "IX_Job_JobBenefits_JobBenefitId",
                 table: "Job_JobBenefits",
-                column: "JobBenefitsId");
+                column: "JobBenefitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobBenefits_CreatedById",

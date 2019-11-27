@@ -1,4 +1,5 @@
 ﻿using JobWebsiteMVC.Models.Job;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,6 +34,13 @@ namespace JobWebsiteMVC.ViewModels.Job
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime PublishDate { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
+        [Display(Name="Job Benefits")]
         public virtual List<Guid> JobBenefitsIds { get; set; }
+
+        [Display(Name="Job Type")]
+        public Guid JobTypeId { get; set; }
+        public virtual List<SelectListItem> JobTypesList{get;set;}
     }
 }

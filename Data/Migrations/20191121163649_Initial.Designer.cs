@@ -194,12 +194,12 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.Property<Guid>("JobId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("JobBenefitsId")
+                    b.Property<Guid>("JobBenefitId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("JobId", "JobBenefitsId");
+                    b.HasKey("JobId", "JobBenefitId");
 
-                    b.HasIndex("JobBenefitsId");
+                    b.HasIndex("JobBenefitId");
 
                     b.ToTable("Job_JobBenefits");
                 });
@@ -358,7 +358,7 @@ namespace JobWebsiteMVC.Data.Migrations
                 {
                     b.HasOne("JobWebsiteMVC.Models.Job.JobBenefit", "JobBenefits")
                         .WithMany("Job_JobBenefits")
-                        .HasForeignKey("JobBenefitsId")
+                        .HasForeignKey("JobBenefitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
