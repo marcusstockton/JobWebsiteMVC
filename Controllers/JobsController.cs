@@ -111,6 +111,7 @@ namespace JobWebsiteMVC.Controllers
              var job = await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
                 .ThenInclude(x=>x.JobBenefit)
+                .Include(x=>x.JobType)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (job == null)
@@ -120,6 +121,7 @@ namespace JobWebsiteMVC.Controllers
 
             var jobVM = _mapper.Map<JobEditViewModel>(job);
             jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s=>s.JobBenefitId).ToList();
+            jobVM.JobTypesList = _context.JobTypes.Select(x=> new SelectListItem{Text = x.Description, Value = x.Id.ToString()}).ToList();
 
             ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
             return View(jobVM);
@@ -130,7 +132,7 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive,JobBenefitsIds")] JobEditViewModel jobVM)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive,JobBenefitsIds,JobTypeId")] JobEditViewModel jobVM)
         {
             if (id != jobVM.Id)
             {
@@ -158,6 +160,7 @@ namespace JobWebsiteMVC.Controllers
                         x=>x.HoursPerWeek,
                         x=>x.IsActive,
                         x=>x.IsDraft,
+                        x=>x.JobTypeId,
                         x=>x.ClosingDate))
                     {
                         jobToUpdate.UpdatedDate = DateTime.Now;
