@@ -26,7 +26,9 @@ namespace JobWebsiteMVC.Controllers
         // GET: Jobs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Jobs.ToListAsync());
+            return View(await _context.Jobs
+                .Include(x=>x.JobType)
+                .ToListAsync());
         }
 
         // GET: Jobs/Details/5
@@ -40,6 +42,7 @@ namespace JobWebsiteMVC.Controllers
             var job = await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
                 .ThenInclude(x=>x.JobBenefit)
+                .Include(x=>x.JobType)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (job == null)

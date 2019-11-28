@@ -44,5 +44,8 @@ namespace JobWebsiteMVC.ViewModels.Job
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? UpdatedDate { get; set; }
+
+        [Display(Name="Job Type")]
+        public virtual JobType JobType{get;set;}
     }
 }
