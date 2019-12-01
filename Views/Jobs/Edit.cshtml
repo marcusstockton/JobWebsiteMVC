@@ -3,103 +3,103 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<div class="container">
+    <h1>Edit</h1>
 
-<h1>Edit</h1>
+    <h4>Job</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h4>Job</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CreatedDate"/>
+                <input type="hidden" asp-for="UpdatedDate"/>
 
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedDate"/>
-            <input type="hidden" asp-for="UpdatedDate"/>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MinSalary" class="control-label"></label>
+                    <input asp-for="MinSalary" class="form-control" />
+                    <span asp-validation-for="MinSalary" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MaxSalary" class="control-label"></label>
+                    <input asp-for="MaxSalary" class="form-control" />
+                    <span asp-validation-for="MaxSalary" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WorkingHoursStart" class="control-label"></label>
+                    <input asp-for="WorkingHoursStart" class="form-control" />
+                    <span asp-validation-for="WorkingHoursStart" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WorkingHoursEnd" class="control-label"></label>
+                    <input asp-for="WorkingHoursEnd" class="form-control" />
+                    <span asp-validation-for="WorkingHoursEnd" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HoursPerWeek" class="control-label"></label>
+                    <input asp-for="HoursPerWeek" class="form-control" />
+                    <span asp-validation-for="HoursPerWeek" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HolidayEntitlement" class="control-label"></label>
+                    <input asp-for="HolidayEntitlement" class="form-control" />
+                    <span asp-validation-for="HolidayEntitlement" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ClosingDate" class="control-label"></label>
+                    <input asp-for="ClosingDate" class="form-control" />
+                    <span asp-validation-for="ClosingDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PublishDate" class="control-label"></label>
+                    <input asp-for="PublishDate" class="form-control" />
+                    <span asp-validation-for="PublishDate" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="JobBenefitsIds"></label>
+                    <select asp-for="JobBenefitsIds" asp-items="ViewBag.JobBenefits" class="form-control" multiple="multiple">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="JobTypeId"></label>
+                    <select asp-for="JobTypeId" asp-items="Model.JobTypesList" class="form-control">
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="MinSalary" class="control-label"></label>
-                <input asp-for="MinSalary" class="form-control" />
-                <span asp-validation-for="MinSalary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxSalary" class="control-label"></label>
-                <input asp-for="MaxSalary" class="form-control" />
-                <span asp-validation-for="MaxSalary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WorkingHoursStart" class="control-label"></label>
-                <input asp-for="WorkingHoursStart" class="form-control" />
-                <span asp-validation-for="WorkingHoursStart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WorkingHoursEnd" class="control-label"></label>
-                <input asp-for="WorkingHoursEnd" class="form-control" />
-                <span asp-validation-for="WorkingHoursEnd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HoursPerWeek" class="control-label"></label>
-                <input asp-for="HoursPerWeek" class="form-control" />
-                <span asp-validation-for="HoursPerWeek" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HolidayEntitlement" class="control-label"></label>
-                <input asp-for="HolidayEntitlement" class="form-control" />
-                <span asp-validation-for="HolidayEntitlement" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClosingDate" class="control-label"></label>
-                <input asp-for="ClosingDate" class="form-control" />
-                <span asp-validation-for="ClosingDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PublishDate" class="control-label"></label>
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="JobBenefitsIds"></label>
-                <select asp-for="JobBenefitsIds" asp-items="ViewBag.JobBenefits" class="form-control" multiple="multiple">
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="JobTypeId"></label>
-                <select asp-for="JobTypeId" asp-items="Model.JobTypesList" class="form-control">
-                </select>
-            </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

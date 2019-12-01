@@ -26,9 +26,13 @@ namespace JobWebsiteMVC.Controllers
         // GET: Jobs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Jobs
+            var jobList = await _context.Jobs
                 .Include(x=>x.JobType)
-                .ToListAsync());
+                .ToListAsync();
+
+            var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
+
+            return View(jobs);
         }
 
         // GET: Jobs/Details/5

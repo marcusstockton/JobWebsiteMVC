@@ -1,4 +1,4 @@
-﻿@model IEnumerable<JobWebsiteMVC.Models.Job.Job>
+﻿@model IEnumerable<JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,9 +7,10 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
 </p>
-<table class="table">
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -61,13 +62,14 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) 
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.DescriptionShort)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsDraft)
@@ -108,12 +110,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.JobType.Description)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td width="1%">
+                <a asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fas fa-edit"></i> </a>
+            </td>
+            <td width="1%">
+                <a asp-action="Details" asp-route-id="@item.Id" title="Details"><i class="fas fa-info-circle"></i> </a>
+            </td>
+            <td width="1%">
+                <a asp-action="Delete" asp-route-id="@item.Id" title="Delete"><i class="fas fa-trash-alt"></i> </a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
