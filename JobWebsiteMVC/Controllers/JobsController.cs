@@ -47,6 +47,7 @@ namespace JobWebsiteMVC.Controllers
                 .Include(x => x.Job_JobBenefits)
                 .ThenInclude(x=>x.JobBenefit)
                 .Include(x=>x.JobType)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (job == null)
@@ -110,9 +111,7 @@ namespace JobWebsiteMVC.Controllers
             {
                 return NotFound();
             }
-
-            // var job = await _context.Jobs.FindAsync(id);
-             var job = await _context.Jobs
+            var job = await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
                 .ThenInclude(x=>x.JobBenefit)
                 .Include(x=>x.JobType)

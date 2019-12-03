@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using JobWebsiteMVC.Models;
 using AutoMapper;
 using JobWebsiteMVC.Profiles;
+using JobWebsiteMVC.Interfaces;
+using JobWebsiteMVC.Services;
 
 namespace JobWebsiteMVC
 {
@@ -43,6 +45,9 @@ namespace JobWebsiteMVC
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            // Register DI
+            services.AddTransient<IJobService, JobService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
