@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JobWebsiteMVC.Models
 {
@@ -15,5 +15,10 @@ namespace JobWebsiteMVC.Models
 
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
+
+        public Guid UserTypeId { get; set; }
+
+        [ForeignKey("UserTypeId")]
+        public virtual UserType UserType { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace JobWebsiteMVC.Data
             : base(options)
         {
         }
-
+        public DbSet<UserType> UserTypes { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobBenefit> JobBenefits { get; set; }
         public DbSet<Job_JobBenefit> Job_JobBenefits { get; set; }
@@ -21,7 +21,13 @@ namespace JobWebsiteMVC.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Job>().HasKey(x => x.Id);
+            builder.Entity<UserType>()
+                .HasMany<ApplicationUser>()
+                .WithOne(x=>x.UserType)
+                .HasForeignKey(x=>x.UserTypeId);
+
+            builder.Entity<Job>()
+                .HasKey(x => x.Id);
 
             builder.Entity<Job>()
                 .HasOne<JobType>()
@@ -39,7 +45,5 @@ namespace JobWebsiteMVC.Data
                     .WithMany(c => c.Job_JobBenefits)
                     .HasForeignKey(bc => bc.JobBenefitId);
         }
-
-        public DbSet<JobWebsiteMVC.Models.Job.JobType> JobType { get; set; }
     }
 }

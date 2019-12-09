@@ -11,12 +11,12 @@ namespace JobWebsiteMVC.Models.Job
         public string Description { get; set; }
 
         public bool IsDraft { get; set; }
-        public decimal MinSalary { get; set; }
-        public decimal MaxSalary { get; set; }
-        public TimeSpan WorkingHoursStart { get; set; }
-        public TimeSpan WorkingHoursEnd { get; set; }
-        public decimal HoursPerWeek { get; set; }
-        public decimal HolidayEntitlement { get; set; }
+        public decimal? MinSalary { get; set; }
+        public decimal? MaxSalary { get; set; }
+        public TimeSpan? WorkingHoursStart { get; set; }
+        public TimeSpan? WorkingHoursEnd { get; set; }
+        public decimal? HoursPerWeek { get; set; }
+        public decimal? HolidayEntitlement { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]

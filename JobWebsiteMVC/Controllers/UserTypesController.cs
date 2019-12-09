@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,26 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JobWebsiteMVC.Data;
-using JobWebsiteMVC.Models.Job;
+using JobWebsiteMVC.Models;
 
 namespace JobWebsiteMVC.Controllers
 {
-    public class JobTypesController : Controller
+    public class UserTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public JobTypesController(ApplicationDbContext context)
+        public UserTypesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: JobTypes
+        // GET: UserTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.JobTypes.ToListAsync());
+            return View(await _context.UserTypes.ToListAsync());
         }
 
-        // GET: JobTypes/Details/5
+        // GET: UserTypes/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -33,41 +33,40 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobType = await _context.JobTypes
+            var userType = await _context.UserTypes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (jobType == null)
+            if (userType == null)
             {
                 return NotFound();
             }
 
-            return View(jobType);
+            return View(userType);
         }
 
-        // GET: JobTypes/Create
+        // GET: UserTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: JobTypes/Create
+        // POST: UserTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] JobType jobType)
+        public async Task<IActionResult> Create([Bind("Id,Description")] UserType userType)
         {
             if (ModelState.IsValid)
             {
-                jobType.Id = Guid.NewGuid();
-                jobType.CreatedDate = DateTime.Now;
-                _context.Add(jobType);
+                userType.Id = Guid.NewGuid();
+                _context.Add(userType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(jobType);
+            return View(userType);
         }
 
-        // GET: JobTypes/Edit/5
+        // GET: UserTypes/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -75,22 +74,22 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobType = await _context.JobTypes.FindAsync(id);
-            if (jobType == null)
+            var userType = await _context.UserTypes.FindAsync(id);
+            if (userType == null)
             {
                 return NotFound();
             }
-            return View(jobType);
+            return View(userType);
         }
 
-        // POST: JobTypes/Edit/5
+        // POST: UserTypes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] JobType jobType)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Description")] UserType userType)
         {
-            if (id != jobType.Id)
+            if (id != userType.Id)
             {
                 return NotFound();
             }
@@ -99,13 +98,12 @@ namespace JobWebsiteMVC.Controllers
             {
                 try
                 {
-                    jobType.UpdatedDate = DateTime.Now;
-                    _context.Update(jobType);
+                    _context.Update(userType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!JobTypeExists(jobType.Id))
+                    if (!UserTypeExists(userType.Id))
                     {
                         return NotFound();
                     }
@@ -116,10 +114,10 @@ namespace JobWebsiteMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(jobType);
+            return View(userType);
         }
 
-        // GET: JobTypes/Delete/5
+        // GET: UserTypes/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -127,30 +125,30 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobType = await _context.JobTypes
+            var userType = await _context.UserTypes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (jobType == null)
+            if (userType == null)
             {
                 return NotFound();
             }
 
-            return View(jobType);
+            return View(userType);
         }
 
-        // POST: JobTypes/Delete/5
+        // POST: UserTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var jobType = await _context.JobTypes.FindAsync(id);
-            _context.JobTypes.Remove(jobType);
+            var userType = await _context.UserTypes.FindAsync(id);
+            _context.UserTypes.Remove(userType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool JobTypeExists(Guid id)
+        private bool UserTypeExists(Guid id)
         {
-            return _context.JobTypes.Any(e => e.Id == id);
+            return _context.UserTypes.Any(e => e.Id == id);
         }
     }
 }

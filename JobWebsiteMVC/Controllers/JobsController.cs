@@ -28,7 +28,6 @@ namespace JobWebsiteMVC.Controllers
         {
             var jobList = await _context.Jobs
                 .Include(x=>x.JobType)
-                .Where(x=>x.PublishDate <= DateTime.Now && x.ClosingDate <= DateTime.Now && !x.IsDraft)
                 .ToListAsync();
 
             var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
