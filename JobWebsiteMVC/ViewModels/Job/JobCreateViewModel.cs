@@ -21,24 +21,24 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name="Draft?")]
         public bool IsDraft { get; set; }
 
-        [Display(Name="Min Salary")]
+        [Display(Name="Min Salary"), Required]
         public decimal MinSalary { get; set; }
 
-        [Display(Name="Max Salary")]
+        [Display(Name="Max Salary"), Required]
         public decimal MaxSalary { get; set; }
 
-        [Display(Name="Start Time")]
+        [Display(Name="Start Time"), Required]
         [DataType(DataType.Time)]
         public TimeSpan WorkingHoursStart { get; set; }
 
-        [Display(Name="End Time")]
+        [Display(Name="End Time"), Required]
         [DataType(DataType.Time)]
         public TimeSpan WorkingHoursEnd { get; set; }
 
-        [Display(Name="Hours Per Week")]
+        [Display(Name="Hours Per Week"), Required]
         public decimal HoursPerWeek { get; set; }
 
-        [Display(Name="Holiday Entitlement")]
+        [Display(Name="Holiday Entitlement"), Required]
         public decimal HolidayEntitlement { get; set; }
 
         [Display(Name="Is Active")]
@@ -49,7 +49,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ClosingDate { get; set; }
 
-        [Display(Name="Publish Date")]
+        [Display(Name="Publish Date"), Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime PublishDate { get; set; }

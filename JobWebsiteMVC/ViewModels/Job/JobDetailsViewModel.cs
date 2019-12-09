@@ -15,7 +15,14 @@ namespace JobWebsiteMVC.ViewModels.Job
 
         public string DescriptionShort
         {
-            get { return Description.Substring(0,100) + "..." ; }
+            get { 
+                if(Description.Length > 100)
+                {
+                    return Description.Substring( 0, 100 ) + "...";
+                }
+                return Description;
+            }
+                
         }
 
         [Display(Name="Draft?")]

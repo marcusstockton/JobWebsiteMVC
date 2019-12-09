@@ -28,6 +28,7 @@ namespace JobWebsiteMVC.Controllers
         {
             var jobList = await _context.Jobs
                 .Include(x=>x.JobType)
+                .Where(x=>x.PublishDate <= DateTime.Now && x.ClosingDate <= DateTime.Now && !x.IsDraft)
                 .ToListAsync();
 
             var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
@@ -89,13 +90,8 @@ namespace JobWebsiteMVC.Controllers
                 job.Id = Guid.NewGuid();
                 job.CreatedDate = DateTime.Now;
 
-                var jjb = new List<Job_JobBenefit>();
-                foreach (var item in jobVM.JobBenefitsIds)
-                {
-                    jjb.Add(new Job_JobBenefit { JobId = job.Id, JobBenefitId = item });
-                }
-                job.Job_JobBenefits = jjb;
-                await _context.AddRangeAsync(jjb);
+                UpdateJobBenefits( jobVM.JobBenefitsIds, job );
+
                 await _context.AddAsync(job);
                 
                 await _context.SaveChangesAsync();
