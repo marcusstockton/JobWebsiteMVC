@@ -17,6 +17,7 @@ using AutoMapper;
 using JobWebsiteMVC.Profiles;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace JobWebsiteMVC
 {
@@ -48,6 +49,7 @@ namespace JobWebsiteMVC
 
             // Register DI
             services.AddTransient<IJobService, JobService>();
+            services.AddTransient<IEmailSender, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

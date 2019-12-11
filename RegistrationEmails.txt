@@ -1,0 +1,10 @@
+pasahyra@getnada.com
+test@blah.com
+Confirm your email
+Please confirm your account by <a href='https://localhost:5001/Identity/Account/ConfirmEmail?userId=04a8d60d-6c42-4a1c-b685-10a7f840ca0b&amp;code=Q2ZESjhJY0VpVEFtTU1SSmpUYnQ2WU1uOEVDQi82cjBKQ1ZpZGIwNTZrcHFRMDhsZ1Q1b2hqTXZQZW14dm1BQ1V4SjdCVWhVMEFUbjRBaVVsRHdlaWpzd3ZnMmdWNU5kL2hHZjBDcmx6SERUWWN3dnhPL2VuTmdoYlk5U25sZG94VTQrRkZyZXBwOWJrUEthbUZwbnJsTTB5SXd1dUY4UWRGYnl4UVEvb3ZVZmRGaTBvMVhRVnBiWkJzVDR3c3VhUGxXY3FYdXV6ZHZNUlJRRnQ0T1d5NGg4NmNFTjFKQk0zMkNCbHFIUDBjNXlSZDZUL1RqRUxQbWU4TFdWZW5DN2g0bmxFUT09'>clicking here</a>.
+=====================================================
+To: 
+From: 
+Subject: 
+Please confirm your account by <a href='https://localhost:5001/Identity/Account/ConfirmEmail?userId=e302c60a-d355-402e-8e84-0e645e88ab5d&amp;code=Q2ZESjhJY0VpVEFtTU1SSmpUYnQ2WU1uOEVCZGhmZGZ2a2YyTkZrMnJKdHVxVVhoYXl6NEZ5bzJzV3BuaEpxMHQzbHN2L2pQTTRWVTl0dGJWdFM2QW9MUlpHeHVydko1eUFSWHpBd25GVEdXUEowOVBVMG5QcndrQTlHT3pvZndoNzU0eFgwUUtPRmZrZVRoOHVieitKaytJd2hGSzYzSk9hR3B0am9uTkJJUEpzYUM2UFNBaGZuR3dnQ1lSSCtGYVRDVTNVeEdpeXpBM3lDQlIrMWJaS2JobVlmNEhHbVM5bDNuRk9WQnFYT0d0Q0Z2S0dOaXVIVFRhaDFUcWtzNnpZNjFGUT09'>clicking here</a>.
+
