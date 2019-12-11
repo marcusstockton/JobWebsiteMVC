@@ -9,6 +9,7 @@ using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.ViewModels.Job;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 namespace JobWebsiteMVC.Controllers
 {
@@ -16,11 +17,13 @@ namespace JobWebsiteMVC.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<JobsController> _logger;
 
-        public JobsController(ApplicationDbContext context, IMapper mapper)
+        public JobsController(ApplicationDbContext context, IMapper mapper, ILogger<JobsController> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
         // GET: Jobs
@@ -28,10 +31,11 @@ namespace JobWebsiteMVC.Controllers
         {
             var jobList = await _context.Jobs
                 .Include(x=>x.JobType)
+                .AsNoTracking()
                 .ToListAsync();
 
             var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
-
+            _logger.LogInformation($"Found {jobList.Count} jobs");
             return View(jobs);
         }
 
@@ -52,6 +56,7 @@ namespace JobWebsiteMVC.Controllers
 
             if (job == null)
             {
+                _logger.LogError($"No Job Found with an Id of {id}");
                 return NotFound();
             }
 
@@ -114,6 +119,7 @@ namespace JobWebsiteMVC.Controllers
 
             if (job == null)
             {
+                _logger.LogError($"No Job Found with an Id of {id}");
                 return NotFound();
             }
 

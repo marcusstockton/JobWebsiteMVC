@@ -53,12 +53,12 @@ namespace JobWebsiteMVC.ViewModels.Job
 
         [Display(Name="Closing Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime ClosingDate { get; set; }
 
         [Display(Name="Publish Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime PublishDate { get; set; }
 
         [Display(Name="Job Benefits")]
@@ -66,12 +66,12 @@ namespace JobWebsiteMVC.ViewModels.Job
 
         [Display(Name="Created Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime CreatedDate { get; set; }
 
         [Display(Name="Updated Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? UpdatedDate { get; set; }
 
         [Display(Name="Job Type")]
