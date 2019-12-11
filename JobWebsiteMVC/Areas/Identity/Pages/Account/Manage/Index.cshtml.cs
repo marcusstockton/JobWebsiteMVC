@@ -36,6 +36,12 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public string LastName{get;set;}
+            public string FirstName { get; set; }
+
+            [DataType(DataType.Date), Display(Name="Date Of Birth")]
+            public DateTime? DateOfBirth { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -47,7 +53,10 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                LastName = user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                FirstName = user.FirstName,
             };
         }
 
@@ -75,6 +84,22 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
                 return Page();
+            }
+
+            if (user.LastName != Input.LastName)
+            {
+                user.LastName = Input.LastName;
+                await _userManager.UpdateAsync(user);
+            }
+            if (user.FirstName != Input.FirstName)
+            {
+                user.FirstName = Input.FirstName;
+                await _userManager.UpdateAsync(user);
+            }
+            if (user.DateOfBirth != Input.DateOfBirth)
+            {
+                user.DateOfBirth = Input.DateOfBirth;
+                await _userManager.UpdateAsync(user);
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);

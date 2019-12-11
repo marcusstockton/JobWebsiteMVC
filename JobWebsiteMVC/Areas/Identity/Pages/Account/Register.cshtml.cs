@@ -69,6 +69,14 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            public DateTime? DateOfBirth { get; set; }
+
+            [Display(Name="First Name")]
+            public string FirstName { get; set; }
+
+            [Display(Name="Last Name")]
+            public string LastName { get; set; }
+
             [Display(Name = "Account Type")]
             public Guid UserTypeId { get; set; }
 
@@ -88,7 +96,16 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, UserTypeId = Input.UserTypeId };
+                var user = new ApplicationUser 
+                { 
+                    UserName = Input.Email, 
+                    Email = Input.Email, 
+                    UserTypeId = Input.UserTypeId, 
+                    DateOfBirth = Input.DateOfBirth, 
+                    FirstName = Input.FirstName, 
+                    LastName = Input.LastName 
+                };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
