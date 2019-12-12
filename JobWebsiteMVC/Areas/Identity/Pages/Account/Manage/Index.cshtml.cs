@@ -68,8 +68,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 FirstName = user.FirstName,
-                ImageUrl = "~" + user.Attachments.Select(x=>x.Location).FirstOrDefault().Split("wwwroot").Last().Replace(@"\","/"),
-                // pPath.Replace(@"q:\quotewerks","~").Replace(@"\","/");
+                ImageUrl = user.Attachments.Select(x=>x.Location).FirstOrDefault(),
             };
         }
 
@@ -111,7 +110,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
                             user.Attachments.Add(new Attachment{
                                 CreatedDate = DateTime.Now,
                                 FileName = file.FileName,
-                                Location = filePath,
+                                Location = "~/" + filePath.Split("wwwroot").Last().Replace(@"\","/"),
                                 FileType = file.FileName.Split('.').Last(),
                                 IsActive = true
                             });
