@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,5 +21,7 @@ namespace JobWebsiteMVC.Models
 
         [ForeignKey("UserTypeId")]
         public virtual UserType UserType { get; set; }
+
+        public virtual ICollection<Attachment> Attachments { get; set; }
     }
 }

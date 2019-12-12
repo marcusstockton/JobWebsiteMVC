@@ -16,6 +16,7 @@ namespace JobWebsiteMVC.Data
         public DbSet<JobBenefit> JobBenefits { get; set; }
         public DbSet<Job_JobBenefit> Job_JobBenefits { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -32,6 +33,11 @@ namespace JobWebsiteMVC.Data
             builder.Entity<Job>()
                 .HasOne<JobType>()
                 .WithMany();
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(c => c.Attachments)
+                .WithOne(e => e.User)
+                .HasForeignKey(x=>x.UserId);
 
             builder.Entity<Job_JobBenefit>().HasKey(bc => new { bc.JobId, bc.JobBenefitId });
 

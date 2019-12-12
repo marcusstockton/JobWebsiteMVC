@@ -18,6 +18,9 @@ using JobWebsiteMVC.Profiles;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace JobWebsiteMVC
 {
@@ -68,6 +71,12 @@ namespace JobWebsiteMVC
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads")),
+                RequestPath = "/Uploads"
+            });
 
             app.UseRouting();
 
