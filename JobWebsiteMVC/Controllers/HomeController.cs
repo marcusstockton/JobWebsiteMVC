@@ -32,12 +32,36 @@ namespace JobWebsiteMVC.Controllers
                 FutureJobs = _context.Jobs.Where(x=>x.PublishDate > DateTime.Now).Count(),
                 ClosedJobs = _context.Jobs.Where(x=>x.ClosingDate <= DateTime.Now).Count(),
                 JobSeekingUserCount = _context.Users.Where(x=>x.UserType.Description == "Job Seeker").Count(),
-                EmployerCount = _context.Users.Where(x=>x.UserType.Description == "Employer").Count()
+                EmployerCount = _context.Users.Where(x=>x.UserType.Description == "Employer").Count(),
             };
 
             return View(result);
         }
+        public IActionResult JobsCreatedInLastMonth(){
+            var today = DateTime.Now;
+            var start = today.AddMonths(-1);
+            var end = today;
+            var yearArray = Enumerable.Range(0, 1 + end.Subtract(start).Days)
+                                        .Select(offset => start.AddDays(offset))
+                                        .ToArray(); 
 
+            var jobCreatedByDateList = _context.Jobs
+                .GroupBy(y=>y.CreatedDate.Date)
+                .Select(x=> new {Date = x.Key, Count = x.Count()})
+                .ToList();
+
+            var jobCreatedByDate = new List<Tuple<string, int>>();
+            foreach(var day in yearArray){
+                foreach(var user in jobCreatedByDateList){
+                    if (user.Date == day.Date){
+                        jobCreatedByDate.Add(new Tuple<string, int>(day.ToString("dd MMM yy"), user.Count));
+                    }else{
+                        jobCreatedByDate.Add(new Tuple<string, int>(day.ToString("dd MMM yy"), 0));
+                    }
+                }
+            }
+            return Json(jobCreatedByDate);
+        }
         public IActionResult Privacy()
         {
             return View();
