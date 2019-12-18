@@ -93,9 +93,12 @@ namespace JobWebsiteMVC.Controllers
                 var job = _mapper.Map<Job>(jobVM);
                 job.Id = Guid.NewGuid();
                 job.CreatedDate = DateTime.Now;
-
-                UpdateJobBenefits( jobVM.JobBenefitsIds, job );
-
+                
+                if(jobVM.JobBenefitsIds.Any())
+                {
+                    UpdateJobBenefits( jobVM.JobBenefitsIds, job );
+                }
+                
                 await _context.AddAsync(job);
                 
                 await _context.SaveChangesAsync();
