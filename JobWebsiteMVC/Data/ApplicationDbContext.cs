@@ -17,7 +17,8 @@ namespace JobWebsiteMVC.Data
         public DbSet<Job_JobBenefit> Job_JobBenefits { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
-
+        public DbSet<JobApplication> JobApplications { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

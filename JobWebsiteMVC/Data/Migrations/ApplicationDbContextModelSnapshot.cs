@@ -213,6 +213,46 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.ToTable("Jobs");
                 });
 
+            modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ApplicantId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedById")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicantId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("JobApplications");
+                });
+
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobBenefit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -477,6 +517,27 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.HasOne("JobWebsiteMVC.Models.Job.JobType", null)
                         .WithMany()
                         .HasForeignKey("JobTypeId1");
+
+                    b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById");
+                });
+
+            modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobApplication", b =>
+                {
+                    b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "Applicant")
+                        .WithMany()
+                        .HasForeignKey("ApplicantId");
+
+                    b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("JobWebsiteMVC.Models.Job.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "UpdatedBy")
                         .WithMany()

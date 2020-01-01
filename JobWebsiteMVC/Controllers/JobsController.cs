@@ -10,6 +10,7 @@ using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.ViewModels.Job;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace JobWebsiteMVC.Controllers
 {
@@ -233,6 +234,44 @@ namespace JobWebsiteMVC.Controllers
             _context.Jobs.Remove(job);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> JobApplication(Guid jobId)
+        {
+            var job = await _context.Jobs.FindAsync(jobId);
+
+            // Check if its already been applied for:
+            var userid = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var jobApplication = await _context.JobApplications.SingleOrDefaultAsync(c => c.JobId == jobId && c.ApplicantId == userid);
+            if (jobApplication != null)
+            {
+                // Already applied, pass back to Details view
+                return RedirectToAction($"Details", new {id = jobId });
+            }
+            return View(job);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> JobApply(Guid jobId)
+        {
+            var job = await _context.Jobs.FindAsync(jobId);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _context.Users.FindAsync(userId);
+
+            await _context.JobApplications.AddAsync(
+                new JobApplication { 
+                    ApplicantId = userId, 
+                    CreatedBy = user, 
+                    IsActive = true, 
+                    JobId = jobId, 
+                    Job = job,
+                    CreatedDate = DateTime.Now,
+                    Applicant = user
+                });
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         private bool JobExists(Guid id)

@@ -117,6 +117,10 @@
     </div>
     <div>
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-action="JobApplication" asp-route-jobId="@Model.Id">Apply</a>
+        }
         <a asp-action="Index">Back to List</a>
     </div>
 </div>
