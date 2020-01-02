@@ -29,9 +29,11 @@ namespace JobWebsiteMVC.ViewModels.Job
         public bool IsDraft { get; set; }
 
         [Display(Name="Min Salary")]
+        [DataType(DataType.Currency)]
         public decimal MinSalary { get; set; }
 
         [Display(Name="Max Salary")]
+        [DataType(DataType.Currency)]
         public decimal MaxSalary { get; set; }
 
         [Display(Name="Start Time")]
