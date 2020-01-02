@@ -11,6 +11,7 @@ using JobWebsiteMVC.ViewModels.Job;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using JobWebsiteMVC.Extensions.Alerts;
 
 namespace JobWebsiteMVC.Controllers
 {
@@ -103,9 +104,9 @@ namespace JobWebsiteMVC.Controllers
                 await _context.AddAsync(job);
                 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job sucessfully created!");
             }
-            return View(jobVM);
+            return View(jobVM).WithDanger("Error", "Some errors occured creating the job");
         }
 
         // GET: Jobs/Edit/5
@@ -189,9 +190,9 @@ namespace JobWebsiteMVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success","Job Updated Sucessfully!");
             }
-            return View(jobVM);
+            return View(jobVM).WithDanger("Error", "Some Errors Occured");
         }
 
         private void UpdateJobBenefits(List<Guid> jobBenefitsIds, Job jobToUpdate)
@@ -233,7 +234,7 @@ namespace JobWebsiteMVC.Controllers
             var job = await _context.Jobs.FindAsync(id);
             _context.Jobs.Remove(job);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)).WithSuccess("", "Job deleted");
         }
 
         [HttpGet]
@@ -247,7 +248,7 @@ namespace JobWebsiteMVC.Controllers
             if (jobApplication != null)
             {
                 // Already applied, pass back to Details view
-                return RedirectToAction($"Details", new {id = jobId });
+                return RedirectToAction($"Details", new {id = jobId }).WithWarning("You were re-directed", "You have already applied for this job");
             }
             return View(job);
         }
