@@ -1,3 +1,8 @@
+
+Job titles, skills and related jobs data:
+https://github.com/workforce-data-initiative/skills-api/wiki/API-Overview
+
+
 Scaffold out a controller from a model:
 
 dotnet aspnet-codegenerator controller -name <Model>sController -m <Model> -dc ApplicationDbContext --relativeFolderPath Controllers --useDefaultLayout --referenceScriptLibraries
