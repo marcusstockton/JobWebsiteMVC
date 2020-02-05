@@ -36,6 +36,9 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name="Job Benefits")]
         public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
 
+        [Display(Name="Key Skills")]
+        public virtual ICollection<Job_JobSkill> Job_JobSkills { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime CreatedDate { get; set; }
@@ -44,6 +47,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? UpdatedDate { get; set; }
         public List<Guid> JobBenefitsIds { get; set; }
+        public List<Guid> JobKeySkillsIds { get; set; }
 
         [Display(Name="Job Type")]
         public Guid JobTypeId { get; set; }

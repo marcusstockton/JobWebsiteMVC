@@ -51,7 +51,9 @@ namespace JobWebsiteMVC.Controllers
 
             var job = await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
-                .ThenInclude(x=>x.JobBenefit)
+                    .ThenInclude(x=>x.JobBenefit)
+                .Include(x => x.Job_JobSkills)
+                    .ThenInclude(x=>x.JobSkill)
                 .Include(x=>x.JobType)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -71,6 +73,7 @@ namespace JobWebsiteMVC.Controllers
         {
             var job = new JobCreateViewModel();
             ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
+            ViewBag.JobSkills = _context.JobSkills.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
             job.JobTypesList =  _context.JobTypes.AsNoTracking()
                     .OrderBy(n => n.Description)
                         .Select(n =>
@@ -100,6 +103,10 @@ namespace JobWebsiteMVC.Controllers
                 {
                     UpdateJobBenefits( jobVM.JobBenefitsIds, job );
                 }
+                if(jobVM.JobSkillIds.Any())
+                {
+                    UpdateJobSkills( jobVM.JobSkillIds, job );
+                }
                 
                 await _context.AddAsync(job);
                 
@@ -118,7 +125,9 @@ namespace JobWebsiteMVC.Controllers
             }
             var job = await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
-                .ThenInclude(x=>x.JobBenefit)
+                    .ThenInclude(x=>x.JobBenefit)
+                .Include(x => x.Job_JobSkills)
+                    .ThenInclude(x=>x.JobSkill)
                 .Include(x=>x.JobType)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -130,9 +139,11 @@ namespace JobWebsiteMVC.Controllers
 
             var jobVM = _mapper.Map<JobEditViewModel>(job);
             jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s=>s.JobBenefitId).ToList();
+            jobVM.JobKeySkillsIds = jobVM.Job_JobSkills.Select(s=>s.JobSkillId).ToList();
             jobVM.JobTypesList = _context.JobTypes.Select(x=> new SelectListItem{Text = x.Description, Value = x.Id.ToString()}).ToList();
 
             ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
+            ViewBag.JobSkills = _context.JobSkills.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
             return View(jobVM);
         }
 
@@ -154,7 +165,9 @@ namespace JobWebsiteMVC.Controllers
                 {
                     var jobToUpdate = await _context.Jobs
                                     .Include(x => x.Job_JobBenefits)
-                                    .ThenInclude(x=>x.JobBenefit)
+                                        .ThenInclude(x=>x.JobBenefit)
+                                    .Include(x => x.Job_JobSkills)
+                                        .ThenInclude(x=>x.JobSkill)                                    
                                     .FirstOrDefaultAsync(m => m.Id == id);
 
                     if(await TryUpdateModelAsync<Job>(jobToUpdate, "", 
@@ -174,6 +187,7 @@ namespace JobWebsiteMVC.Controllers
                     {
                         jobToUpdate.UpdatedDate = DateTime.Now;
                         UpdateJobBenefits(jobVM.JobBenefitsIds, jobToUpdate);
+                        UpdateJobSkills(jobVM.JobKeySkillsIds, jobToUpdate);
 
                         _context.Update(jobToUpdate);
                         await _context.SaveChangesAsync();
@@ -206,6 +220,19 @@ namespace JobWebsiteMVC.Controllers
 
             tagLinksToDelete.ForEach(x => _context.Job_JobBenefits.Remove(x));
             tagLinksToAdd.ForEach(x => _context.Job_JobBenefits.Add(x));
+        }
+
+        private void UpdateJobSkills(List<Guid> jobSkillsIds, Job jobToUpdate)
+        {
+            var tagLinksToDelete =
+                _context.Job_JobSkills.Where(x => !jobSkillsIds.Contains(x.JobSkillId) && x.JobId == jobToUpdate.Id).ToList();
+
+            var tagLinksToAdd = jobSkillsIds
+                .Where(x => !_context.Job_JobSkills.Any(y => y.JobSkillId == x && y.JobId == jobToUpdate.Id))
+                .Select(z => new Job_JobSkill {JobId = jobToUpdate.Id, JobSkillId = z}).ToList();
+
+            tagLinksToDelete.ForEach(x => _context.Job_JobSkills.Remove(x));
+            tagLinksToAdd.ForEach(x => _context.Job_JobSkills.Add(x));
         }
 
         // GET: Jobs/Delete/5

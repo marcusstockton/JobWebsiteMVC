@@ -3,14 +3,16 @@ using System;
 using JobWebsiteMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JobWebsiteMVC.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200205110430_JobSkills")]
+    partial class JobSkills
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -316,7 +318,7 @@ namespace JobWebsiteMVC.Data.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("JobSkills");
+                    b.ToTable("JobSkill");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobType", b =>
@@ -643,7 +645,7 @@ namespace JobWebsiteMVC.Data.Migrations
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.Job_JobSkill", b =>
                 {
                     b.HasOne("JobWebsiteMVC.Models.Job.Job", "Job")
-                        .WithMany("Job_JobSkills")
+                        .WithMany("Job_Jobskills")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

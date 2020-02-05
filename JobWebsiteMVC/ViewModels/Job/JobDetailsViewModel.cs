@@ -66,6 +66,9 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name="Job Benefits")]
         public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
 
+        [Display(Name="Key Skills")]
+        public virtual ICollection<Job_JobSkill> Job_JobSkills { get; set; }
+
         [Display(Name="Created Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}")]

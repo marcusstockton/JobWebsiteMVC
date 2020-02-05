@@ -28,6 +28,8 @@ namespace JobWebsiteMVC.Models.Job
 
         public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
 
+        public virtual ICollection<Job_JobSkill> Job_JobSkills { get; set; }
+
         public Guid JobTypeId { get; set; }
 
         [ForeignKey("JobTypeId")]

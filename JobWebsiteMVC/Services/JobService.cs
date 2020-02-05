@@ -26,7 +26,9 @@ namespace JobWebsiteMVC.Services
         {
             return await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
-                .ThenInclude(x=>x.JobBenefit)
+                    .ThenInclude(x=>x.JobBenefit)
+                .Include(x => x.Job_JobSkills)
+                    .ThenInclude(x=>x.JobSkill)                    
                 .Include(x=>x.JobType)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
