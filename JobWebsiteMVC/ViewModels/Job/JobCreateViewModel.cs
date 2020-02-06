@@ -1,10 +1,7 @@
-﻿using JobWebsiteMVC.Models.Job;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.ViewModels.Job
 {
@@ -13,6 +10,10 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Required]
         [StringLength(100)]
         public string Title { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string JobTitle { get; set; }
 
         [Required]
         [StringLength(1000)]

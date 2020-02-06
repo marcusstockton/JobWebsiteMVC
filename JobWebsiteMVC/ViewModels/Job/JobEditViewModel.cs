@@ -10,25 +10,45 @@ namespace JobWebsiteMVC.ViewModels.Job
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        
+        [Display(Name="Job Title")]
+        public string JobTitle { get; set; }
+
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
+        [Display(Name="Draft?")]
         public bool IsDraft { get; set; }
+
+        [Display(Name="Min Salary")]
         public decimal MinSalary { get; set; }
+
+        [Display(Name="Max Salary")]
         public decimal MaxSalary { get; set; }
 
+        [Display(Name="Start Time")]
         [DataType(DataType.Time)]
         public TimeSpan WorkingHoursStart { get; set; }
 
+        [Display(Name="End Time")]
         [DataType(DataType.Time)]
         public TimeSpan WorkingHoursEnd { get; set; }
+
+        [Display(Name="Hours Per Week")]
         public decimal HoursPerWeek { get; set; }
+
+        [Display(Name="Holiday Allowance")]
         public decimal HolidayEntitlement { get; set; }
+
+        [Display(Name="Active?")]
         public bool IsActive { get; set; }
 
+        [Display(Name="Closing Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ClosingDate { get; set; }
 
+        [Display(Name="Publish Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime PublishDate { get; set; }
@@ -46,7 +66,11 @@ namespace JobWebsiteMVC.ViewModels.Job
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? UpdatedDate { get; set; }
+
+        [Display(Name="Job Benefits")]
         public List<Guid> JobBenefitsIds { get; set; }
+
+        [Display(Name="Key Skills")]
         public List<Guid> JobKeySkillsIds { get; set; }
 
         [Display(Name="Job Type")]

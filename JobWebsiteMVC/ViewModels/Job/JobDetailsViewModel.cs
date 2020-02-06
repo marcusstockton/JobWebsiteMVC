@@ -11,6 +11,7 @@ namespace JobWebsiteMVC.ViewModels.Job
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public string JobTitle { get; set; }
         public string Description { get; set; }
 
         public string DescriptionShort

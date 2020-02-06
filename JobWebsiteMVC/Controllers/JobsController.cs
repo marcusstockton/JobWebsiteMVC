@@ -175,6 +175,7 @@ namespace JobWebsiteMVC.Controllers
                         x=>x.MinSalary, 
                         x=>x.PublishDate, 
                         x=>x.Title, 
+                        x=>x.JobTitle,
                         x=>x.WorkingHoursEnd, 
                         x=>x.WorkingHoursStart, 
                         x=>x.Description, 
