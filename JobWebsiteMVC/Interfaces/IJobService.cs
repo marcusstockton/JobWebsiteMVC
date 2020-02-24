@@ -17,6 +17,11 @@ namespace JobWebsiteMVC.Interfaces
 
         Task Delete(Guid jobId);
 
+        Task<List<JobApplication>> GetJobApplicationsForJob(Guid jobId);
+
+        Task<List<JobApplication>> GetJobApplicationsForUser(string userId);
+        Task<JobApplication> ApplyForJob(Guid jobId, string userId);
+
         void Save();
     }
 }

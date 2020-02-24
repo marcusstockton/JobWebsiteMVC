@@ -46,6 +46,12 @@ namespace JobWebsiteMVC
             // Register DI
             services.AddTransient<IJobService, JobService>();
             services.AddTransient<IEmailSender, EmailService>();
+            services.AddTransient<IJobService, JobService>();
+            services.AddTransient<IJobTypesService, JobTypesService>();
+            services.AddTransient<IJobBenefitsService, JobBenefitsService>();
+            services.AddTransient<IUserTypesService, UserTypesService>();
+            services.AddTransient<IAttachmentService, AttachmentService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

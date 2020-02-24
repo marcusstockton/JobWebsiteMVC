@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
@@ -26,9 +27,7 @@ namespace JobWebsiteMVC.Services
         {
             return await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
-                    .ThenInclude(x=>x.JobBenefit)
-                .Include(x => x.Job_JobSkills)
-                    .ThenInclude(x=>x.JobSkill)                    
+                    .ThenInclude(x=>x.JobBenefit)               
                 .Include(x=>x.JobType)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
@@ -50,7 +49,33 @@ namespace JobWebsiteMVC.Services
             await Task.Run(() =>
             {
                 _context.Entry(job).State = EntityState.Modified;
+                Save();
             });
+        }
+
+        public async Task<List<JobApplication>> GetJobApplicationsForJob(Guid jobId)
+        {
+            return await _context.JobApplications.Where( x => x.JobId == jobId ).ToListAsync();
+        }
+
+        public async Task<List<JobApplication>> GetJobApplicationsForUser(string userId)
+        {
+            return await _context.JobApplications.Where( x => x.ApplicantId == userId ).ToListAsync();
+        }
+
+        public async Task<JobApplication> ApplyForJob(Guid jobId, string userId)
+        {
+            var application = new JobApplication
+            {
+                ApplicantId = userId,
+                JobId = jobId,
+                CreatedDate = DateTime.Now,
+                IsActive = true,
+                CreatedBy = _context.Users.Find( userId )
+            };
+            _context.AddAsync( application );
+            Save();
+            return application;
         }
 
         public void Save()

@@ -12,29 +12,31 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using JobWebsiteMVC.Extensions.Alerts;
+using JobWebsiteMVC.Interfaces;
 
 namespace JobWebsiteMVC.Controllers
 {
     public class JobsController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<JobsController> _logger;
+        private readonly IJobService _service;
+        private readonly IJobTypesService _jobTypesService;
+        private readonly IJobBenefitsService _jobBenefitsService;
 
-        public JobsController(ApplicationDbContext context, IMapper mapper, ILogger<JobsController> logger)
+        public JobsController(IMapper mapper, ILogger<JobsController> logger, IJobService service, IJobTypesService jobTypesService, IJobBenefitsService jobBenefitsService)
         {
-            _context = context;
             _mapper = mapper;
             _logger = logger;
+            _service = service;
+            _jobTypesService = jobTypesService;
+            _jobBenefitsService = jobBenefitsService;
         }
 
         // GET: Jobs
         public async Task<IActionResult> Index()
         {
-            var jobList = await _context.Jobs
-                .Include(x=>x.JobType)
-                .AsNoTracking()
-                .ToListAsync();
+            var jobList = await _service.GetJobs();
 
             var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
             _logger.LogInformation($"Found {jobList.Count} jobs");
@@ -49,14 +51,13 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var job = await _context.Jobs
-                .Include(x => x.Job_JobBenefits)
-                    .ThenInclude(x=>x.JobBenefit)
-                .Include(x => x.Job_JobSkills)
-                    .ThenInclude(x=>x.JobSkill)
-                .Include(x=>x.JobType)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            // var job = await _context.Jobs
+            //     .Include(x => x.Job_JobBenefits)
+            //         .ThenInclude(x=>x.JobBenefit)
+            //     .Include(x=>x.JobType)
+            //     .AsNoTracking()
+            //     .FirstOrDefaultAsync(m => m.Id == id);
+            var job = await _service.GetJobById(id.Value);
 
             if (job == null)
             {
@@ -71,18 +72,18 @@ namespace JobWebsiteMVC.Controllers
         // GET: Jobs/Create
         public IActionResult Create()
         {
+            //var job = new JobCreateViewModel();
+            //ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
+            //job.JobTypesList =  _context.JobTypes.AsNoTracking()
+            //        .OrderBy(n => n.Description)
+            //            .Select(n =>
+            //            new SelectListItem
+            //            {
+            //                Value = n.Id.ToString(),
+            //                Text = n.Description
+            //            }).ToList();
             var job = new JobCreateViewModel();
-            ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
-            ViewBag.JobSkills = _context.JobSkills.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
-            job.JobTypesList =  _context.JobTypes.AsNoTracking()
-                    .OrderBy(n => n.Description)
-                        .Select(n =>
-                        new SelectListItem
-                        {
-                            Value = n.Id.ToString(),
-                            Text = n.Description
-                        }).ToList();
-                        
+            
             return View(job);
         }
 
@@ -93,27 +94,24 @@ namespace JobWebsiteMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(JobCreateViewModel jobVM) // [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive")]
         {
-            if (ModelState.IsValid)
-            {
-                var job = _mapper.Map<Job>(jobVM);
-                job.Id = Guid.NewGuid();
-                job.CreatedDate = DateTime.Now;
-                
-                if(jobVM.JobBenefitsIds.Any())
-                {
-                    UpdateJobBenefits( jobVM.JobBenefitsIds, job );
-                }
-                if(jobVM.JobSkillIds.Any())
-                {
-                    UpdateJobSkills( jobVM.JobSkillIds, job );
-                }
-                
-                await _context.AddAsync(job);
-                
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job sucessfully created!");
-            }
-            return View(jobVM).WithDanger("Error", "Some errors occured creating the job");
+            //if (ModelState.IsValid)
+            //{
+            //    var job = _mapper.Map<Job>(jobVM);
+            //    job.Id = Guid.NewGuid();
+            //    job.CreatedDate = DateTime.Now;
+
+            //    if(jobVM.JobBenefitsIds.Any())
+            //    {
+            //        UpdateJobBenefits( jobVM.JobBenefitsIds, job );
+            //    }
+
+            //    await _context.AddAsync(job);
+
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job sucessfully created!");
+            //}
+            //return View(jobVM).WithDanger("Error", "Some errors occured creating the job");
+            return null;
         }
 
         // GET: Jobs/Edit/5
@@ -123,13 +121,7 @@ namespace JobWebsiteMVC.Controllers
             {
                 return NotFound();
             }
-            var job = await _context.Jobs
-                .Include(x => x.Job_JobBenefits)
-                    .ThenInclude(x=>x.JobBenefit)
-                .Include(x => x.Job_JobSkills)
-                    .ThenInclude(x=>x.JobSkill)
-                .Include(x=>x.JobType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var job = await _service.GetJobById(id.Value);
 
             if (job == null)
             {
@@ -138,12 +130,12 @@ namespace JobWebsiteMVC.Controllers
             }
 
             var jobVM = _mapper.Map<JobEditViewModel>(job);
+            var jobTypes = await _jobTypesService.GetJobTypes();
+            var jobBenefits = await _jobBenefitsService.GetJobBenefits();
             jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s=>s.JobBenefitId).ToList();
-            jobVM.JobKeySkillsIds = jobVM.Job_JobSkills.Select(s=>s.JobSkillId).ToList();
-            jobVM.JobTypesList = _context.JobTypes.Select(x=> new SelectListItem{Text = x.Description, Value = x.Id.ToString()}).ToList();
+            jobVM.JobTypesList = jobTypes.Select(x=> new SelectListItem{Text = x.Description, Value = x.Id.ToString()}).ToList();
 
-            ViewBag.JobBenefits = _context.JobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
-            ViewBag.JobSkills = _context.JobSkills.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
+            ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
             return View(jobVM);
         }
 
@@ -163,36 +155,13 @@ namespace JobWebsiteMVC.Controllers
             {
                 try
                 {
-                    var jobToUpdate = await _context.Jobs
-                                    .Include(x => x.Job_JobBenefits)
-                                        .ThenInclude(x=>x.JobBenefit)
-                                    .Include(x => x.Job_JobSkills)
-                                        .ThenInclude(x=>x.JobSkill)                                    
-                                    .FirstOrDefaultAsync(m => m.Id == id);
+                    var job = _mapper.Map<Job>(jobVM);
+                    var currentJobBenefits = await _jobBenefitsService.GetJobBenefitsForJobId(job.Id);
+                    // Update JobBenefits:
+                    _jobBenefitsService.UpdateJobBenefitsForJob(job.Id, currentJobBenefits, jobVM.JobBenefitsIds);
 
-                    if(await TryUpdateModelAsync<Job>(jobToUpdate, "", 
-                        x=>x.MaxSalary, 
-                        x=>x.MinSalary, 
-                        x=>x.PublishDate, 
-                        x=>x.Title, 
-                        x=>x.JobTitle,
-                        x=>x.WorkingHoursEnd, 
-                        x=>x.WorkingHoursStart, 
-                        x=>x.Description, 
-                        x=>x.HolidayEntitlement,
-                        x=>x.HoursPerWeek,
-                        x=>x.IsActive,
-                        x=>x.IsDraft,
-                        x=>x.JobTypeId,
-                        x=>x.ClosingDate))
-                    {
-                        jobToUpdate.UpdatedDate = DateTime.Now;
-                        UpdateJobBenefits(jobVM.JobBenefitsIds, jobToUpdate);
-                        UpdateJobSkills(jobVM.JobKeySkillsIds, jobToUpdate);
-
-                        _context.Update(jobToUpdate);
-                        await _context.SaveChangesAsync();
-                    }
+                    await _service.Put(job);
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -212,28 +181,15 @@ namespace JobWebsiteMVC.Controllers
 
         private void UpdateJobBenefits(List<Guid> jobBenefitsIds, Job jobToUpdate)
         {
-            var tagLinksToDelete =
-                _context.Job_JobBenefits.Where(x => !jobBenefitsIds.Contains(x.JobBenefitId) && x.JobId == jobToUpdate.Id).ToList();
+            //var tagLinksToDelete =
+            //    _context.Job_JobBenefits.Where(x => !jobBenefitsIds.Contains(x.JobBenefitId) && x.JobId == jobToUpdate.Id).ToList();
 
-            var tagLinksToAdd = jobBenefitsIds
-                .Where(x => !_context.Job_JobBenefits.Any(y => y.JobBenefitId == x && y.JobId == jobToUpdate.Id))
-                .Select(z => new Job_JobBenefit {JobId = jobToUpdate.Id, JobBenefitId = z}).ToList();
+            //var tagLinksToAdd = jobBenefitsIds
+            //    .Where(x => !_context.Job_JobBenefits.Any(y => y.JobBenefitId == x && y.JobId == jobToUpdate.Id))
+            //    .Select(z => new Job_JobBenefit {JobId = jobToUpdate.Id, JobBenefitId = z}).ToList();
 
-            tagLinksToDelete.ForEach(x => _context.Job_JobBenefits.Remove(x));
-            tagLinksToAdd.ForEach(x => _context.Job_JobBenefits.Add(x));
-        }
-
-        private void UpdateJobSkills(List<Guid> jobSkillsIds, Job jobToUpdate)
-        {
-            var tagLinksToDelete =
-                _context.Job_JobSkills.Where(x => !jobSkillsIds.Contains(x.JobSkillId) && x.JobId == jobToUpdate.Id).ToList();
-
-            var tagLinksToAdd = jobSkillsIds
-                .Where(x => !_context.Job_JobSkills.Any(y => y.JobSkillId == x && y.JobId == jobToUpdate.Id))
-                .Select(z => new Job_JobSkill {JobId = jobToUpdate.Id, JobSkillId = z}).ToList();
-
-            tagLinksToDelete.ForEach(x => _context.Job_JobSkills.Remove(x));
-            tagLinksToAdd.ForEach(x => _context.Job_JobSkills.Add(x));
+            //tagLinksToDelete.ForEach(x => _context.Job_JobBenefits.Remove(x));
+            //tagLinksToAdd.ForEach(x => _context.Job_JobBenefits.Add(x));
         }
 
         // GET: Jobs/Delete/5
@@ -244,8 +200,8 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var job = await _context.Jobs
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var job = await _service.GetJobById(id.Value);
+
             if (job == null)
             {
                 return NotFound();
@@ -259,24 +215,23 @@ namespace JobWebsiteMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var job = await _context.Jobs.FindAsync(id);
-            _context.Jobs.Remove(job);
-            await _context.SaveChangesAsync();
+            await _service.Delete(id);
+         
             return RedirectToAction(nameof(Index)).WithSuccess("", "Job deleted");
         }
 
         [HttpGet]
         public async Task<IActionResult> JobApplication(Guid jobId)
         {
-            var job = await _context.Jobs.FindAsync(jobId);
+            var job = await _service.GetJobById(jobId);
 
             // Check if its already been applied for:
             var userid = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var jobApplication = await _context.JobApplications.SingleOrDefaultAsync(c => c.JobId == jobId && c.ApplicantId == userid);
-            if (jobApplication != null)
+            var jobApplication = await _service.GetJobApplicationsForJob( jobId );
+            if (jobApplication != null && jobApplication.Any(x=>x.ApplicantId == userid))
             {
                 // Already applied, pass back to Details view
-                return RedirectToAction($"Details", new {id = jobId }).WithWarning("You were re-directed", "You have already applied for this job");
+                return RedirectToAction( $"Details", new { id = jobId } ).WithWarning( "You were re-directed", "You have already applied for this job" );
             }
             return View(job);
         }
@@ -285,27 +240,19 @@ namespace JobWebsiteMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> JobApply(Guid jobId)
         {
-            var job = await _context.Jobs.FindAsync(jobId);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.Users.FindAsync(userId);
-
-            await _context.JobApplications.AddAsync(
-                new JobApplication { 
-                    ApplicantId = userId, 
-                    CreatedBy = user, 
-                    IsActive = true, 
-                    JobId = jobId, 
-                    Job = job,
-                    CreatedDate = DateTime.Now,
-                    Applicant = user
-                });
-            await _context.SaveChangesAsync();
+            var result = await _service.ApplyForJob( jobId, userId );
+            if (result == null)
+            {
+                return View( result );
+            }
             return RedirectToAction("Index");
         }
 
         private bool JobExists(Guid id)
         {
-            return _context.Jobs.Any(e => e.Id == id);
+            //return _context.Jobs.Any(e => e.Id == id);
+            return false;
         }
     }
 }

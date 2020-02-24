@@ -13,3 +13,7 @@ dotnet aspnet-codegenerator identity -dc JobWebsiteMVC.Data.ApplicationDbContext
 marcus_stockton@hotmail.co.uk
 Test@test.com
 P@55w0rd!
+
+
+Free postcode lookup stuff: 
+http://api.getthedata.com/postcode/WC1A+1AB

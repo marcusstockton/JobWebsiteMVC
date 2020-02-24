@@ -289,39 +289,6 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.ToTable("JobBenefits");
                 });
 
-            modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobSkill", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UpdatedById")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("UpdatedById");
-
-                    b.ToTable("JobSkills");
-                });
-
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -369,21 +336,6 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.HasIndex("JobBenefitId");
 
                     b.ToTable("Job_JobBenefits");
-                });
-
-            modelBuilder.Entity("JobWebsiteMVC.Models.Job.Job_JobSkill", b =>
-                {
-                    b.Property<Guid>("JobId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("JobSkillId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("JobId", "JobSkillId");
-
-                    b.HasIndex("JobSkillId");
-
-                    b.ToTable("Job_JobSkills");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.UserType", b =>
@@ -606,17 +558,6 @@ namespace JobWebsiteMVC.Data.Migrations
                         .HasForeignKey("UpdatedById");
                 });
 
-            modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobSkill", b =>
-                {
-                    b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "UpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("UpdatedById");
-                });
-
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobType", b =>
                 {
                     b.HasOne("JobWebsiteMVC.Models.ApplicationUser", "CreatedBy")
@@ -639,21 +580,6 @@ namespace JobWebsiteMVC.Data.Migrations
                     b.HasOne("JobWebsiteMVC.Models.Job.Job", "Job")
                         .WithMany("Job_JobBenefits")
                         .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("JobWebsiteMVC.Models.Job.Job_JobSkill", b =>
-                {
-                    b.HasOne("JobWebsiteMVC.Models.Job.Job", "Job")
-                        .WithMany("Job_JobSkills")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobWebsiteMVC.Models.Job.JobSkill", "JobSkill")
-                        .WithMany("Job_JobSkills")
-                        .HasForeignKey("JobSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

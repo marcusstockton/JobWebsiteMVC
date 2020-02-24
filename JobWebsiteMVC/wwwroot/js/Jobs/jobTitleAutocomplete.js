@@ -24,19 +24,19 @@ $(document).ready(function(){
         minLength: 2,
         delay: 500,
         select: function (event, ui) {
-            var jobId = ui.item ? ui.item.id : 0;
-            console.log("JobId: ", jobId);
-            if (jobId !== '') {
-                // Go Get skills for the selected job???
-                let url = "/Job/GetJobSkillAutoComplete?jobId=" + jobId;
-                $.get(url)
-                    .done((response)=>{
-                        console.log(response);
-                    })
-                    .catch((err)=>{
-                        console.log(err);
-                    });
-            }
+            // var jobId = ui.item ? ui.item.id : 0;
+            // console.log("JobId: ", jobId);
+            // if (jobId !== '') {
+            //     // Go Get skills for the selected job???
+            //     let url = "/Job/GetJobSkillAutoComplete?jobId=" + jobId;
+            //     $.get(url)
+            //         .done((response)=>{
+            //             console.log(response);
+            //         })
+            //         .catch((err)=>{
+            //             console.log(err);
+            //         });
+            // }
         }
     });
     

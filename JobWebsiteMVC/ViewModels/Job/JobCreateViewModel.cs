@@ -60,9 +60,6 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name="Job Benefits")]
         public virtual List<Guid> JobBenefitsIds { get; set; }
 
-        [Display(Name="Job Skills")]
-        public virtual List<Guid> JobSkillIds { get; set; }
-
         [Display(Name="Job Type")]
         [Required]
         public Guid JobTypeId { get; set; }
