@@ -50,13 +50,7 @@ namespace JobWebsiteMVC.Controllers
             {
                 return NotFound();
             }
-
-            // var job = await _context.Jobs
-            //     .Include(x => x.Job_JobBenefits)
-            //         .ThenInclude(x=>x.JobBenefit)
-            //     .Include(x=>x.JobType)
-            //     .AsNoTracking()
-            //     .FirstOrDefaultAsync(m => m.Id == id);
+            
             var job = await _service.GetJobById(id.Value);
 
             if (job == null)
@@ -91,9 +85,9 @@ namespace JobWebsiteMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-               var job = _mapper.Map<Job>(jobVM);
-               await _service.Post(job);
-               await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob( job.Id, new List<Job_JobBenefit>(), jobVM.JobBenefitsIds );
+                var job = _mapper.Map<Job>(jobVM);
+                await _service.Post(job);
+                await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, new List<Job_JobBenefit>(), jobVM.JobBenefitsIds);
 
                 return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job sucessfully created!");
             }
@@ -118,10 +112,10 @@ namespace JobWebsiteMVC.Controllers
             var jobVM = _mapper.Map<JobEditViewModel>(job);
             var jobTypes = await _jobTypesService.GetJobTypes();
             var jobBenefits = await _jobBenefitsService.GetJobBenefits();
-            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s=>s.JobBenefitId).ToList();
-            jobVM.JobTypesList = jobTypes.Select(x=> new SelectListItem{Text = x.Description, Value = x.Id.ToString()}).ToList();
+            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s => s.JobBenefitId).ToList();
+            jobVM.JobTypesList = jobTypes.Select(x => new SelectListItem { Text = x.Description, Value = x.Id.ToString() }).ToList();
 
-            ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description}).ToList();
+            ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description }).ToList();
             return View(jobVM);
         }
 
@@ -147,25 +141,18 @@ namespace JobWebsiteMVC.Controllers
                     await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, currentJobBenefits, jobVM.JobBenefitsIds);
 
                     await _service.Put(job);
-                    
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job Updated Sucessfully!");
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!JobExists(jobVM.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return View(jobVM).WithDanger("Error", ex.Message);
                 }
-                return RedirectToAction(nameof(Index)).WithSuccess("Success","Job Updated Sucessfully!");
+                
             }
             return View(jobVM).WithDanger("Error", "Some Errors Occured");
         }
 
-        
+
         // GET: Jobs/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
@@ -190,7 +177,7 @@ namespace JobWebsiteMVC.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             await _service.Delete(id);
-         
+
             return RedirectToAction(nameof(Index)).WithSuccess("", "Job deleted");
         }
 
@@ -201,11 +188,11 @@ namespace JobWebsiteMVC.Controllers
 
             // Check if its already been applied for:
             var userid = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var jobApplication = await _service.GetJobApplicationsForJob( jobId );
-            if (jobApplication != null && jobApplication.Any(x=>x.ApplicantId == userid))
+            var jobApplication = await _service.GetJobApplicationsForJob(jobId);
+            if (jobApplication != null && jobApplication.Any(x => x.ApplicantId == userid))
             {
                 // Already applied, pass back to Details view
-                return RedirectToAction( $"Details", new { id = jobId } ).WithWarning( "You were re-directed", "You have already applied for this job" );
+                return RedirectToAction($"Details", new { id = jobId }).WithWarning("You were re-directed", "You have already applied for this job");
             }
             return View(job);
         }
@@ -215,18 +202,12 @@ namespace JobWebsiteMVC.Controllers
         public async Task<IActionResult> JobApply(Guid jobId)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = await _service.ApplyForJob( jobId, userId );
+            var result = await _service.ApplyForJob(jobId, userId);
             if (result == null)
             {
-                return View( result );
+                return View(result);
             }
             return RedirectToAction("Index");
-        }
-
-        private bool JobExists(Guid id)
-        {
-            //return _context.Jobs.Any(e => e.Id == id);
-            return false;
         }
     }
 }
