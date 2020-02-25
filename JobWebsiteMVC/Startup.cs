@@ -43,6 +43,13 @@ namespace JobWebsiteMVC
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("JobSeekerOnly", policy => policy.RequireClaim("JobType.Description", "Job Seeker"));
+                options.AddPolicy("JobOwnerOnly", policy => policy.RequireClaim("JobType.Description", "Job Owner"));
+                options.AddPolicy("AdminOnly", policy => policy.RequireClaim("JobType.Description", "Admin"));
+            });
+
             // Register DI
             services.AddTransient<IEmailSender, EmailService>();
             services.AddScoped<IJobService, JobService>();
@@ -51,15 +58,18 @@ namespace JobWebsiteMVC
             services.AddScoped<IUserTypesService, UserTypesService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
 
+            services.AddTransient<DataSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeeder seeder)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                seeder.SeedDatabase();
+                
             }
             else
             {

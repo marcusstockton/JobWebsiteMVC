@@ -17,3 +17,9 @@ P@55w0rd!
 
 Free postcode lookup stuff: 
 http://api.getthedata.com/postcode/WC1A+1AB
+
+
+Claim Types:
+- JobSeekerOnly
+- JobOwnerOnly
+- AdminOnly

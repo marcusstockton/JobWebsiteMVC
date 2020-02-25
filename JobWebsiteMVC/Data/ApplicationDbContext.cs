@@ -50,6 +50,10 @@ namespace JobWebsiteMVC.Data
                     .WithMany(c => c.Job_JobBenefits)
                     .HasForeignKey(bc => bc.JobBenefitId);
 
+
+            // Properties:
+            builder.Entity<JobType>().Property(x=>x.Description).IsRequired().HasMaxLength(100);
+            builder.Entity<JobBenefit>().Property(x=>x.Description).IsRequired().HasMaxLength(100);
         }
     }
 }

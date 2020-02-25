@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Extensions.Alerts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JobWebsiteMVC.Controllers
 {
     public class JobTypesController : Controller
     {
-        // private readonly ApplicationDbContext _context;
         private readonly IJobTypesService _jobTypeService;
 
         public JobTypesController(IJobTypesService jobTypeService)
@@ -42,6 +42,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // GET: JobTypes/Create
+        [Authorize(Policy = "JobOwnerOnly")]
         public IActionResult Create()
         {
             return View();
@@ -52,6 +53,7 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "JobOwnerOnly")]
         public async Task<IActionResult> Create([Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] JobType jobType)
         {
             if (ModelState.IsValid)
@@ -61,10 +63,13 @@ namespace JobWebsiteMVC.Controllers
                 await _jobTypeService.CreateJobType(jobType);
                 return RedirectToAction(nameof(Index));
             }
-            return View(jobType);
+            var query = ModelState.Values.SelectMany(v => v.Errors);
+            var errorList = query.ToList();
+            return View(jobType).WithDanger("Error", errorList.ToString());
         }
 
         // GET: JobTypes/Edit/5
+        [Authorize(Policy = "JobOwnerOnly")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -85,6 +90,7 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "JobOwnerOnly")]
         public async Task<IActionResult> Edit(Guid id, [Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] JobType jobType)
         {
             if (id != jobType.Id)
@@ -104,15 +110,14 @@ namespace JobWebsiteMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job type sucessfully updated!");
             }
-            var query = from state in ModelState.Values
-                  from error in state.Errors
-                  select error.ErrorMessage;
-
+            var query = ModelState.Values.SelectMany(v => v.Errors);
             var errorList = query.ToList();
+
             return View(jobType).WithDanger("Error", errorList.ToString());
         }
 
         // GET: JobTypes/Delete/5
+        [Authorize(Policy = "JobOwnerOnly")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -131,6 +136,7 @@ namespace JobWebsiteMVC.Controllers
 
         // POST: JobTypes/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = "JobOwnerOnly")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
