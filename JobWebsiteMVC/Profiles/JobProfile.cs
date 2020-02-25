@@ -16,6 +16,7 @@ namespace JobWebsiteMVC.Profiles
             CreateMap<Job, JobDetailsViewModel>()
                 .ForMember(dto=>dto.JobType, opt => opt.MapFrom(src=>src.JobType)).ReverseMap();
             CreateMap<Job, JobEditViewModel>().ReverseMap();
+            CreateMap<Job, JobDeleteViewModel>().ReverseMap();
         }
     }
 }

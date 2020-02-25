@@ -63,6 +63,6 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name="Job Type")]
         [Required]
         public Guid JobTypeId { get; set; }
-        public virtual List<SelectListItem> JobTypesList{get;set;}
+
     }
 }

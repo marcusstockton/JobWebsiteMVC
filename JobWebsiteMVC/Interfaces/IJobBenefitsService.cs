@@ -11,6 +11,6 @@ namespace JobWebsiteMVC.Interfaces
         Task<List<JobBenefit>> GetJobBenefits();
 
         Task<List<Job_JobBenefit>> GetJobBenefitsForJobId(Guid jobId);
-        void UpdateJobBenefitsForJob(Guid jobId, List<Job_JobBenefit> currentItems, List<Guid> newItems);
+        void CreateOrUpdateJobBenefitsForJob(Guid jobId, List<Job_JobBenefit> currentItems, List<Guid> newItems);
     }
 }

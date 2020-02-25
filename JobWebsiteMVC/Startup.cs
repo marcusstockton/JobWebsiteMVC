@@ -44,13 +44,12 @@ namespace JobWebsiteMVC
             services.AddRazorPages();
 
             // Register DI
-            services.AddTransient<IJobService, JobService>();
             services.AddTransient<IEmailSender, EmailService>();
-            services.AddTransient<IJobService, JobService>();
-            services.AddTransient<IJobTypesService, JobTypesService>();
-            services.AddTransient<IJobBenefitsService, JobBenefitsService>();
-            services.AddTransient<IUserTypesService, UserTypesService>();
-            services.AddTransient<IAttachmentService, AttachmentService>();
+            services.AddScoped<IJobService, JobService>();
+            services.AddScoped<IJobTypesService, JobTypesService>();
+            services.AddScoped<IJobBenefitsService, JobBenefitsService>();
+            services.AddScoped<IUserTypesService, UserTypesService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
 
         }
 

@@ -20,7 +20,8 @@ namespace JobWebsiteMVC.Services
         public async Task Delete(Guid id)
         {
             var job = await _context.Jobs.FindAsync(id);
-            _context.Jobs.Remove(job);            
+            _context.Jobs.Remove(job);
+            await Save();
         }
        
         public async Task<Job> GetJobById(Guid id)
@@ -41,16 +42,16 @@ namespace JobWebsiteMVC.Services
 
         public async Task Post(Job job)
         {
+            job.CreatedDate = DateTime.Now;
             await _context.Jobs.AddAsync(job);
+            await Save();
         }
 
         public async Task Put(Job job)
         {
-            await Task.Run(() =>
-            {
-                _context.Entry(job).State = EntityState.Modified;
-                Save();
-            });
+            job.UpdatedDate = DateTime.Now;
+            _context.Entry(job).State = EntityState.Modified;
+            await Save();
         }
 
         public async Task<List<JobApplication>> GetJobApplicationsForJob(Guid jobId)
@@ -73,14 +74,14 @@ namespace JobWebsiteMVC.Services
                 IsActive = true,
                 CreatedBy = _context.Users.Find( userId )
             };
-            _context.AddAsync( application );
-            Save();
+            await _context.AddAsync( application );
+            await Save();
             return application;
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;
