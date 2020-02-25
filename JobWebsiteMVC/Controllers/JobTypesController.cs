@@ -2,25 +2,26 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Models.Job;
+using JobWebsiteMVC.Interfaces;
+using JobWebsiteMVC.Extensions.Alerts;
 
 namespace JobWebsiteMVC.Controllers
 {
     public class JobTypesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        // private readonly ApplicationDbContext _context;
+        private readonly IJobTypesService _jobTypeService;
 
-        public JobTypesController(ApplicationDbContext context)
+        public JobTypesController(IJobTypesService jobTypeService)
         {
-            _context = context;
+            _jobTypeService = jobTypeService;
         }
 
         // GET: JobTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.JobTypes.ToListAsync());
+            return View(await _jobTypeService.GetJobTypes());
         }
 
         // GET: JobTypes/Details/5
@@ -31,8 +32,7 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobType = await _context.JobTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var jobType = await _jobTypeService.GetJobTypeById(id.Value);
             if (jobType == null)
             {
                 return NotFound();
@@ -56,10 +56,9 @@ namespace JobWebsiteMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                jobType.Id = Guid.NewGuid();
+
                 jobType.CreatedDate = DateTime.Now;
-                _context.Add(jobType);
-                await _context.SaveChangesAsync();
+                await _jobTypeService.CreateJobType(jobType);
                 return RedirectToAction(nameof(Index));
             }
             return View(jobType);
@@ -73,7 +72,7 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobType = await _context.JobTypes.FindAsync(id);
+            var jobType = await _jobTypeService.GetJobTypeById(id.Value);
             if (jobType == null)
             {
                 return NotFound();
@@ -97,24 +96,20 @@ namespace JobWebsiteMVC.Controllers
             {
                 try
                 {
-                    jobType.UpdatedDate = DateTime.Now;
-                    _context.Update(jobType);
-                    await _context.SaveChangesAsync();
+                    await _jobTypeService.UpdateJobType(jobType);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!JobTypeExists(jobType.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return View(jobType).WithDanger("Error", ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job type sucessfully updated!");
             }
-            return View(jobType);
+            var query = from state in ModelState.Values
+                  from error in state.Errors
+                  select error.ErrorMessage;
+
+            var errorList = query.ToList();
+            return View(jobType).WithDanger("Error", errorList.ToString());
         }
 
         // GET: JobTypes/Delete/5
@@ -125,8 +120,7 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobType = await _context.JobTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var jobType = await _jobTypeService.GetJobTypeById(id.Value);
             if (jobType == null)
             {
                 return NotFound();
@@ -140,15 +134,13 @@ namespace JobWebsiteMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var jobType = await _context.JobTypes.FindAsync(id);
-            _context.JobTypes.Remove(jobType);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool JobTypeExists(Guid id)
-        {
-            return _context.JobTypes.Any(e => e.Id == id);
+            var jobType = await _jobTypeService.GetJobTypeById(id);
+            if(jobType != null)
+            {
+                await _jobTypeService.DeleteJobType(jobType);
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job Type deleted");
+            }
+            return View(jobType);
         }
     }
 }
