@@ -30,7 +30,7 @@ namespace JobWebsiteMVC.Services
 
 
         // https://stackoverflow.com/questions/42993860/entity-framework-core-update-many-to-many
-        public void CreateOrUpdateJobBenefitsForJob(Guid jobId, List<Job_JobBenefit> currentItems, List<Guid> newItems)
+        public async Task CreateOrUpdateJobBenefitsForJob(Guid jobId, List<Job_JobBenefit> currentItems, List<Guid> newItems)
         {
             _context.TryUpdateManyToMany(currentItems, newItems
             .Select(x => new Job_JobBenefit
@@ -38,7 +38,7 @@ namespace JobWebsiteMVC.Services
                 JobId = jobId,
                 JobBenefitId = x
             }), x => x);
-            Save();
+            await Save();
         }
         public async Task Save()
         {

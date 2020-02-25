@@ -93,7 +93,7 @@ namespace JobWebsiteMVC.Controllers
             {
                var job = _mapper.Map<Job>(jobVM);
                await _service.Post(job);
-               _jobBenefitsService.CreateOrUpdateJobBenefitsForJob( job.Id, new List<Job_JobBenefit>(), jobVM.JobBenefitsIds );
+               await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob( job.Id, new List<Job_JobBenefit>(), jobVM.JobBenefitsIds );
 
                 return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job sucessfully created!");
             }
@@ -144,7 +144,7 @@ namespace JobWebsiteMVC.Controllers
                     var job = _mapper.Map<Job>(jobVM);
                     var currentJobBenefits = await _jobBenefitsService.GetJobBenefitsForJobId(job.Id);
                     // Update JobBenefits:
-                    _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, currentJobBenefits, jobVM.JobBenefitsIds);
+                    await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, currentJobBenefits, jobVM.JobBenefitsIds);
 
                     await _service.Put(job);
                     
