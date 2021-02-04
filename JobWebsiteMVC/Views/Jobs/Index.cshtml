@@ -62,7 +62,7 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) 
+    @foreach (var item in Model)
     {
         <tr>
             <td>
@@ -110,14 +110,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.JobType.Description)
             </td>
-            <td width="1%">
-                <a asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fas fa-edit"></i> </a>
-            </td>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <td width="1%">
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fas fa-edit"></i> </a>
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td width="1%">
+                        <a asp-action="Delete" asp-route-id="@item.Id" title="Delete"><i class="fas fa-trash-alt"></i> </a>
+                    </td>
+                }
+            }
             <td width="1%">
                 <a asp-action="Details" asp-route-id="@item.Id" title="Details"><i class="fas fa-info-circle"></i> </a>
-            </td>
-            <td width="1%">
-                <a asp-action="Delete" asp-route-id="@item.Id" title="Delete"><i class="fas fa-trash-alt"></i> </a>
             </td>
         </tr>
     }

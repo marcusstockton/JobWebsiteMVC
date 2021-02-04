@@ -18,6 +18,7 @@ namespace JobWebsiteMVC.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? UpdatedDate { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

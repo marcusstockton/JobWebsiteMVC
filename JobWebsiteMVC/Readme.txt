@@ -23,3 +23,6 @@ Claim Types:
 - JobSeekerOnly
 - JobOwnerOnly
 - AdminOnly
+
+
+Wire in SignalR to update the admin panel when stuff happens (new users, new jobs etc)

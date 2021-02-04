@@ -1,10 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace JobWebsiteMVC.Areas.Identity.Controllers
 {
@@ -50,13 +50,14 @@ namespace JobWebsiteMVC.Areas.Identity.Controllers
                     {
                         html = reader.ReadToEnd();
                         var deserialisedData = JsonConvert.DeserializeObject<SkillAutoComplete>(html);
-                        skills = deserialisedData.skills.Where(x=>double.Parse(x.importance) > 4.0).Select(x => x.description).ToList();
+                        skills = deserialisedData.skills.Where(x => double.Parse(x.importance) > 4.0).Select(x => x.description).ToList();
                     }
                 }
             }
             return skills;
         }
     }
+
     internal class JobTitleAutoComplete
     {
         public Guid uuid { get; set; }
@@ -73,6 +74,7 @@ namespace JobWebsiteMVC.Areas.Identity.Controllers
         public string normalized_job_title { get; set; }
         public List<Skill> skills { get; set; }
     }
+
     [JsonObject]
     internal class Skill
     {

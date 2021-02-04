@@ -1,5 +1,3 @@
-using System;
-
 namespace JobWebsiteMVC.Models
 {
     public class ErrorViewModel

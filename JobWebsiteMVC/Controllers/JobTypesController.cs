@@ -1,14 +1,15 @@
+using JobWebsiteMVC.Extensions.Alerts;
+using JobWebsiteMVC.Interfaces;
+using JobWebsiteMVC.Models.Job;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using JobWebsiteMVC.Models.Job;
-using JobWebsiteMVC.Interfaces;
-using JobWebsiteMVC.Extensions.Alerts;
-using Microsoft.AspNetCore.Authorization;
 
 namespace JobWebsiteMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class JobTypesController : Controller
     {
         private readonly IJobTypesService _jobTypeService;
@@ -49,7 +50,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: JobTypes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -58,7 +59,6 @@ namespace JobWebsiteMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 jobType.CreatedDate = DateTime.Now;
                 await _jobTypeService.CreateJobType(jobType);
                 return RedirectToAction(nameof(Index));
@@ -86,7 +86,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: JobTypes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -141,7 +141,7 @@ namespace JobWebsiteMVC.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var jobType = await _jobTypeService.GetJobTypeById(id);
-            if(jobType != null)
+            if (jobType != null)
             {
                 await _jobTypeService.DeleteJobType(jobType);
                 return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job Type deleted");

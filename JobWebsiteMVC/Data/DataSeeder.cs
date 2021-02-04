@@ -1,16 +1,17 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.Models.Job;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Data
 {
     public class DataSeeder
     {
         private readonly ApplicationDbContext _context;
+
         public DataSeeder(ApplicationDbContext context, IServiceProvider service)
         {
             _context = context;

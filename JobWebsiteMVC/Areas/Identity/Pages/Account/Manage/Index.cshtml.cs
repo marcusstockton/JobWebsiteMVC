@@ -1,16 +1,15 @@
+using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using JobWebsiteMVC.Data;
-using JobWebsiteMVC.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
 {
@@ -46,11 +45,13 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
-            public string LastName{get;set;}
+
+            public string LastName { get; set; }
             public string FirstName { get; set; }
 
-            [DataType(DataType.Date), Display(Name="Date Of Birth")]
+            [DataType(DataType.Date), Display(Name = "Date Of Birth")]
             public DateTime? DateOfBirth { get; set; }
+
             public string ImageUrl { get; set; }
             // public IFormFile Avatar { get; set; }
         }
@@ -68,14 +69,14 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 FirstName = user.FirstName,
-                ImageUrl = user.Attachments.Select(x=>x.Location).FirstOrDefault(),
+                ImageUrl = user.Attachments.Select(x => x.Location).FirstOrDefault(),
             };
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            user.Attachments = _context.Attachments.Where(x=>x.UserId == user.Id).ToList();
+            user.Attachments = _context.Attachments.Where(x => x.UserId == user.Id).ToList();
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -88,17 +89,17 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            user.Attachments = _context.Attachments.Where(x=>x.UserId == user.Id).ToList();
+            user.Attachments = _context.Attachments.Where(x => x.UserId == user.Id).ToList();
 
             var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
             var attachmentList = new List<Attachment>();
             var files = Request.Form.Files;
-            foreach(var file in files)
+            foreach (var file in files)
             {
-                if(file.Length > 0)
+                if (file.Length > 0)
                 {
                     var filePath = Path.Combine(uploads, user.Id, file.FileName);
-                    if(!Directory.Exists(filePath))
+                    if (!Directory.Exists(filePath))
                     {
                         Directory.CreateDirectory(Path.Combine(uploads, user.Id));
                     }
@@ -107,22 +108,24 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
                         using (var filestream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                         {
                             await file.CopyToAsync(filestream);
-                            user.Attachments.Add(new Attachment{
+                            user.Attachments.Add(new Attachment
+                            {
                                 CreatedDate = DateTime.Now,
                                 FileName = file.FileName,
-                                Location = "~/" + filePath.Split("wwwroot").Last().Replace(@"\","/"),
+                                Location = "~/" + filePath.Split("wwwroot").Last().Replace(@"\", "/"),
                                 FileType = file.FileName.Split('.').Last(),
                                 IsActive = true
                             });
                             await _userManager.UpdateAsync(user);
                         }
                     }
-                    catch (UnauthorizedAccessException ex){
+                    catch (UnauthorizedAccessException ex)
+                    {
                         return BadRequest(ex.Message);
                     }
                 }
             }
-            
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");

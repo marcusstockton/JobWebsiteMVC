@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobWebsiteMVC.Extensions
 {
@@ -20,6 +20,6 @@ namespace JobWebsiteMVC.Extensions
                 .SelectMany(t => t.tempItems.DefaultIfEmpty(), (t, temp) => new { t, temp })
                 .Where(t => ReferenceEquals(null, t.temp) || t.temp.Equals(default(T)))
                 .Select(t => t.t.item);
-        }   
+        }
     }
 }

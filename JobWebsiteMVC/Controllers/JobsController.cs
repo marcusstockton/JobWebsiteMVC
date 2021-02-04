@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using JobWebsiteMVC.Data;
-using JobWebsiteMVC.Models.Job;
-using JobWebsiteMVC.ViewModels.Job;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
-using System.Security.Claims;
+﻿using AutoMapper;
 using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Interfaces;
+using JobWebsiteMVC.Models.Job;
+using JobWebsiteMVC.ViewModels.Job;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Controllers
 {
@@ -50,7 +48,7 @@ namespace JobWebsiteMVC.Controllers
             {
                 return NotFound();
             }
-            
+
             var job = await _service.GetJobById(id.Value);
 
             if (job == null)
@@ -77,7 +75,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: Jobs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -120,7 +118,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: Jobs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -147,11 +145,9 @@ namespace JobWebsiteMVC.Controllers
                 {
                     return View(jobVM).WithDanger("Error", ex.Message);
                 }
-                
             }
             return View(jobVM).WithDanger("Error", "Some Errors Occured");
         }
-
 
         // GET: Jobs/Delete/5
         public async Task<IActionResult> Delete(Guid? id)

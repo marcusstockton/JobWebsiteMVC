@@ -1,17 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Services
 {
     public class JobService : IJobService, IDisposable
     {
         private ApplicationDbContext _context;
+        private readonly EmailService _emailService;
+
         public JobService(ApplicationDbContext context)
         {
             _context = context;
@@ -23,20 +25,20 @@ namespace JobWebsiteMVC.Services
             _context.Jobs.Remove(job);
             await Save();
         }
-       
+
         public async Task<Job> GetJobById(Guid id)
         {
             return await _context.Jobs
                 .Include(x => x.Job_JobBenefits)
-                    .ThenInclude(x=>x.JobBenefit)               
-                .Include(x=>x.JobType)
+                    .ThenInclude(x => x.JobBenefit)
+                .Include(x => x.JobType)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<IList<Job>> GetJobs()
         {
             return await _context.Jobs
-                .Include(x=>x.JobType)
+                .Include(x => x.JobType)
                 .ToListAsync();
         }
 
@@ -56,26 +58,31 @@ namespace JobWebsiteMVC.Services
 
         public async Task<List<JobApplication>> GetJobApplicationsForJob(Guid jobId)
         {
-            return await _context.JobApplications.Where( x => x.JobId == jobId ).ToListAsync();
+            return await _context.JobApplications.Where(x => x.JobId == jobId).ToListAsync();
         }
 
         public async Task<List<JobApplication>> GetJobApplicationsForUser(string userId)
         {
-            return await _context.JobApplications.Where( x => x.ApplicantId == userId ).ToListAsync();
+            return await _context.JobApplications.Where(x => x.ApplicantId == userId).ToListAsync();
         }
 
         public async Task<JobApplication> ApplyForJob(Guid jobId, string userId)
         {
+            var applicant = _context.Users.Find(userId);
             var application = new JobApplication
             {
                 ApplicantId = userId,
                 JobId = jobId,
                 CreatedDate = DateTime.Now,
                 IsActive = true,
-                CreatedBy = _context.Users.Find( userId )
+                CreatedBy = applicant
             };
-            await _context.AddAsync( application );
+            await _context.AddAsync(application);
             await Save();
+
+            var job = _context.Jobs.Find(jobId);
+            await _emailService.SendEmailAsync(job.CreatedBy.Email, $"You have received an application for job { job.Title }", "<p>You have received an application for job " + job.Title + "</p>");
+            await _emailService.SendEmailAsync(applicant.Email, $"You have applied for job { job.Title }", "<p>Congratz!, You have applied for job " + job.Title + "</p>");
             return application;
         }
 

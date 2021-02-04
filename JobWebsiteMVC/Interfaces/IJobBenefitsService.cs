@@ -1,8 +1,7 @@
-﻿using System;
+﻿using JobWebsiteMVC.Models.Job;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using JobWebsiteMVC.Models.Job;
 
 namespace JobWebsiteMVC.Interfaces
 {
@@ -11,6 +10,7 @@ namespace JobWebsiteMVC.Interfaces
         Task<List<JobBenefit>> GetJobBenefits();
 
         Task<List<Job_JobBenefit>> GetJobBenefitsForJobId(Guid jobId);
+
         Task CreateOrUpdateJobBenefitsForJob(Guid jobId, List<Job_JobBenefit> currentItems, List<Guid> newItems);
     }
 }

@@ -1,18 +1,18 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Interfaces;
+using JobWebsiteMVC.Models;
+using JobWebsiteMVC.Profiles;
+using JobWebsiteMVC.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using JobWebsiteMVC.Models;
-using AutoMapper;
-using JobWebsiteMVC.Profiles;
-using JobWebsiteMVC.Interfaces;
-using JobWebsiteMVC.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using System.IO;
 
 namespace JobWebsiteMVC
@@ -69,7 +69,6 @@ namespace JobWebsiteMVC
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 seeder.SeedDatabase();
-                
             }
             else
             {

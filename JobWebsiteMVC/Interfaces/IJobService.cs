@@ -1,7 +1,7 @@
+using JobWebsiteMVC.Models.Job;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JobWebsiteMVC.Models.Job;
 
 namespace JobWebsiteMVC.Interfaces
 {
@@ -20,6 +20,7 @@ namespace JobWebsiteMVC.Interfaces
         Task<List<JobApplication>> GetJobApplicationsForJob(Guid jobId);
 
         Task<List<JobApplication>> GetJobApplicationsForUser(string userId);
+
         Task<JobApplication> ApplyForJob(Guid jobId, string userId);
 
         Task Save();

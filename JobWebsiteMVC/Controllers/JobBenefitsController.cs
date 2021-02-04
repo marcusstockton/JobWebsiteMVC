@@ -1,13 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Models.Job;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using JobWebsiteMVC.Data;
-using JobWebsiteMVC.Models.Job;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class JobBenefitsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -48,7 +50,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: JobBenefits/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -82,7 +84,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: JobBenefits/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]

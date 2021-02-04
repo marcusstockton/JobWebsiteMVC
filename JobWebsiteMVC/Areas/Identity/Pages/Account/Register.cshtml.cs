@@ -1,3 +1,14 @@
+using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -5,17 +16,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using JobWebsiteMVC.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using JobWebsiteMVC.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobWebsiteMVC.Areas.Identity.Pages.Account
 {
@@ -71,16 +71,14 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
 
             public DateTime? DateOfBirth { get; set; }
 
-            [Display(Name="First Name")]
+            [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
-            [Display(Name="Last Name")]
+            [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             [Display(Name = "Account Type")]
             public Guid UserTypeId { get; set; }
-
-            
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -96,14 +94,14 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser 
-                { 
-                    UserName = Input.Email, 
-                    Email = Input.Email, 
-                    UserTypeId = Input.UserTypeId, 
-                    DateOfBirth = Input.DateOfBirth, 
-                    FirstName = Input.FirstName, 
-                    LastName = Input.LastName 
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    UserTypeId = Input.UserTypeId,
+                    DateOfBirth = Input.DateOfBirth,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
