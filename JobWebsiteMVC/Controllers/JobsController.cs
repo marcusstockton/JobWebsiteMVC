@@ -32,9 +32,12 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // GET: Jobs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, bool showExpiredJobs, Guid? jobTypeId)
         {
-            var jobList = await _service.GetJobs();
+            var jobList = await _service.GetJobs(searchString, showExpiredJobs, jobTypeId);
+
+            var jobTypes = await _jobTypesService.GetJobTypes();
+            ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x=>x.IsActive).ToList();
 
             var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
             _logger.LogInformation($"Found {jobList.Count} jobs");

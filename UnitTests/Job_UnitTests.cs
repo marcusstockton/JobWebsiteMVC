@@ -38,7 +38,7 @@ namespace UnitTests
         public async Task GetJobs_Returns_Jobs()
         {
             // Arrange
-            _mockService.Setup(x => x.GetJobs()).ReturnsAsync(
+            _mockService.Setup(x => x.GetJobs(It.IsAny<string>(), It.IsAny<bool>(), null)).ReturnsAsync(
                 new List<Job> {
                     new Job { Id = new Guid(), Title = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, JobTitle = "JobTitle", ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40 },
                     new Job { Id = new Guid(), Title = "Test title two", JobType = new JobType{ Id = new Guid(), Description = "JobType2"}, IsDraft=false, MinSalary = 12344M, MaxSalary = 34321M, Description = "Test2", IsActive = true, JobTitle = "JobTitle2", ClosingDate = DateTime.Now.AddDays(8), CreatedDate = DateTime.Now, HolidayEntitlement = 20, HoursPerWeek = 37.5M  }
@@ -53,7 +53,31 @@ namespace UnitTests
             var controller = new JobsController(_mockMapper.Object, _mockLogger.Object, _mockService.Object, _mockJobTypesService.Object, _mockJobBenefitsService.Object);
 
             // Assert
-            var result = await controller.Index() as ViewResult;
+            var result = await controller.Index(It.IsAny<string>(), It.IsAny<bool>(), null) as ViewResult;
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public async Task GetJobs_Returns_Correct_Filtered_Jobs()
+        {
+            // Arrange
+            _mockService.Setup(x => x.GetJobs(It.IsAny<string>(), It.IsAny<bool>(), null)).ReturnsAsync(
+                new List<Job> {
+                    new Job { Id = new Guid(), Title = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, JobTitle = "JobTitle", ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40 },
+                    new Job { Id = new Guid(), Title = "Test title two", JobType = new JobType{ Id = new Guid(), Description = "JobType2"}, IsDraft=false, MinSalary = 12344M, MaxSalary = 34321M, Description = "Test2", IsActive = true, JobTitle = "JobTitle2", ClosingDate = DateTime.Now.AddDays(8), CreatedDate = DateTime.Now, HolidayEntitlement = 20, HoursPerWeek = 37.5M  }
+                });
+            // Mock Mapper stuff...
+            _mockMapper.Setup(x => x.Map<List<JobDetailsViewModel>>(It.IsAny<Job>())).Returns(new List<JobDetailsViewModel> {
+                new JobDetailsViewModel{ },
+                new JobDetailsViewModel{ }
+            });
+
+            // Act
+            var controller = new JobsController(_mockMapper.Object, _mockLogger.Object, _mockService.Object, _mockJobTypesService.Object, _mockJobBenefitsService.Object);
+
+            // Assert
+            var result = await controller.Index(It.IsAny<string>(), It.IsAny<bool>(), null) as ViewResult;
 
             Assert.IsNotNull(result);
         }

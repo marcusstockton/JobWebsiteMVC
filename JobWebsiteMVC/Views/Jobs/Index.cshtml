@@ -9,7 +9,24 @@
 <p>
     <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
 </p>
-
+@using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <div class="form-group mr-2">
+        @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
+    </div>
+    <div class="form-group mr-2">
+        @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
+        <label class="form-check-label" for="showExpiredJobs">
+            Show Expired Jobs
+        </label>
+    </div>
+    <div class="form-group mr-2">
+        @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-control" })
+    </div>
+    <div class="form-group mr-2">
+        <input type="submit" value="Search" />
+    </div>
+}
 <table class="table table-hover">
     <thead>
         <tr>
@@ -62,70 +79,70 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DescriptionShort)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDraft)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinSalary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxSalary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkingHoursStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkingHoursEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HoursPerWeek)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HolidayEntitlement)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobType.Description)
-            </td>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <td width="1%">
-                    <a asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fas fa-edit"></i> </a>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
                 </td>
-                @if (User.IsInRole("Admin"))
+                <td>
+                    @Html.DisplayFor(modelItem => item.DescriptionShort)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsDraft)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinSalary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxSalary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkingHoursStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkingHoursEnd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoursPerWeek)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HolidayEntitlement)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClosingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobType.Description)
+                </td>
+                @if (User.Identity.IsAuthenticated)
                 {
                     <td width="1%">
-                        <a asp-action="Delete" asp-route-id="@item.Id" title="Delete"><i class="fas fa-trash-alt"></i> </a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fas fa-edit"></i> </a>
                     </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td width="1%">
+                            <a asp-action="Delete" asp-route-id="@item.Id" title="Delete"><i class="fas fa-trash-alt"></i> </a>
+                        </td>
+                    }
                 }
-            }
-            <td width="1%">
-                <a asp-action="Details" asp-route-id="@item.Id" title="Details"><i class="fas fa-info-circle"></i> </a>
-            </td>
-        </tr>
-    }
+                <td width="1%">
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Details"><i class="fas fa-info-circle"></i> </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

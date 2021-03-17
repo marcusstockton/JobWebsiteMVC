@@ -35,11 +35,29 @@ namespace JobWebsiteMVC.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<IList<Job>> GetJobs()
+        public async Task<IList<Job>> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
-            return await _context.Jobs
+            var jobs = _context.Jobs
                 .Include(x => x.JobType)
-                .ToListAsync();
+                .Where(x=>x.IsActive);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                jobs = jobs.Where(x => x.Title.ToLower().Contains(searchString.ToLower()) || x.Description.ToLower().Contains(searchString.ToLower()));
+            }
+            if (jobTypeId.HasValue)
+            {
+                jobs = jobs.Where(x => x.JobTypeId == jobTypeId);
+            }
+            if (showExpiredJobs)
+            {
+                jobs = jobs.Where(x => x.ClosingDate < DateTime.Now);
+            }
+            else
+            {
+                jobs = jobs.Where(x => x.ClosingDate > DateTime.Now);
+            }
+            return await jobs.ToListAsync();
         }
 
         public async Task Post(Job job)

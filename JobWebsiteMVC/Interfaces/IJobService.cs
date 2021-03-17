@@ -7,7 +7,7 @@ namespace JobWebsiteMVC.Interfaces
 {
     public interface IJobService
     {
-        Task<IList<Job>> GetJobs();
+        Task<IList<Job>> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId);
 
         Task<Job> GetJobById(Guid jobId);
 
