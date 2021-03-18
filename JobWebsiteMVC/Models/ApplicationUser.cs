@@ -17,11 +17,6 @@ namespace JobWebsiteMVC.Models
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
 
-        public Guid UserTypeId { get; set; }
-
-        [ForeignKey("UserTypeId")]
-        public virtual UserType UserType { get; set; }
-
         public virtual ICollection<Attachment> Attachments { get; set; }
     }
 }

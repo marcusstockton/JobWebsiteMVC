@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobWebsiteMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200225125044_initialCommit")]
-    partial class initialCommit
+    [Migration("20210318124258_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -81,9 +81,6 @@ namespace JobWebsiteMVC.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<Guid>("UserTypeId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -92,8 +89,6 @@ namespace JobWebsiteMVC.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
-
-                    b.HasIndex("UserTypeId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -343,21 +338,6 @@ namespace JobWebsiteMVC.Migrations
                     b.ToTable("Job_JobBenefits");
                 });
 
-            modelBuilder.Entity("JobWebsiteMVC.Models.UserType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserTypes");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -484,15 +464,6 @@ namespace JobWebsiteMVC.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("JobWebsiteMVC.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("JobWebsiteMVC.Models.UserType", "UserType")
-                        .WithMany()
-                        .HasForeignKey("UserTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Attachment", b =>

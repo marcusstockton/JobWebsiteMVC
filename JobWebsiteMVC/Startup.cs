@@ -54,7 +54,6 @@ namespace JobWebsiteMVC
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<IJobTypesService, JobTypesService>();
             services.AddScoped<IJobBenefitsService, JobBenefitsService>();
-            services.AddScoped<IUserTypesService, UserTypesService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
 
             services.AddTransient<DataSeeder>();

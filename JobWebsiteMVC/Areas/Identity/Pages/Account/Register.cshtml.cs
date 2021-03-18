@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Models;
@@ -27,11 +28,13 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -39,6 +42,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
             _emailSender = emailSender;
         }
 
@@ -47,7 +51,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public List<UserType> UserTypes { get; set; }
+        public List<IdentityRole> UserTypes { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -85,7 +89,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            UserTypes = (await _context.UserTypes.ToListAsync());
+            UserTypes = await _context.Roles.ToListAsync();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -98,7 +102,6 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
                 {
                     UserName = Input.Email,
                     Email = Input.Email,
-                    UserTypeId = Input.UserTypeId,
                     DateOfBirth = Input.DateOfBirth,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName
@@ -107,6 +110,10 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    var role = await _context.Roles.FindAsync(Input.UserTypeId);
+                    await _userManager.AddToRoleAsync(user, role.Name);
+                    _context.SaveChanges();
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

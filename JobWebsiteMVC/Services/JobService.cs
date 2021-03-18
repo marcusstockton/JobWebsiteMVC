@@ -104,6 +104,12 @@ namespace JobWebsiteMVC.Services
             return application;
         }
 
+        public async Task<IList<Job>> GetMyJobs(string userId)
+        {
+            return _context.Jobs.Where(x => x.CreatedBy.Id == userId).ToList();
+        }
+
+
         public async Task Save()
         {
             await _context.SaveChangesAsync();

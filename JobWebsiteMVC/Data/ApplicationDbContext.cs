@@ -2,6 +2,7 @@ using JobWebsiteMVC.Models;
 using JobWebsiteMVC.Models.Job;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using JobWebsiteMVC.ViewModels.Job;
 
 namespace JobWebsiteMVC.Data
 {
@@ -11,8 +12,6 @@ namespace JobWebsiteMVC.Data
             : base(options)
         {
         }
-
-        public DbSet<UserType> UserTypes { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobBenefit> JobBenefits { get; set; }
         public DbSet<Job_JobBenefit> Job_JobBenefits { get; set; }
@@ -23,11 +22,6 @@ namespace JobWebsiteMVC.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<UserType>()
-                .HasMany<ApplicationUser>()
-                .WithOne(x => x.UserType)
-                .HasForeignKey(x => x.UserTypeId);
 
             builder.Entity<Job>()
                 .HasKey(x => x.Id);
@@ -55,5 +49,7 @@ namespace JobWebsiteMVC.Data
             builder.Entity<JobType>().Property(x => x.Description).IsRequired().HasMaxLength(100);
             builder.Entity<JobBenefit>().Property(x => x.Description).IsRequired().HasMaxLength(100);
         }
+
+        public DbSet<JobDetailsViewModel> JobDetailsViewModel { get; set; }
     }
 }

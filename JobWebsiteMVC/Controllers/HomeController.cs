@@ -5,7 +5,9 @@ using System.Linq;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.ViewModels.Home;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace JobWebsiteMVC.Controllers
@@ -14,24 +16,26 @@ namespace JobWebsiteMVC.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
             var result = new Overview
             {
-                ActiveJobCount = _context.Jobs.Where(c => c.IsActive && c.ClosingDate < DateTime.Now && c.PublishDate > DateTime.Now).Count(),
+                ActiveJobCount = _context.Jobs.Where(c => c.IsActive && c.ClosingDate > DateTime.Now && c.PublishDate < DateTime.Now).Count(),
                 UserCount = _context.Users.Count(),
                 DraftJobs = _context.Jobs.Where(x => x.IsDraft).Count(),
                 FutureJobs = _context.Jobs.Where(x => x.PublishDate > DateTime.Now).Count(),
                 ClosedJobs = _context.Jobs.Where(x => x.ClosingDate <= DateTime.Now).Count(),
-                JobSeekingUserCount = _context.Users.Where(x => x.UserType.Description == "Job Seeker").Count(),
-                EmployerCount = _context.Users.Where(x => x.UserType.Description == "Employer").Count(),
+                JobSeekingUserCount = _userManager.GetUsersInRoleAsync("JobSeeker").Result.Count(),
+                EmployerCount = _userManager.GetUsersInRoleAsync("JobOwner").Result.Count()
             };
 
             return View(result);

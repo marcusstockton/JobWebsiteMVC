@@ -8,7 +8,7 @@
     {
         foreach (var userType in Model.UserTypes)
         {
-            userTypeList.Add(new SelectListItem { Text = userType.Description, Value = userType.Id.ToString() });
+            userTypeList.Add(new SelectListItem { Text = userType.Name, Value = userType.Id.ToString() });
         }
     }
 }

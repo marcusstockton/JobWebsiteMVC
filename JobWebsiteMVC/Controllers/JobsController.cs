@@ -8,6 +8,7 @@ using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.ViewModels.Job;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -82,6 +83,7 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,JobOwner")]
         public async Task<IActionResult> Create(JobCreateViewModel jobVM) // [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive")]
         {
             if (ModelState.IsValid)
@@ -96,6 +98,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // GET: Jobs/Edit/5
+        [Authorize(Roles = "Admin,JobOwner")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -125,6 +128,7 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,JobOwner")]
         public async Task<IActionResult> Edit(Guid id, [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive,JobBenefitsIds,JobTypeId")] JobEditViewModel jobVM)
         {
             if (id != jobVM.Id)
@@ -153,6 +157,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // GET: Jobs/Delete/5
+        [Authorize(Roles = "Admin,JobOwner")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -172,6 +177,7 @@ namespace JobWebsiteMVC.Controllers
 
         // POST: Jobs/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,JobOwner")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
@@ -181,6 +187,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> JobApplication(Guid jobId)
         {
             var job = await _service.GetJobById(jobId);
@@ -197,6 +204,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "JobSeeker")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> JobApply(Guid jobId)
         {
@@ -207,6 +215,15 @@ namespace JobWebsiteMVC.Controllers
                 return View(result);
             }
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin,JobOwner")]
+        public async Task<IActionResult> ViewMyJobs()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _service.GetMyJobs(userId);
+            var jobs = _mapper.Map<List<JobDetailsViewModel>>(result);
+            return View("MyJobs", jobs);
         }
     }
 }

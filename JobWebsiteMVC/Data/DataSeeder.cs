@@ -16,15 +16,20 @@ namespace JobWebsiteMVC.Data
         {
             _context = context;
             var _userManager = service.GetRequiredService<UserManager<ApplicationUser>>();
+            var _roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
+            IdentityResult roleResult;
 
-            if (!_context.UserTypes.Any())
+            if (!_context.Roles.Any())
             {
-                _context.AddRange(
-                    new UserType { Description = "Job Seeker" },
-                    new UserType { Description = "Job Owner" },
-                    new UserType { Description = "Admin" }
-                );
-                _context.SaveChanges();
+                string[] roleNames = { "Admin", "JobSeeker", "JobOwner" };
+                foreach (var roleName in roleNames)
+                {
+                    var roleExist = _roleManager.RoleExistsAsync(roleName).Result;
+                    if (!roleExist)
+                    {
+                        roleResult = _roleManager.CreateAsync(new IdentityRole(roleName)).Result;
+                    }
+                }
             }
 
             if (!_context.Users.Any())
@@ -36,9 +41,10 @@ namespace JobWebsiteMVC.Data
                     DateOfBirth = new DateTime(1992, 4, 12),
                     FirstName = "Marcus",
                     LastName = "TestUser",
-                    UserType = _context.UserTypes.FirstOrDefault(x => x.Description == "Job Owner")
+                    //UserType = _context.UserTypes.FirstOrDefault(x => x.Description == "Job Owner")
                 };
-                _userManager.CreateAsync(user, "P@55w0rd1");
+                _userManager.CreateAsync(user, "P@55w0rd1").Wait();
+                _userManager.AddToRoleAsync(user, "JobOwner").Wait();
 
                 ApplicationUser user2 = new ApplicationUser()
                 {
@@ -47,9 +53,9 @@ namespace JobWebsiteMVC.Data
                     DateOfBirth = new DateTime(1992, 11, 23),
                     FirstName = "Sarah",
                     LastName = "TestUser",
-                    UserType = _context.UserTypes.FirstOrDefault(x => x.Description == "Job Seeker")
                 };
-                _userManager.CreateAsync(user2, "P@55w0rd1");
+                _userManager.CreateAsync(user2, "P@55w0rd1").Wait();
+                _userManager.AddToRoleAsync(user2, "JobSeeker").Wait();
 
                 ApplicationUser user3 = new ApplicationUser()
                 {
@@ -58,9 +64,9 @@ namespace JobWebsiteMVC.Data
                     DateOfBirth = new DateTime(1987, 08, 14),
                     FirstName = "Admin",
                     LastName = "TestUser",
-                    UserType = _context.UserTypes.FirstOrDefault(x => x.Description == "Admin")
                 };
-                _userManager.CreateAsync(user3, "P@55w0rd1");
+                _userManager.CreateAsync(user3, "P@55w0rd1").Wait();
+                _userManager.AddToRoleAsync(user3, "Admin").Wait();
             }
         }
 
@@ -73,10 +79,10 @@ namespace JobWebsiteMVC.Data
             {
                 // Insert some job types:
                 await _context.JobTypes.AddRangeAsync(
-                    new JobType { Description = "Full Time", IsActive = true, CreatedBy = user1 },
-                    new JobType { Description = "Part-Time", IsActive = true, CreatedBy = user1 },
-                    new JobType { Description = "Contract", IsActive = true, CreatedBy = user1 },
-                    new JobType { Description = "Permanent", IsActive = true, CreatedBy = user2 }
+                    new JobType { Description = "Full Time", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = user1 },
+                    new JobType { Description = "Part-Time", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = user1 },
+                    new JobType { Description = "Contract", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = user1 },
+                    new JobType { Description = "Permanent", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = user2 }
                 );
                 await _context.SaveChangesAsync();
             }
@@ -85,10 +91,10 @@ namespace JobWebsiteMVC.Data
             {
                 // Insert some job benefits:
                 await _context.AddRangeAsync(
-                    new JobBenefit { Description = "Cycle To Work Scheme", CreatedBy = user1, IsActive = true },
-                    new JobBenefit { Description = "Pension", CreatedBy = user1, IsActive = true },
-                    new JobBenefit { Description = "Work From Home", CreatedBy = user1, IsActive = true },
-                    new JobBenefit { Description = "Flexi-Time", CreatedBy = user1, IsActive = true }
+                    new JobBenefit { Description = "Cycle To Work Scheme", CreatedBy = user1, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobBenefit { Description = "Pension", CreatedBy = user1, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobBenefit { Description = "Work From Home", CreatedBy = user1, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobBenefit { Description = "Flexi-Time", CreatedBy = user1, CreatedDate = DateTime.Now, IsActive = true }
                 );
                 await _context.SaveChangesAsync();
             }
