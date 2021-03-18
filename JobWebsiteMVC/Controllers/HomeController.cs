@@ -1,12 +1,12 @@
-﻿using JobWebsiteMVC.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace JobWebsiteMVC.Controllers
 {
@@ -25,7 +25,7 @@ namespace JobWebsiteMVC.Controllers
         {
             var result = new Overview
             {
-                ActiveJobCount = _context.Jobs.Where(c => c.IsActive).Count(),
+                ActiveJobCount = _context.Jobs.Where(c => c.IsActive && c.ClosingDate < DateTime.Now && c.PublishDate > DateTime.Now).Count(),
                 UserCount = _context.Users.Count(),
                 DraftJobs = _context.Jobs.Where(x => x.IsDraft).Count(),
                 FutureJobs = _context.Jobs.Where(x => x.PublishDate > DateTime.Now).Count(),

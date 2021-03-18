@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function () {
     // Do Stuff
     $("#JobTitle").autocomplete({
         source: function (request, response) {

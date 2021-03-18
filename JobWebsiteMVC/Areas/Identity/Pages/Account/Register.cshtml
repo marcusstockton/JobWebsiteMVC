@@ -4,11 +4,11 @@
     ViewData["Title"] = "Register";
 
     var userTypeList = new List<SelectListItem>();
-    if(Model.UserTypes != null)
+    if (Model.UserTypes != null)
     {
-        foreach(var userType in Model.UserTypes)
+        foreach (var userType in Model.UserTypes)
         {
-            userTypeList.Add(new SelectListItem{Text=userType.Description, Value = userType.Id.ToString()});
+            userTypeList.Add(new SelectListItem { Text = userType.Description, Value = userType.Id.ToString() });
         }
     }
 }

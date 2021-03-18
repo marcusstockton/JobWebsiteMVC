@@ -1,7 +1,7 @@
-﻿using JobWebsiteMVC.Models.Job;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using JobWebsiteMVC.Models.Job;
 
 namespace JobWebsiteMVC.ViewModels.Job
 {

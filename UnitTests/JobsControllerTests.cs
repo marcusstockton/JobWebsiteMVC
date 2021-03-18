@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using JobWebsiteMVC.Controllers;
 using JobWebsiteMVC.Data;
@@ -8,9 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace UnitTests
 {
@@ -32,6 +32,12 @@ namespace UnitTests
             _mockService = new Mock<IJobService>();
             _mockJobTypesService = new Mock<IJobTypesService>();
             _mockJobBenefitsService = new Mock<IJobBenefitsService>();
+
+            _mockMapper.Setup(x => x.Map<List<JobDetailsViewModel>>(It.IsAny<Job>())).Returns(new List<JobDetailsViewModel> {
+                new JobDetailsViewModel{ },
+                new JobDetailsViewModel{ }
+            });
+            _mockJobTypesService.Setup(x => x.GetJobTypes()).ReturnsAsync(new List<JobType> { new JobType { Description = "Job Type 1" } });
         }
 
         [TestMethod]
@@ -43,12 +49,6 @@ namespace UnitTests
                     new Job { Id = new Guid(), Title = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, JobTitle = "JobTitle", ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40 },
                     new Job { Id = new Guid(), Title = "Test title two", JobType = new JobType{ Id = new Guid(), Description = "JobType2"}, IsDraft=false, MinSalary = 12344M, MaxSalary = 34321M, Description = "Test2", IsActive = true, JobTitle = "JobTitle2", ClosingDate = DateTime.Now.AddDays(8), CreatedDate = DateTime.Now, HolidayEntitlement = 20, HoursPerWeek = 37.5M  }
                 });
-            // Mock Mapper stuff...
-            _mockMapper.Setup(x => x.Map<List<JobDetailsViewModel>>(It.IsAny<Job>())).Returns(new List<JobDetailsViewModel> {
-                new JobDetailsViewModel{ },
-                new JobDetailsViewModel{ }
-            });
-            _mockJobTypesService.Setup(x => x.GetJobTypes()).ReturnsAsync(new List<JobType> { new JobType { Description = "Job Type 1" } });
 
             // Act
             var controller = new JobsController(_mockMapper.Object, _mockLogger.Object, _mockService.Object, _mockJobTypesService.Object, _mockJobBenefitsService.Object);
@@ -68,12 +68,6 @@ namespace UnitTests
                     new Job { Id = new Guid(), Title = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, JobTitle = "JobTitle", ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40 },
                     new Job { Id = new Guid(), Title = "Test title two", JobType = new JobType{ Id = new Guid(), Description = "JobType2"}, IsDraft=false, MinSalary = 12344M, MaxSalary = 34321M, Description = "Test2", IsActive = true, JobTitle = "JobTitle2", ClosingDate = DateTime.Now.AddDays(8), CreatedDate = DateTime.Now, HolidayEntitlement = 20, HoursPerWeek = 37.5M  }
                 });
-            // Mock Mapper stuff...
-            _mockMapper.Setup(x => x.Map<List<JobDetailsViewModel>>(It.IsAny<Job>())).Returns(new List<JobDetailsViewModel> {
-                new JobDetailsViewModel{ },
-                new JobDetailsViewModel{ }
-            });
-            _mockJobTypesService.Setup(x => x.GetJobTypes()).ReturnsAsync(new List<JobType> { new JobType { Description = "Job Type 1"} });
 
             // Act
             var controller = new JobsController(_mockMapper.Object, _mockLogger.Object, _mockService.Object, _mockJobTypesService.Object, _mockJobBenefitsService.Object);

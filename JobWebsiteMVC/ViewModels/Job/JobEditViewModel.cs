@@ -1,8 +1,8 @@
-using JobWebsiteMVC.Models.Job;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using JobWebsiteMVC.Models.Job;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JobWebsiteMVC.ViewModels.Job
 {

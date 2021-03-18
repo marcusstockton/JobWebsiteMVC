@@ -1,9 +1,9 @@
-﻿using JobWebsiteMVC.Data;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Services
 {

@@ -1,4 +1,9 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using AutoMapper;
 using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
@@ -6,11 +11,6 @@ using JobWebsiteMVC.ViewModels.Job;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Controllers
 {
@@ -37,7 +37,7 @@ namespace JobWebsiteMVC.Controllers
             var jobList = await _service.GetJobs(searchString, showExpiredJobs, jobTypeId);
 
             var jobTypes = await _jobTypesService.GetJobTypes();
-            ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x=>x.IsActive).ToList();
+            ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
 
             var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
             _logger.LogInformation($"Found {jobList.Count} jobs");
