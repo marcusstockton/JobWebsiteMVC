@@ -32,7 +32,7 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // GET: Jobs
-        public async Task<IActionResult> Index(string searchString, bool showExpiredJobs, Guid? jobTypeId)
+        public async Task<IActionResult> Index(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
             var jobList = await _service.GetJobs(searchString, showExpiredJobs, jobTypeId);
 

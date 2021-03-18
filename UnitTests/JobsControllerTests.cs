@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace UnitTests
 {
     [TestClass]
-    public class Job_UnitTests
+    public class JobsControllerTests
     {
         private Mock<ApplicationDbContext> _mockContext;
         private Mock<IMapper> _mockMapper;
@@ -48,6 +48,7 @@ namespace UnitTests
                 new JobDetailsViewModel{ },
                 new JobDetailsViewModel{ }
             });
+            _mockJobTypesService.Setup(x => x.GetJobTypes()).ReturnsAsync(new List<JobType> { new JobType { Description = "Job Type 1" } });
 
             // Act
             var controller = new JobsController(_mockMapper.Object, _mockLogger.Object, _mockService.Object, _mockJobTypesService.Object, _mockJobBenefitsService.Object);
@@ -72,6 +73,7 @@ namespace UnitTests
                 new JobDetailsViewModel{ },
                 new JobDetailsViewModel{ }
             });
+            _mockJobTypesService.Setup(x => x.GetJobTypes()).ReturnsAsync(new List<JobType> { new JobType { Description = "Job Type 1"} });
 
             // Act
             var controller = new JobsController(_mockMapper.Object, _mockLogger.Object, _mockService.Object, _mockJobTypesService.Object, _mockJobBenefitsService.Object);
