@@ -39,10 +39,12 @@ namespace JobWebsiteMVC.ViewModels.Job
         public decimal MaxSalary { get; set; }
 
         [Display(Name = "Start Time")]
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Time)]
         public TimeSpan WorkingHoursStart { get; set; }
 
         [Display(Name = "End Time")]
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Time)]
         public TimeSpan WorkingHoursEnd { get; set; }
 

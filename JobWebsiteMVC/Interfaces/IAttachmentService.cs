@@ -1,6 +1,11 @@
-﻿namespace JobWebsiteMVC.Interfaces
+﻿using System.Threading.Tasks;
+using JobWebsiteMVC.Models;
+using Microsoft.AspNetCore.Http;
+
+namespace JobWebsiteMVC.Interfaces
 {
-    internal interface IAttachmentService
+    public interface IAttachmentService
     {
+        Task<Attachment> SaveAvatar(IFormFile file, ApplicationUser user);
     }
 }

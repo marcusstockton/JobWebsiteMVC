@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,18 +16,18 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private IWebHostEnvironment _hostingEnvironment;
+        private IAttachmentService _attachmentService;
         private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IWebHostEnvironment environment,
+            IAttachmentService attachmentService,
             ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _hostingEnvironment = environment;
+            _attachmentService = attachmentService;
             _context = context;
         }
 
@@ -90,41 +89,11 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
         {
             var user = await _userManager.GetUserAsync(User);
             user.Attachments = _context.Attachments.Where(x => x.UserId == user.Id).ToList();
-
-            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads");
             var attachmentList = new List<Attachment>();
-            var files = Request.Form.Files;
-            foreach (var file in files)
-            {
-                if (file.Length > 0)
-                {
-                    var filePath = Path.Combine(uploads, user.Id, file.FileName);
-                    if (!Directory.Exists(filePath))
-                    {
-                        Directory.CreateDirectory(Path.Combine(uploads, user.Id));
-                    }
-                    try
-                    {
-                        using (var filestream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                        {
-                            await file.CopyToAsync(filestream);
-                            user.Attachments.Add(new Attachment
-                            {
-                                CreatedDate = DateTime.Now,
-                                FileName = file.FileName,
-                                Location = "~/" + filePath.Split("wwwroot").Last().Replace(@"\", "/"),
-                                FileType = file.FileName.Split('.').Last(),
-                                IsActive = true
-                            });
-                            await _userManager.UpdateAsync(user);
-                        }
-                    }
-                    catch (UnauthorizedAccessException ex)
-                    {
-                        return BadRequest(ex.Message);
-                    }
-                }
-            }
+            var file = Request.Form.Files[0];
+
+            var attachment = await _attachmentService.SaveAvatar(file, user);
+            user.Attachments.Add(attachment);
 
             if (user == null)
             {

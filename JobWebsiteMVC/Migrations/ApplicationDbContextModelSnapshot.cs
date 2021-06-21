@@ -329,11 +329,77 @@ namespace JobWebsiteMVC.Migrations
                     b.Property<Guid>("JobBenefitId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("JobDetailsViewModelId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("JobId", "JobBenefitId");
 
                     b.HasIndex("JobBenefitId");
 
+                    b.HasIndex("JobDetailsViewModelId");
+
                     b.ToTable("Job_JobBenefits");
+                });
+
+            modelBuilder.Entity("JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ClosingDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("HolidayEntitlement")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("HoursPerWeek")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("JobTitle")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("JobTypeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("MaxSalary")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("MinSalary")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("WorkingHoursEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("WorkingHoursStart")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobTypeId");
+
+                    b.ToTable("JobDetailsViewModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -551,11 +617,22 @@ namespace JobWebsiteMVC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel", null)
+                        .WithMany("Job_JobBenefits")
+                        .HasForeignKey("JobDetailsViewModelId");
+
                     b.HasOne("JobWebsiteMVC.Models.Job.Job", "Job")
                         .WithMany("Job_JobBenefits")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel", b =>
+                {
+                    b.HasOne("JobWebsiteMVC.Models.Job.JobType", "JobType")
+                        .WithMany()
+                        .HasForeignKey("JobTypeId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
