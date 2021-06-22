@@ -1,8 +1,8 @@
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.Models.Job;
+using JobWebsiteMVC.ViewModels.Job;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using JobWebsiteMVC.ViewModels.Job;
 
 namespace JobWebsiteMVC.Data
 {
@@ -12,6 +12,7 @@ namespace JobWebsiteMVC.Data
             : base(options)
         {
         }
+
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobBenefit> JobBenefits { get; set; }
         public DbSet<Job_JobBenefit> Job_JobBenefits { get; set; }

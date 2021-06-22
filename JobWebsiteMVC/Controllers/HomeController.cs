@@ -7,7 +7,6 @@ using JobWebsiteMVC.Models;
 using JobWebsiteMVC.ViewModels.Home;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace JobWebsiteMVC.Controllers

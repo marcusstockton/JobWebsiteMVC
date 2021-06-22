@@ -109,7 +109,6 @@ namespace JobWebsiteMVC.Services
             return _context.Jobs.Where(x => x.CreatedBy.Id == userId).ToList();
         }
 
-
         public async Task Save()
         {
             await _context.SaveChangesAsync();

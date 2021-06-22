@@ -22,7 +22,9 @@ namespace JobWebsiteMVC.Interfaces
         Task<List<JobApplication>> GetJobApplicationsForUser(string userId);
 
         Task<JobApplication> ApplyForJob(Guid jobId, string userId);
+
         Task<IList<Job>> GetMyJobs(string userId);
+
         Task Save();
     }
 }

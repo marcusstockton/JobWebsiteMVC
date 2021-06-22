@@ -94,7 +94,7 @@ namespace JobWebsiteMVC.Data
             var adminUser = await _context.Users.FindAsync("AdminTestUser2");
             var jobSeeker = await _context.Users.FindAsync("TestUser2");
 
-            if (!_context.Attachments.Any()) 
+            if (!_context.Attachments.Any())
             {
                 await _context.Attachments.AddAsync(new Attachment
                 {
