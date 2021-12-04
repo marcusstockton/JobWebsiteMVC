@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JobWebsiteMVC.Models;
@@ -159,7 +160,8 @@ namespace JobWebsiteMVC.Data
                         MinSalary = 10000M,
                         HolidayEntitlement = 21,
                         HoursPerWeek = 40,
-                        JobType = _context.JobTypes.First()
+                        JobType = _context.JobTypes.First(),
+                        Job_JobBenefits = _context.Job_JobBenefits.Take(2).ToList(),
                     },
                     new Job
                     {
@@ -177,7 +179,8 @@ namespace JobWebsiteMVC.Data
                         MinSalary = 38000,
                         PublishDate = DateTime.Now,
                         WorkingHoursStart = new TimeSpan(08, 30, 00),
-                        WorkingHoursEnd = new TimeSpan(16, 30, 00)
+                        WorkingHoursEnd = new TimeSpan(16, 30, 00),
+                        Job_JobBenefits = _context.Job_JobBenefits.Skip(1).Take(2).ToList(),
                     },
                     new Job
                     {
@@ -195,7 +198,8 @@ namespace JobWebsiteMVC.Data
                         MinSalary = 24000,
                         PublishDate = DateTime.Now.AddDays(-2),
                         WorkingHoursStart = new TimeSpan(09, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(16, 30, 00)
+                        WorkingHoursEnd = new TimeSpan(16, 30, 00),
+                        Job_JobBenefits = _context.Job_JobBenefits.Skip(2).Take(2).ToList(),
                     },
                     new Job
                     {
@@ -213,7 +217,8 @@ namespace JobWebsiteMVC.Data
                         MinSalary = 18000,
                         PublishDate = DateTime.Now.AddDays(1),
                         WorkingHoursStart = new TimeSpan(07, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(18, 30, 00)
+                        WorkingHoursEnd = new TimeSpan(18, 30, 00),
+                        Job_JobBenefits = _context.Job_JobBenefits.Skip(2).Take(2).ToList(),
                     },
                     new Job
                     {
