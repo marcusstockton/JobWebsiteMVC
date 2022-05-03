@@ -33,7 +33,7 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobBenefit = await _context.JobBenefits
+            var jobBenefit = await _context.Benefits
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (jobBenefit == null)
             {
@@ -54,7 +54,7 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] JobBenefit jobBenefit)
+        public async Task<IActionResult> Create([Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] Benefit jobBenefit)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace JobWebsiteMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] JobBenefit jobBenefit)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Description,Id,CreatedDate,UpdatedDate,IsActive")] Benefit jobBenefit)
         {
             if (id != jobBenefit.Id)
             {
@@ -127,7 +127,7 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobBenefit = await _context.JobBenefits
+            var jobBenefit = await _context.Benefits
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (jobBenefit == null)
             {
@@ -150,7 +150,7 @@ namespace JobWebsiteMVC.Controllers
 
         private bool JobBenefitExists(Guid id)
         {
-            return _context.JobBenefits.Any(e => e.Id == id);
+            return _context.JobBenefits.Any(e => e.Benefit.Id == id);
         }
     }
 }

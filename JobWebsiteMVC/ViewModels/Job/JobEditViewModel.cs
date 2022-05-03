@@ -54,7 +54,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         public DateTime PublishDate { get; set; }
 
         [Display(Name = "Job Benefits")]
-        public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
+        public virtual ICollection<JobBenefit> Job_JobBenefits { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]

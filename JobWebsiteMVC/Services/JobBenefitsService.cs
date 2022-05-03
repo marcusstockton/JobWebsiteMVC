@@ -19,21 +19,21 @@ namespace JobWebsiteMVC.Services
             _context = context;
         }
 
-        public async Task<List<JobBenefit>> GetJobBenefits()
+        public async Task<List<Benefit>> GetJobBenefits()
         {
-            return await _context.JobBenefits.ToListAsync();
+            return await _context.Benefits.ToListAsync();
         }
 
-        public async Task<List<Job_JobBenefit>> GetJobBenefitsForJobId(Guid jobId)
+        public async Task<List<JobBenefit>> GetJobBenefitsForJobId(Guid jobId)
         {
-            return await _context.Job_JobBenefits.Where(x => x.JobId == jobId).ToListAsync();
+            return await _context.JobBenefits.Where(x => x.JobId == jobId).ToListAsync();
         }
 
         // https://stackoverflow.com/questions/42993860/entity-framework-core-update-many-to-many
-        public async Task CreateOrUpdateJobBenefitsForJob(Guid jobId, List<Job_JobBenefit> currentItems, List<Guid> newItems)
+        public async Task CreateOrUpdateJobBenefitsForJob(Guid jobId, List<JobBenefit> currentItems, List<Guid> newItems)
         {
             _context.TryUpdateManyToMany(currentItems, newItems
-            .Select(x => new Job_JobBenefit
+            .Select(x => new JobBenefit
             {
                 JobId = jobId,
                 JobBenefitId = x

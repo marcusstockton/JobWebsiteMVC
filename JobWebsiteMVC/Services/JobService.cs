@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobWebsiteMVC.Services
@@ -12,11 +13,12 @@ namespace JobWebsiteMVC.Services
     public class JobService : IJobService, IDisposable
     {
         private ApplicationDbContext _context;
-        private readonly EmailService _emailService;
+        private readonly IEmailSender _emailService;
 
-        public JobService(ApplicationDbContext context)
+        public JobService(ApplicationDbContext context, IEmailSender emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         public async Task Delete(Guid id)
@@ -29,8 +31,8 @@ namespace JobWebsiteMVC.Services
         public async Task<Job> GetJobById(Guid id)
         {
             return await _context.Jobs
-                .Include(x => x.Job_JobBenefits)
-                    .ThenInclude(x => x.JobBenefit)
+                .Include(x => x.JobBenefits)
+                    .ThenInclude(x => x.Benefit)
                 .Include(x => x.JobType)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
@@ -51,11 +53,11 @@ namespace JobWebsiteMVC.Services
             }
             if (showExpiredJobs)
             {
-                jobs = jobs.Where(x => x.ClosingDate < DateTime.Now);
+                jobs = jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, DateTimeOffset.Now) < 0);
             }
             else
             {
-                jobs = jobs.Where(x => x.ClosingDate > DateTime.Now);
+                jobs = jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, DateTime.Now) > 0);
             }
 
             return await jobs.ToListAsync();

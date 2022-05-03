@@ -1,13 +1,12 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace JobWebsiteMVC.Models.Job
 {
-    public class JobBenefit : Base
+    public class JobBenefit
     {
-        [Required, MinLength(5), MaxLength(100)]
-        public string Description { get; set; }
-
-        public ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
+        public Guid JobId { get; set; }
+        public virtual Job Job { get; set; }
+        public Guid JobBenefitId { get; set; }
+        public virtual Benefit Benefit { get; set; }
     }
 }

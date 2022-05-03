@@ -14,8 +14,8 @@ namespace JobWebsiteMVC.Data
         }
 
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<Benefit> Benefits { get; set; }
         public DbSet<JobBenefit> JobBenefits { get; set; }
-        public DbSet<Job_JobBenefit> Job_JobBenefits { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
@@ -41,19 +41,19 @@ namespace JobWebsiteMVC.Data
                 .WithOne(e => e.User)
                 .HasForeignKey(x => x.UserId);
 
-            builder.Entity<Job_JobBenefit>().HasKey(bc => new { bc.JobId, bc.JobBenefitId });
-            builder.Entity<Job_JobBenefit>()
+            builder.Entity<JobBenefit>().HasKey(bc => new { bc.JobId, bc.JobBenefitId });
+            builder.Entity<JobBenefit>()
                     .HasOne<Job>(bc => bc.Job)
-                    .WithMany(b => b.Job_JobBenefits)
+                    .WithMany(b => b.JobBenefits)
                     .HasForeignKey(bc => bc.JobId);
-            builder.Entity<Job_JobBenefit>()
-                    .HasOne<JobBenefit>(bc => bc.JobBenefit)
+            builder.Entity<JobBenefit>()
+                    .HasOne<Benefit>(bc => bc.Benefit)
                     .WithMany(c => c.Job_JobBenefits)
                     .HasForeignKey(bc => bc.JobBenefitId);
 
             // Properties:
             builder.Entity<JobType>().Property(x => x.Description).IsRequired().HasMaxLength(100);
-            builder.Entity<JobBenefit>().Property(x => x.Description).IsRequired().HasMaxLength(100);
+            builder.Entity<Benefit>().Property(x => x.Description).IsRequired().HasMaxLength(100);
         }
 
         public DbSet<JobDetailsViewModel> JobDetailsViewModel { get; set; }

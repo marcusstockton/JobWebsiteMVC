@@ -18,10 +18,12 @@ namespace JobWebsiteMVC.Services
                 mailMessage.Body = htmlMessage;
                 mailMessage.Subject = subject;
 
-                var client = new SmtpClient("localhost", 25);
-                client.UseDefaultCredentials = true;
-                //client.Credentials = new NetworkCredential("username", "password");
-                client.Send(mailMessage);
+                //var client = new SmtpClient("localhost", 25);
+                //client.UseDefaultCredentials = true;
+                ////client.Credentials = new NetworkCredential("username", "password");
+                //client.Send(mailMessage);
+
+                WriteEmailToText(mailMessage);
             });
         }
 

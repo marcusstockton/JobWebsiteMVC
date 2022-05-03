@@ -52,12 +52,12 @@ namespace JobWebsiteMVC
             });
 
             // Register DI
-            services.AddTransient<IEmailSender, EmailService>();
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<IJobTypesService, JobTypesService>();
             services.AddScoped<IJobBenefitsService, JobBenefitsService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
 
+            services.AddTransient<IEmailSender, EmailService>();
             services.AddTransient<DataSeeder>();
         }
 

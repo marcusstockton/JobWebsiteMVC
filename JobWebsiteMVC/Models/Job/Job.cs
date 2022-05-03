@@ -18,15 +18,15 @@ namespace JobWebsiteMVC.Models.Job
         public decimal? HoursPerWeek { get; set; }
         public decimal? HolidayEntitlement { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ClosingDate { get; set; }
+        public DateTimeOffset ClosingDate { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime PublishDate { get; set; }
+        public DateTimeOffset PublishDate { get; set; }
 
-        public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
+        public virtual ICollection<JobBenefit> JobBenefits { get; set; }
 
         public Guid JobTypeId { get; set; }
 

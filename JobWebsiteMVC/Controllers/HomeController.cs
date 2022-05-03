@@ -26,13 +26,15 @@ namespace JobWebsiteMVC.Controllers
 
         public IActionResult Index()
         {
+            var now = DateTimeOffset.Now;
+
             var result = new Overview
             {
-                ActiveJobCount = _context.Jobs.Where(c => c.IsActive && c.ClosingDate > DateTime.Now && c.PublishDate < DateTime.Now).Count(),
+                ActiveJobCount = _context.Jobs.Where(c => c.IsActive && DateTimeOffset.Compare(c.ClosingDate, now) > 0 && DateTimeOffset.Compare(c.PublishDate, now) < 0).Count(),
                 UserCount = _context.Users.Count(),
                 DraftJobs = _context.Jobs.Where(x => x.IsDraft).Count(),
-                FutureJobs = _context.Jobs.Where(x => x.PublishDate > DateTime.Now).Count(),
-                ClosedJobs = _context.Jobs.Where(x => x.ClosingDate <= DateTime.Now).Count(),
+                FutureJobs = _context.Jobs.Where(x => DateTimeOffset.Compare(x.PublishDate, now) > 0).Count(),
+                ClosedJobs = _context.Jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, now) < 0).Count(),
                 JobSeekingUserCount = _userManager.GetUsersInRoleAsync("JobSeeker").Result.Count(),
                 EmployerCount = _userManager.GetUsersInRoleAsync("JobOwner").Result.Count()
             };
@@ -50,7 +52,7 @@ namespace JobWebsiteMVC.Controllers
                                         .ToArray();
 
             var jobCreatedByDateList = _context.Jobs
-                .GroupBy(y => y.CreatedDate.Date)
+                .GroupBy(y => y.CreatedDate)
                 .Select(x => new { Date = x.Key, Count = x.Count() })
                 .ToList();
 

@@ -127,17 +127,17 @@ namespace JobWebsiteMVC.Data
             {
                 // Insert some job benefits:
                 await _context.AddRangeAsync(
-                    new JobBenefit { Description = "Cycle To Work Scheme", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Pension", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Work From Home", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Flexi-Time", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Health insurance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Childcare benefits", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Relocation assistance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Gym Membership", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Critical Illness Cover", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Death in Service Cover", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobBenefit { Description = "Private Medical Insurance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true }
+                    new Benefit { Description = "Cycle To Work Scheme", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Pension", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Work From Home", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Flexi-Time", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Health insurance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Childcare benefits", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Relocation assistance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Gym Membership", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Critical Illness Cover", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Death in Service Cover", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new Benefit { Description = "Private Medical Insurance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true }
                 );
                 await _context.SaveChangesAsync();
             }
@@ -163,7 +163,7 @@ namespace JobWebsiteMVC.Data
                     .RuleFor(x => x.Description, d => d.Name.JobArea())
                     .RuleFor(x=>x.CreatedBy, adminUser)
                     .RuleFor(x=>x.IsActive, d=>d.Random.Bool(0.9f))
-                    .RuleFor(x=>x.CreatedDate, d=>d.Date.RecentOffset());
+                    .RuleFor(x=>x.CreatedDate, d=>d.Date.PastOffset());
 
                 var jobCats = bogusJobCats.Generate(12);
                 await _context.JobCategories.AddRangeAsync(jobCats);
@@ -191,7 +191,7 @@ namespace JobWebsiteMVC.Data
                         HolidayEntitlement = 21,
                         HoursPerWeek = 40,
                         JobType = _context.JobTypes.First(),
-                        Job_JobBenefits = _context.Job_JobBenefits.Take(2).ToList(),
+                        JobBenefits = _context.JobBenefits.Take(2).ToList(),
                     },
                     new Job
                     {
@@ -209,7 +209,7 @@ namespace JobWebsiteMVC.Data
                         PublishDate = DateTime.Now,
                         WorkingHoursStart = new TimeSpan(08, 30, 00),
                         WorkingHoursEnd = new TimeSpan(16, 30, 00),
-                        Job_JobBenefits = new List<Job_JobBenefit> { new Job_JobBenefit { JobBenefitId = _context.JobBenefits.Skip(1).Take(2).First().Id } }
+                        JobBenefits = new List<JobBenefit> { new JobBenefit { JobBenefitId = _context.Benefits.Skip(1).Take(2).First().Id } }
                     },
                     new Job
                     {
@@ -227,7 +227,7 @@ namespace JobWebsiteMVC.Data
                         PublishDate = DateTime.Now.AddDays(-2),
                         WorkingHoursStart = new TimeSpan(09, 00, 00),
                         WorkingHoursEnd = new TimeSpan(16, 30, 00),
-                        Job_JobBenefits = new List<Job_JobBenefit> { new Job_JobBenefit { JobBenefitId = _context.JobBenefits.Skip(2).Take(1).First().Id } }
+                        JobBenefits = new List<JobBenefit> { new JobBenefit { JobBenefitId = _context.Benefits.Skip(2).Take(1).First().Id } }
                     },
                     new Job
                     {
@@ -245,7 +245,7 @@ namespace JobWebsiteMVC.Data
                         PublishDate = DateTime.Now.AddDays(1),
                         WorkingHoursStart = new TimeSpan(07, 00, 00),
                         WorkingHoursEnd = new TimeSpan(18, 30, 00),
-                        Job_JobBenefits = new List<Job_JobBenefit> { new Job_JobBenefit { JobBenefitId = _context.JobBenefits.Skip(3).Take(1).First().Id } }
+                        JobBenefits = new List<JobBenefit> { new JobBenefit { JobBenefitId = _context.Benefits.Skip(3).Take(1).First().Id } }
                     },
                     new Job
                     {
@@ -300,7 +300,7 @@ namespace JobWebsiteMVC.Data
                     }
                 );
                 var users = await _context.Users.ToListAsync();
-                var benefits = await _context.JobBenefits.ToListAsync();
+                var jobTypes = await _context.JobTypes.ToListAsync();
 
                 // Insert some bogus jobs:
                 var bogusJobs = new Faker<Job>("en_GB")
@@ -308,10 +308,16 @@ namespace JobWebsiteMVC.Data
                     .RuleFor(x => x.Description, d => d.Name.JobDescriptor())
                     .RuleFor(x => x.PublishDate, d => d.Date.RecentOffset())
                     .RuleFor(x=>x.CreatedBy, d=>d.PickRandom(users))
-                    //.RuleFor(x=>x.Job_JobBenefits, d=>d.PickRandom(benefits))
+                    //.RuleFor(x => x.JobBenefits, d => new JobBenefit { JobBenefitId = d.PickRandom(benefits) } )
+                    .RuleFor(x=>x.ClosingDate, d=>d.Date.FutureOffset())
+                    .RuleFor(x=>x.HoursPerWeek, d=>d.Random.Number(24,40))
+                    .RuleFor(x=>x.IsActive, true)
+                    .RuleFor(x=>x.JobType, d=>d.PickRandom(jobTypes))
                     .RuleFor(x => x.WorkingHoursEnd, d => d.Date.SoonTimeOnly().ToTimeSpan());
 
+                var bogusJobList = bogusJobs.Generate(12);
 
+                await _context.Jobs.AddRangeAsync(bogusJobList);
                 await _context.SaveChangesAsync();
             }
         }

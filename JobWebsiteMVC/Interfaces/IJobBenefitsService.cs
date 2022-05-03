@@ -7,10 +7,10 @@ namespace JobWebsiteMVC.Interfaces
 {
     public interface IJobBenefitsService
     {
-        Task<List<JobBenefit>> GetJobBenefits();
+        Task<List<Benefit>> GetJobBenefits();
 
-        Task<List<Job_JobBenefit>> GetJobBenefitsForJobId(Guid jobId);
+        Task<List<JobBenefit>> GetJobBenefitsForJobId(Guid jobId);
 
-        Task CreateOrUpdateJobBenefitsForJob(Guid jobId, List<Job_JobBenefit> currentItems, List<Guid> newItems);
+        Task CreateOrUpdateJobBenefitsForJob(Guid jobId, List<JobBenefit> currentItems, List<Guid> newItems);
     }
 }

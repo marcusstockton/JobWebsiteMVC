@@ -8,7 +8,6 @@ namespace JobWebsiteMVC.ViewModels.Job
     public class JobDetailsViewModel
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
 
         [Display(Name = "Job Title")]
         public string JobTitle { get; set; }
@@ -60,25 +59,25 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name = "Closing Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
-        public DateTime ClosingDate { get; set; }
+        public DateTimeOffset ClosingDate { get; set; }
 
         [Display(Name = "Publish Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
-        public DateTime PublishDate { get; set; }
+        public DateTimeOffset PublishDate { get; set; }
 
         [Display(Name = "Job Benefits")]
-        public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
+        public virtual ICollection<JobBenefit> Job_JobBenefits { get; set; }
 
         [Display(Name = "Created Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}")]
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
 
         [Display(Name = "Updated Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}")]
-        public DateTime? UpdatedDate { get; set; }
+        public DateTimeOffset? UpdatedDate { get; set; }
 
         [Display(Name = "Job Type")]
         public virtual JobType JobType { get; set; }

@@ -3,6 +3,7 @@ using System;
 using JobWebsiteMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobWebsiteMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220503191216_Tidy Up 1")]
+    partial class TidyUp1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.4");
@@ -133,7 +135,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Attachments", (string)null);
+                    b.ToTable("Attachments");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.Benefit", b =>
@@ -168,7 +170,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Benefits", (string)null);
+                    b.ToTable("Benefits");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.Job", b =>
@@ -246,7 +248,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Jobs", (string)null);
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobApplication", b =>
@@ -286,7 +288,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("JobApplications", (string)null);
+                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobBenefit", b =>
@@ -306,7 +308,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("JobDetailsViewModelId");
 
-                    b.ToTable("JobBenefits", (string)null);
+                    b.ToTable("JobBenefits");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobCategory", b =>
@@ -346,7 +348,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("JobCategories", (string)null);
+                    b.ToTable("JobCategories");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobType", b =>
@@ -381,7 +383,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("JobTypes", (string)null);
+                    b.ToTable("JobTypes");
                 });
 
             modelBuilder.Entity("JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel", b =>
@@ -442,7 +444,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("JobTypeId");
 
-                    b.ToTable("JobDetailsViewModel", (string)null);
+                    b.ToTable("JobDetailsViewModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
