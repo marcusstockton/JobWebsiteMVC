@@ -8,6 +8,6 @@ namespace JobWebsiteMVC.Models.Job
         [Required, MinLength(5), MaxLength(100)]
         public string Description { get; set; }
 
-        public virtual ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
+        public ICollection<Job_JobBenefit> Job_JobBenefits { get; set; }
     }
 }

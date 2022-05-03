@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bogus;
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.Models.Job;
 using Microsoft.AspNetCore.Identity;
@@ -140,6 +141,36 @@ namespace JobWebsiteMVC.Data
                 );
                 await _context.SaveChangesAsync();
             }
+
+            if (!_context.JobCategories.Any())
+            {
+                // Insert some job benefits:
+                await _context.JobCategories.AddRangeAsync(
+                    new JobCategory { Description = "Administrator", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Compliance officer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Operational researcher", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Acupuncturist", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Agricultural consultant", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Oceanographer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "App developer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Web developer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Architect", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Land surveyor", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
+                    new JobCategory { Description = "Cabinet maker", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true }
+                );
+
+                var bogusJobCats = new Faker<JobCategory>("en_GB")
+                    .RuleFor(x => x.Description, d => d.Name.JobArea())
+                    .RuleFor(x=>x.CreatedBy, adminUser)
+                    .RuleFor(x=>x.IsActive, d=>d.Random.Bool(0.9f))
+                    .RuleFor(x=>x.CreatedDate, d=>d.Date.RecentOffset());
+
+                var jobCats = bogusJobCats.Generate(12);
+                await _context.JobCategories.AddRangeAsync(jobCats);
+
+                await _context.SaveChangesAsync();
+            }
+
             if (!_context.Jobs.Any())
             {
                 // Insert some jobs:
@@ -147,7 +178,6 @@ namespace JobWebsiteMVC.Data
                     new Job
                     {
                         JobTitle = "Demolition Worker",
-                        Title = "Demolition Man",
                         ClosingDate = DateTime.Now.AddMonths(1),
                         CreatedDate = DateTime.Now.AddDays(-1),
                         PublishDate = DateTime.Now,
@@ -166,7 +196,6 @@ namespace JobWebsiteMVC.Data
                     new Job
                     {
                         JobTitle = "C# Software Devleloper",
-                        Title = "C# Software Devleloper",
                         ClosingDate = DateTime.Now.AddMonths(1),
                         CreatedDate = DateTime.Now,
                         CreatedBy = jobOwner,
@@ -180,12 +209,11 @@ namespace JobWebsiteMVC.Data
                         PublishDate = DateTime.Now,
                         WorkingHoursStart = new TimeSpan(08, 30, 00),
                         WorkingHoursEnd = new TimeSpan(16, 30, 00),
-                        Job_JobBenefits = _context.Job_JobBenefits.Skip(1).Take(2).ToList(),
+                        Job_JobBenefits = new List<Job_JobBenefit> { new Job_JobBenefit { JobBenefitId = _context.JobBenefits.Skip(1).Take(2).First().Id } }
                     },
                     new Job
                     {
                         JobTitle = "Journal Manager",
-                        Title = "Journal Manager",
                         ClosingDate = DateTime.Now.AddMonths(1),
                         CreatedDate = DateTime.Now,
                         CreatedBy = jobOwner,
@@ -199,12 +227,11 @@ namespace JobWebsiteMVC.Data
                         PublishDate = DateTime.Now.AddDays(-2),
                         WorkingHoursStart = new TimeSpan(09, 00, 00),
                         WorkingHoursEnd = new TimeSpan(16, 30, 00),
-                        Job_JobBenefits = _context.Job_JobBenefits.Skip(2).Take(2).ToList(),
+                        Job_JobBenefits = new List<Job_JobBenefit> { new Job_JobBenefit { JobBenefitId = _context.JobBenefits.Skip(2).Take(1).First().Id } }
                     },
                     new Job
                     {
                         JobTitle = "Office Secretary",
-                        Title = "Office Secretary",
                         ClosingDate = DateTime.Now.AddMonths(1),
                         CreatedDate = DateTime.Now.AddDays(-2),
                         CreatedBy = jobOwner,
@@ -218,12 +245,11 @@ namespace JobWebsiteMVC.Data
                         PublishDate = DateTime.Now.AddDays(1),
                         WorkingHoursStart = new TimeSpan(07, 00, 00),
                         WorkingHoursEnd = new TimeSpan(18, 30, 00),
-                        Job_JobBenefits = _context.Job_JobBenefits.Skip(2).Take(2).ToList(),
+                        Job_JobBenefits = new List<Job_JobBenefit> { new Job_JobBenefit { JobBenefitId = _context.JobBenefits.Skip(3).Take(1).First().Id } }
                     },
                     new Job
                     {
                         JobTitle = "LGV Driver",
-                        Title = "LGV Driver",
                         ClosingDate = DateTime.Now.AddMonths(1),
                         CreatedDate = DateTime.Now.AddDays(-2),
                         CreatedBy = jobOwner,
@@ -241,7 +267,6 @@ namespace JobWebsiteMVC.Data
                     new Job
                     {
                         JobTitle = "Fudge Packer",
-                        Title = "Fudge Packer",
                         ClosingDate = DateTime.Now.AddMonths(-1),
                         CreatedDate = DateTime.Now.AddDays(-7),
                         CreatedBy = jobOwner,
@@ -259,7 +284,6 @@ namespace JobWebsiteMVC.Data
                     new Job
                     {
                         JobTitle = "CTO",
-                        Title = "CTO (Chief Technology Officer)",
                         ClosingDate = DateTime.Now.AddMonths(10),
                         CreatedDate = DateTime.Now.AddDays(-2),
                         CreatedBy = jobOwner,
@@ -275,6 +299,19 @@ namespace JobWebsiteMVC.Data
                         WorkingHoursEnd = new TimeSpan(15, 30, 00)
                     }
                 );
+                var users = await _context.Users.ToListAsync();
+                var benefits = await _context.JobBenefits.ToListAsync();
+
+                // Insert some bogus jobs:
+                var bogusJobs = new Faker<Job>("en_GB")
+                    .RuleFor(x => x.JobTitle, d => d.Name.JobTitle())
+                    .RuleFor(x => x.Description, d => d.Name.JobDescriptor())
+                    .RuleFor(x => x.PublishDate, d => d.Date.RecentOffset())
+                    .RuleFor(x=>x.CreatedBy, d=>d.PickRandom(users))
+                    //.RuleFor(x=>x.Job_JobBenefits, d=>d.PickRandom(benefits))
+                    .RuleFor(x => x.WorkingHoursEnd, d => d.Date.SoonTimeOnly().ToTimeSpan());
+
+
                 await _context.SaveChangesAsync();
             }
         }

@@ -7,7 +7,6 @@ namespace JobWebsiteMVC.Models.Job
 {
     public class Job : Base
     {
-        public string Title { get; set; }
         public string JobTitle { get; set; }
         public string Description { get; set; }
 
@@ -33,5 +32,7 @@ namespace JobWebsiteMVC.Models.Job
 
         [ForeignKey("JobTypeId")]
         public virtual JobType JobType { get; set; }
+
+        public virtual ICollection<JobCategory> JobCategories { get; set; }
     }
 }

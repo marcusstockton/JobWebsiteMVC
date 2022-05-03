@@ -43,7 +43,7 @@ namespace JobWebsiteMVC.Services
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                jobs = jobs.Where(x => x.Title.ToLower().Contains(searchString.ToLower()) || x.Description.ToLower().Contains(searchString.ToLower()));
+                jobs = jobs.Where(x => x.JobTitle.ToLower().Contains(searchString.ToLower()) || x.Description.ToLower().Contains(searchString.ToLower()));
             }
             if (jobTypeId.HasValue)
             {
@@ -57,6 +57,7 @@ namespace JobWebsiteMVC.Services
             {
                 jobs = jobs.Where(x => x.ClosingDate > DateTime.Now);
             }
+
             return await jobs.ToListAsync();
         }
 
@@ -99,14 +100,14 @@ namespace JobWebsiteMVC.Services
             await Save();
 
             var job = _context.Jobs.Find(jobId);
-            await _emailService.SendEmailAsync(job.CreatedBy.Email, $"You have received an application for job { job.Title }", "<p>You have received an application for job " + job.Title + "</p>");
-            await _emailService.SendEmailAsync(applicant.Email, $"You have applied for job { job.Title }", "<p>Congratz!, You have applied for job " + job.Title + "</p>");
+            await _emailService.SendEmailAsync(job.CreatedBy.Email, $"You have received an application for job { job.JobTitle }", "<p>You have received an application for job " + job.JobTitle + "</p>");
+            await _emailService.SendEmailAsync(applicant.Email, $"You have applied for job { job.JobTitle }", "<p>Congratz!, You have applied for job " + job.JobTitle + "</p>");
             return application;
         }
 
         public async Task<IList<Job>> GetMyJobs(string userId)
         {
-            return _context.Jobs.Where(x => x.CreatedBy.Id == userId).ToList();
+            return await _context.Jobs.Where(x => x.CreatedBy.Id == userId).ToListAsync();
         }
 
         public async Task Save()

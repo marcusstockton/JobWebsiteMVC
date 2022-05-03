@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "c459a975-c8fb-4429-a901-694af457ebf1": {
+      "ProjectGuid": "c459a975-c8fb-4429-a901-694af457ebf1",
+      "DisplayName": "JobWebsiteMVC",
+      "ColorIndex": 0
+    },
+    "ae4dca71-a426-4fab-992e-0f76f15ad72c": {
+      "ProjectGuid": "ae4dca71-a426-4fab-992e-0f76f15ad72c",
+      "DisplayName": "UnitTests",
+      "ColorIndex": 1
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 2
+}

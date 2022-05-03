@@ -26,3 +26,5 @@ Claim Types:
 
 
 Wire in SignalR to update the admin panel when stuff happens (new users, new jobs etc)
+
+Added markdown (https://github.com/xoofx/markdig) - implement with preview when creating/editing jobs

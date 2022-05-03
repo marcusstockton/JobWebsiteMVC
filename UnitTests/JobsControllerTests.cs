@@ -43,8 +43,8 @@ namespace UnitTests
             // Arrange
             _mockService.Setup(x => x.GetJobs(It.IsAny<string>(), It.IsAny<bool>(), null)).ReturnsAsync(
                 new List<Job> {
-                    new Job { Id = new Guid(), Title = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, JobTitle = "JobTitle", ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40 },
-                    new Job { Id = new Guid(), Title = "Test title two", JobType = new JobType{ Id = new Guid(), Description = "JobType2"}, IsDraft=false, MinSalary = 12344M, MaxSalary = 34321M, Description = "Test2", IsActive = true, JobTitle = "JobTitle2", ClosingDate = DateTime.Now.AddDays(8), CreatedDate = DateTime.Now, HolidayEntitlement = 20, HoursPerWeek = 37.5M  }
+                    new Job { Id = new Guid(), JobTitle = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40 },
+                    new Job { Id = new Guid(), JobTitle = "Test title two", JobType = new JobType{ Id = new Guid(), Description = "JobType2"}, IsDraft=false, MinSalary = 12344M, MaxSalary = 34321M, Description = "Test2", IsActive = true, ClosingDate = DateTime.Now.AddDays(8), CreatedDate = DateTime.Now, HolidayEntitlement = 20, HoursPerWeek = 37.5M  }
                 });
 
             // Act
@@ -63,7 +63,7 @@ namespace UnitTests
             var jobType1 = Guid.NewGuid();
             _mockService.Setup(x => x.GetJobs(It.IsAny<string>(), It.IsAny<bool>(), null)).ReturnsAsync(
                 new List<Job> {
-                    new Job { Id = new Guid(), Title = "Test title", JobType = new JobType{ Id = jobType1, Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, JobTitle = "JobTitle", ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now.AddDays(-1), HolidayEntitlement = 21, HoursPerWeek = 40 },
+                    new Job { Id = new Guid(), JobType = new JobType{ Id = jobType1, Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, JobTitle = "JobTitle", ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now.AddDays(-1), HolidayEntitlement = 21, HoursPerWeek = 40 },
                 });
             _mockJobTypesService.Setup(x => x.GetJobTypes()).ReturnsAsync(new List<JobType> { new JobType { Description = "JobType", Id = jobType1, IsActive = true } });
 

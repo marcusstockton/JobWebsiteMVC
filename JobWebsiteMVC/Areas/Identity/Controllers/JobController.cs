@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,18 +12,18 @@ namespace JobWebsiteMVC.Areas.Identity.Controllers
 {
     public class JobController : Controller
     {
-        public Dictionary<string, string> GetJobTitleAutoComplete(string jobTitle)
+        public async Task<Dictionary<string, string>> GetJobTitleAutoCompleteAsync(string jobTitle)
         {
             var url = "http://api.dataatwork.org/v1/jobs/autocomplete?contains=" + jobTitle;
             string html = string.Empty;
             var words = new Dictionary<string, string>();
 
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            var response = (HttpWebResponse)request.GetResponse();
+            var myClient = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
+            var request = await myClient.GetAsync(url);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (request.IsSuccessStatusCode)
             {
-                using (Stream stream = response.GetResponseStream())
+                using (Stream stream = await request.Content.ReadAsStreamAsync())
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
@@ -34,17 +36,18 @@ namespace JobWebsiteMVC.Areas.Identity.Controllers
             return words;
         }
 
-        public List<string> GetJobSkillAutoComplete(string jobId)
+        public async Task<List<string>> GetJobSkillAutoCompleteAsync(string jobId)
         {
             var url = $"http://api.dataatwork.org/v1/jobs/{Guid.Parse(jobId).ToString("n")}/related_skills";
             string html = string.Empty;
             var skills = new List<string>();
 
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            var response = (HttpWebResponse)request.GetResponse();
-            if (response.StatusCode == HttpStatusCode.OK)
+            var myClient = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
+            var request = await myClient.GetAsync(url);
+
+            if (request.IsSuccessStatusCode)
             {
-                using (Stream stream = response.GetResponseStream())
+                using (Stream stream = await request.Content.ReadAsStreamAsync())
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
@@ -54,6 +57,7 @@ namespace JobWebsiteMVC.Areas.Identity.Controllers
                     }
                 }
             }
+
             return skills;
         }
     }

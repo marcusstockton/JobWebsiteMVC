@@ -19,6 +19,7 @@ namespace JobWebsiteMVC.Data
         public DbSet<JobType> JobTypes { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
+        public DbSet<JobCategory> JobCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,6 +27,10 @@ namespace JobWebsiteMVC.Data
 
             builder.Entity<Job>()
                 .HasKey(x => x.Id);
+
+            builder.Entity<Job>()
+                .HasOne<JobType>()
+                .WithMany();
 
             builder.Entity<Job>()
                 .HasOne<JobType>()
