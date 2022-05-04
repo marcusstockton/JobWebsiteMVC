@@ -12,10 +12,9 @@ a {
     color: #0366d6;
 }
 
-.main-body {
-    max-height: 100vh !important;
-    overflow: auto !important;
-}
+/*.main-body {
+    max-height: 85vh !important;
+}*/
 
 .btn-primary {
     color: #fff;

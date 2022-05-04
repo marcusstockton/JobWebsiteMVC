@@ -38,6 +38,10 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        public List<string> JobSeekerUsernames { get; set; }
+        public List<string> JobOwnerUsernames { get; set; }
+        public List<string> AdminUsernames { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [TempData]
@@ -67,6 +71,13 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            var jobOwners = await _userManager.GetUsersInRoleAsync("JobOwner");
+            var jobSeekers = await _userManager.GetUsersInRoleAsync("JobSeeker");
+            var admins = await _userManager.GetUsersInRoleAsync("Admin");
+
+            JobOwnerUsernames = jobOwners.Select(x => x.UserName).ToList();
+            JobSeekerUsernames = jobSeekers.Select(x => x.UserName).ToList();
+            AdminUsernames = admins.Select(x => x.UserName).ToList();
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

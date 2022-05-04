@@ -28,10 +28,12 @@ namespace JobWebsiteMVC.ViewModels.Job
 
         [Display(Name = "Start Time")]
         [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan WorkingHoursStart { get; set; }
 
         [Display(Name = "End Time")]
         [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan WorkingHoursEnd { get; set; }
 
         [Display(Name = "Hours Per Week")]
@@ -46,23 +48,23 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name = "Closing Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime ClosingDate { get; set; }
+        public DateTimeOffset ClosingDate { get; set; }
 
         [Display(Name = "Publish Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime PublishDate { get; set; }
+        public DateTimeOffset PublishDate { get; set; }
 
         [Display(Name = "Job Benefits")]
         public virtual ICollection<JobBenefit> Job_JobBenefits { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-        public DateTime? UpdatedDate { get; set; }
+        public DateTimeOffset? UpdatedDate { get; set; }
 
         [Display(Name = "Job Benefits")]
         public List<Guid> JobBenefitsIds { get; set; }

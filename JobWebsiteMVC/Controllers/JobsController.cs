@@ -116,7 +116,7 @@ namespace JobWebsiteMVC.Controllers
             var jobVM = _mapper.Map<JobEditViewModel>(job);
             var jobTypes = await _jobTypesService.GetJobTypes();
             var jobBenefits = await _jobBenefitsService.GetJobBenefits();
-            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits.Select(s => s.JobBenefitId).ToList();
+            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits?.Select(s => s.JobBenefitId).ToList();
             jobVM.JobTypesList = jobTypes.Select(x => new SelectListItem { Text = x.Description, Value = x.Id.ToString() }).ToList();
 
             ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description }).ToList();
@@ -129,7 +129,7 @@ namespace JobWebsiteMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,JobOwner")]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive,JobBenefitsIds,JobTypeId")] JobEditViewModel jobVM)
+        public async Task<IActionResult> Edit(Guid id, [Bind("JobTitle,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive,JobBenefitsIds,JobTypeId")] JobEditViewModel jobVM)
         {
             if (id != jobVM.Id)
             {

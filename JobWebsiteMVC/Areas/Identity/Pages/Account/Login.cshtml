@@ -50,6 +50,42 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        @if (Model.JobOwnerUsernames == null) { <p> Loading Users....</p>}
+        <fieldset>
+            <legend>Job Owners</legend>
+            @foreach(var username in Model.JobOwnerUsernames){
+                <p>@username</p>
+            }
+        </fieldset>
+        <fieldset>
+            <legend>Job Seekers</legend>
+            @foreach(var username in Model.JobSeekerUsernames){
+                <p>@username</p>
+            }
+        </fieldset>
+        <fieldset>
+            <legend>Admins</legend>
+            @foreach(var username in Model.AdminUsernames){
+                <p>@username</p>
+            }
+        </fieldset>
+        <p>P@55w0rd1</p>
+    </div>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    fieldset {
+        border: 1px solid darkgray;
+        padding-left: 10px;
+    }
+    legend{
+        width:auto;
+    }
+
+</style>
