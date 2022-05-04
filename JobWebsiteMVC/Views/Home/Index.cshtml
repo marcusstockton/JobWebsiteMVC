@@ -58,13 +58,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <canvas id="myChart" width="400" height="400"></canvas>
+        <div class="col-md-10 offset-md-1">
+            <canvas id="myChart"></canvas>
         </div>
     </div>
 </div>
 @section scripts{
-    <script type="text/javascript">
+<script type="text/javascript">
     $( document ).ready(function() {
 
         $.get("Home/JobsCreatedInLastMonth", function(res){
@@ -76,7 +76,7 @@
                     datasets: [{
                         label: '# of Jobs Created Last Month',
                         fill: false,
-                        lineTension: 0.5,
+                        tension: 0.1,
                         data: $.map(res, function(i, v){ return i.item2 }),
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
@@ -158,5 +158,12 @@
         });
 
     });
-    </script>
+</script>
+
+<style type="text/css">
+    .myChart {
+        width: 90%;
+        height: 400px;
+    }
+</style>
 }

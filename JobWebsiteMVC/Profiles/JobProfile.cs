@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.ViewModels.Job;
-using Markdig;
 
 namespace JobWebsiteMVC.Profiles
 {

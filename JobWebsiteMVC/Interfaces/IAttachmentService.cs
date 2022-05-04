@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using JobWebsiteMVC.Models;
+﻿using JobWebsiteMVC.Models;
 using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Interfaces
 {

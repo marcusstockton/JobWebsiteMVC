@@ -1,7 +1,7 @@
-﻿using System;
+﻿using JobWebsiteMVC.Models.Job;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using JobWebsiteMVC.Models.Job;
 
 namespace JobWebsiteMVC.ViewModels.Job
 {
@@ -67,7 +67,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         public DateTimeOffset PublishDate { get; set; }
 
         [Display(Name = "Job Benefits")]
-        public virtual ICollection<JobBenefit> Job_JobBenefits { get; set; }
+        public virtual ICollection<JobBenefit> JobBenefits { get; set; }
 
         [Display(Name = "Created Date")]
         [DataType(DataType.Date)]

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using JobWebsiteMVC.Data;
+﻿using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.ViewModels.Home;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace JobWebsiteMVC.Controllers
 {
@@ -61,15 +61,12 @@ namespace JobWebsiteMVC.Controllers
             {
                 foreach (var user in jobCreatedByDateList)
                 {
-                    if (user.Date == day.Date)
+                    if (user.Date.Date == day.Date.Date)
                     {
                         jobCreatedByDate.Add(new Tuple<string, int>(day.ToString("dd MMM yy"), user.Count));
                     }
-                    else
-                    {
-                        jobCreatedByDate.Add(new Tuple<string, int>(day.ToString("dd MMM yy"), 0));
-                    }
                 }
+                jobCreatedByDate.Add(new Tuple<string, int>(day.ToString("dd MMM yy"), 0));
             }
             return Json(jobCreatedByDate);
         }

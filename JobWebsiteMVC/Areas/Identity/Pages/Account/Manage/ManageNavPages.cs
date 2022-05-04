@@ -1,5 +1,5 @@
-using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
 {

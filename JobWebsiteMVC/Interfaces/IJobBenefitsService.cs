@@ -1,7 +1,7 @@
-﻿using System;
+﻿using JobWebsiteMVC.Models.Job;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JobWebsiteMVC.Models.Job;
 
 namespace JobWebsiteMVC.Interfaces
 {

@@ -1,11 +1,11 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Controllers
 {

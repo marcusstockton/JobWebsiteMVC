@@ -1,4 +1,3 @@
-using System.IO;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace JobWebsiteMVC
 {
@@ -67,7 +67,7 @@ namespace JobWebsiteMVC
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                seeder.SeedDatabase(false).Wait();
+                seeder.SeedDatabase(true).Wait();
             }
             else
             {

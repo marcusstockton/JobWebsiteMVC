@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Bogus;
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.Models.Job;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Data
 {
@@ -161,9 +161,9 @@ namespace JobWebsiteMVC.Data
 
                 var bogusJobCats = new Faker<JobCategory>("en_GB")
                     .RuleFor(x => x.Description, d => d.Name.JobArea())
-                    .RuleFor(x=>x.CreatedBy, adminUser)
-                    .RuleFor(x=>x.IsActive, d=>d.Random.Bool(0.9f))
-                    .RuleFor(x=>x.CreatedDate, d=>d.Date.PastOffset());
+                    .RuleFor(x => x.CreatedBy, adminUser)
+                    .RuleFor(x => x.IsActive, d => d.Random.Bool(0.9f))
+                    .RuleFor(x => x.CreatedDate, d => d.Date.PastOffset());
 
                 var jobCats = bogusJobCats.Generate(12);
                 await _context.JobCategories.AddRangeAsync(jobCats);
@@ -307,12 +307,15 @@ namespace JobWebsiteMVC.Data
                     .RuleFor(x => x.JobTitle, d => d.Name.JobTitle())
                     .RuleFor(x => x.Description, d => d.Name.JobDescriptor())
                     .RuleFor(x => x.PublishDate, d => d.Date.RecentOffset())
-                    .RuleFor(x=>x.CreatedBy, d=>d.PickRandom(users))
+                    .RuleFor(x => x.CreatedBy, d => d.PickRandom(users))
+                    .RuleFor(x => x.CreatedDate, d => d.Date.PastOffset())
+                    .RuleFor(x => x.MinSalary, d => d.Random.Decimal(12000, 50000))
+                    .RuleFor(x => x.MaxSalary, (d, u) => d.Random.Decimal(u.MinSalary.Value, 100000))
                     //.RuleFor(x => x.JobBenefits, d => new JobBenefit { JobBenefitId = d.PickRandom(benefits) } )
-                    .RuleFor(x=>x.ClosingDate, d=>d.Date.FutureOffset())
-                    .RuleFor(x=>x.HoursPerWeek, d=>d.Random.Number(24,40))
-                    .RuleFor(x=>x.IsActive, true)
-                    .RuleFor(x=>x.JobType, d=>d.PickRandom(jobTypes))
+                    .RuleFor(x => x.ClosingDate, d => d.Date.FutureOffset())
+                    .RuleFor(x => x.HoursPerWeek, d => d.Random.Number(24, 40))
+                    .RuleFor(x => x.IsActive, true)
+                    .RuleFor(x => x.JobType, d => d.PickRandom(jobTypes))
                     .RuleFor(x => x.WorkingHoursEnd, d => d.Date.SoonTimeOnly().ToTimeSpan());
 
                 var bogusJobList = bogusJobs.Generate(12);
