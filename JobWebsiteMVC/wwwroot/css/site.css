@@ -12,6 +12,11 @@ a {
     color: #0366d6;
 }
 
+.main-body {
+    max-height: 100vh !important;
+    overflow: auto !important;
+}
+
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
