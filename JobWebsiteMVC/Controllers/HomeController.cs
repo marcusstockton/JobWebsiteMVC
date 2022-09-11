@@ -47,7 +47,7 @@ namespace JobWebsiteMVC.Controllers
             var today = DateTime.Now;
             var start = today.AddMonths(-1);
             var end = today;
-            var yearArray = Enumerable.Range(0, 1 + end.Subtract(start).Days)
+            var monthArray = Enumerable.Range(0, 1 + end.Subtract(start).Days)
                                         .Select(offset => start.AddDays(offset))
                                         .ToArray();
 
@@ -57,7 +57,7 @@ namespace JobWebsiteMVC.Controllers
                 .ToList();
 
             var jobCreatedByDate = new List<Tuple<string, int>>();
-            foreach (var day in yearArray)
+            foreach (var day in monthArray)
             {
                 foreach (var user in jobCreatedByDateList)
                 {

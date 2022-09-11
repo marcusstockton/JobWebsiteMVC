@@ -322,7 +322,7 @@ namespace JobWebsiteMVC.Data
                     .RuleFor(x=>x.WorkingHoursStart, (d, u)=>d.Date.Timespan(u.WorkingHoursEnd))
                     .RuleFor(x => x.WorkingHoursEnd, d => d.Date.Timespan());
 
-                var bogusJobList = bogusJobs.Generate(12);
+                var bogusJobList = bogusJobs.Generate(200);
 
                 await _context.Jobs.AddRangeAsync(bogusJobList);
                 await _context.SaveChangesAsync();

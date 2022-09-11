@@ -1,5 +1,5 @@
-﻿@model IEnumerable<JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel>
-
+﻿@*@model IEnumerable<JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel>*@
+@model PaginatedList<JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel>
 @{
     ViewData["Title"] = "Index";
 }
@@ -31,49 +31,49 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.JobTitle)
+                @Html.DisplayNameFor(model => model.First().JobTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.First().Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDraft)
+                @Html.DisplayNameFor(model => model.First().IsDraft)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MinSalary)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MinSalarySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].MinSalary)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaxSalary)
+                @Html.DisplayNameFor(model => model.First().MaxSalary)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkingHoursStart)
+                @Html.DisplayNameFor(model => model.First().WorkingHoursStart)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkingHoursEnd)
+                @Html.DisplayNameFor(model => model.First().WorkingHoursEnd)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HoursPerWeek)
+                @Html.DisplayNameFor(model => model.First().HoursPerWeek)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayEntitlement)
+                @Html.DisplayNameFor(model => model.First().HolidayEntitlement)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClosingDate)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ClosingDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().ClosingDate)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PublishDate)
+                @Html.DisplayNameFor(model => model.First().PublishDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
+                @Html.DisplayNameFor(model => model.First().CreatedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedDate)
+                @Html.DisplayNameFor(model => model.First().UpdatedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+                @Html.DisplayNameFor(model => model.First().IsActive)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JobType)
+                @Html.DisplayNameFor(model => model.First().JobType)
             </th>
             <th></th>
         </tr>
@@ -146,6 +146,26 @@
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-outline-secondary @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-outline-secondary @nextDisabled">
+    Next
+</a>
 
 <style type="text/css">
     .table{

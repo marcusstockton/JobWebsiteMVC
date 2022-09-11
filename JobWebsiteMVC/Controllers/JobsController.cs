@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using JobWebsiteMVC.Extensions.Alerts;
+using JobWebsiteMVC.Helpers;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.ViewModels.Job;
@@ -33,16 +35,47 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // GET: Jobs
-        public async Task<IActionResult> Index(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, bool showExpiredJobs, int? pageNumber, Guid? jobTypeId = null)
         {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["MinSalarySortParm"] = String.IsNullOrEmpty(sortOrder) ? "min_salary_desc" : "";
+            ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
             var jobList = await _service.GetJobs(searchString, showExpiredJobs, jobTypeId);
 
             var jobTypes = await _jobTypesService.GetJobTypes();
             ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
 
-            var jobs = _mapper.Map<List<JobDetailsViewModel>>(jobList);
-            _logger.LogInformation($"Found {jobList.Count} jobs");
-            return View(jobs);
+            switch (sortOrder)
+            {
+                case "min_salary_desc":
+                    jobList = jobList.OrderByDescending(x => x.MinSalary);
+                    break;
+                case "closing_date_desc":
+                    jobList = jobList.OrderByDescending(x => x.ClosingDate);
+                    break;
+                case "closing_date_asc":
+                    jobList = jobList.OrderBy(x => x.ClosingDate);
+                    break;
+                //default:
+                //    jobList = jobList;
+                //    break;
+            }
+            var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
+            int pageSize = 10;
+
+            return View(await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
         }
 
         // GET: Jobs/Details/5

@@ -1,13 +1,14 @@
 using JobWebsiteMVC.Models.Job;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Interfaces
 {
     public interface IJobService
     {
-        Task<IList<Job>> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null);
+        Task<IQueryable<Job>> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null);
 
         Task<Job> GetJobById(Guid jobId);
 

@@ -37,7 +37,7 @@ namespace JobWebsiteMVC.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<IList<Job>> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
+        public async Task<IQueryable<Job>> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
             var jobs = _context.Jobs
                 .Include(x => x.JobType)
@@ -60,7 +60,7 @@ namespace JobWebsiteMVC.Services
                 jobs = jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, DateTime.Now) > 0);
             }
 
-            return await jobs.ToListAsync();
+            return jobs;
         }
 
         public async Task Post(Job job)
