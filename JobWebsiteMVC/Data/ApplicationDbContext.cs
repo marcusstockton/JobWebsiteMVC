@@ -75,8 +75,8 @@ namespace JobWebsiteMVC.Data
                         .HasConversion(new DateTimeOffsetToBinaryConverter()); // The converter!
                 }
                 // convert all decimals to doubles for sqlite
-                var decimalProperties = entityType.ClrType.GetProperties().Where(x => x.PropertyType == typeof(decimal));
-
+                var decimalProperties = entityType.ClrType.GetProperties().Where(x => x.PropertyType == typeof(decimal) 
+                                                                                || x.PropertyType == typeof(decimal?));
                 foreach (var property in decimalProperties)
                 {
                     builder
