@@ -38,7 +38,7 @@ namespace JobWebsiteMVC.Controllers
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, bool showExpiredJobs, int? pageNumber, Guid? jobTypeId = null)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["MinSalarySortParm"] = String.IsNullOrEmpty(sortOrder) ? "min_salary_desc" : "";
+            ViewData["MinSalarySortParm"] = sortOrder == "min_salary_asc" ? "min_salary_desc" : "min_salary_asc";
             ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
 
             if (searchString != null)
@@ -68,9 +68,12 @@ namespace JobWebsiteMVC.Controllers
                 case "closing_date_asc":
                     jobList = jobList.OrderBy(x => x.ClosingDate);
                     break;
-                //default:
-                //    jobList = jobList;
-                //    break;
+                case "min_salary_asc":
+                    jobList = jobList.OrderBy(x => x.MinSalary);
+                    break;
+                default:
+                    jobList = jobList;
+                    break;
             }
             var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
             int pageSize = 10;
