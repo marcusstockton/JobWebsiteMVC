@@ -62,17 +62,20 @@ namespace JobWebsiteMVC.Controllers
                 case "min_salary_desc":
                     jobList = jobList.OrderByDescending(x => x.MinSalary);
                     break;
+
                 case "closing_date_desc":
                     jobList = jobList.OrderByDescending(x => x.ClosingDate);
                     break;
+
                 case "closing_date_asc":
                     jobList = jobList.OrderBy(x => x.ClosingDate);
                     break;
+
                 case "min_salary_asc":
                     jobList = jobList.OrderBy(x => x.MinSalary);
                     break;
+
                 default:
-                    jobList = jobList;
                     break;
             }
             var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);

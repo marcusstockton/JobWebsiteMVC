@@ -3,14 +3,10 @@ using JobWebsiteMVC.Controllers;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.Profiles;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace UnitTests
 {

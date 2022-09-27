@@ -102,8 +102,8 @@ namespace JobWebsiteMVC.Services
             await Save();
 
             var job = _context.Jobs.Find(jobId);
-            await _emailService.SendEmailAsync(job.CreatedBy.Email, $"You have received an application for job { job.JobTitle }", "<p>You have received an application for job " + job.JobTitle + "</p>");
-            await _emailService.SendEmailAsync(applicant.Email, $"You have applied for job { job.JobTitle }", "<p>Congratz!, You have applied for job " + job.JobTitle + "</p>");
+            await _emailService.SendEmailAsync(job.CreatedBy.Email, $"You have received an application for job {job.JobTitle}", "<p>You have received an application for job " + job.JobTitle + "</p>");
+            await _emailService.SendEmailAsync(applicant.Email, $"You have applied for job {job.JobTitle}", "<p>Congratz!, You have applied for job " + job.JobTitle + "</p>");
             return application;
         }
 

@@ -156,6 +156,7 @@
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-jobTypeId="jobTypeId"
    class="btn btn-outline-secondary @prevDisabled">
     Previous
 </a>
@@ -163,6 +164,7 @@
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-jobTypeId="jobTypeId"
    class="btn btn-outline-secondary @nextDisabled">
     Next
 </a>

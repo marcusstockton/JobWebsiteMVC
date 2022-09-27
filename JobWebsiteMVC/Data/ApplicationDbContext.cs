@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
-using System.Reflection.Emit;
 
 namespace JobWebsiteMVC.Data
 {
@@ -61,7 +60,6 @@ namespace JobWebsiteMVC.Data
             builder.Entity<JobType>().Property(x => x.Description).IsRequired().HasMaxLength(100);
             builder.Entity<Benefit>().Property(x => x.Description).IsRequired().HasMaxLength(100);
 
-
             // Do some conversions to handle how lame SqlLite is..
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
@@ -75,7 +73,7 @@ namespace JobWebsiteMVC.Data
                         .HasConversion(new DateTimeOffsetToBinaryConverter()); // The converter!
                 }
                 // convert all decimals to doubles for sqlite
-                var decimalProperties = entityType.ClrType.GetProperties().Where(x => x.PropertyType == typeof(decimal) 
+                var decimalProperties = entityType.ClrType.GetProperties().Where(x => x.PropertyType == typeof(decimal)
                                                                                 || x.PropertyType == typeof(decimal?));
                 foreach (var property in decimalProperties)
                 {

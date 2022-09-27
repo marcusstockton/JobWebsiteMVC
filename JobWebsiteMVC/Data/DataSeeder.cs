@@ -307,8 +307,8 @@ namespace JobWebsiteMVC.Data
                 // Insert some bogus jobs:
                 var bogusJobs = new Faker<Job>("en_GB")
                     .RuleFor(x => x.JobTitle, d => d.Name.JobTitle())
-                    .RuleFor(x => x.Description, d => d.Lorem.Paragraphs(d.Random.Number(3,9)))
-                    .RuleFor(x => x.PublishDate, (d,u) => d.Date.BetweenOffset(u.CreatedDate, DateTimeOffset.Now))
+                    .RuleFor(x => x.Description, d => d.Lorem.Paragraphs(d.Random.Number(3, 9)))
+                    .RuleFor(x => x.PublishDate, (d, u) => d.Date.BetweenOffset(u.CreatedDate, DateTimeOffset.Now))
                     .RuleFor(x => x.CreatedBy, d => d.PickRandom(users))
                     .RuleFor(x => x.CreatedDate, d => d.Date.PastOffset())
                     .RuleFor(x => x.MinSalary, d => d.Random.Decimal(12000, 50000))
@@ -316,10 +316,10 @@ namespace JobWebsiteMVC.Data
                     .RuleFor(x => x.ClosingDate, d => d.Date.FutureOffset())
                     .RuleFor(x => x.HoursPerWeek, d => d.Random.Number(24, 40))
                     .RuleFor(x => x.IsActive, true)
-                    .RuleFor(x=>x.JobBenefits, d=> new List<JobBenefit> { new JobBenefit { Benefit = benefits.Skip(d.Random.Number(1,10)).First()} })
-                    .RuleFor(x=>x.HolidayEntitlement, d =>d.Random.Decimal(12,46))
+                    .RuleFor(x => x.JobBenefits, d => new List<JobBenefit> { new JobBenefit { Benefit = benefits.Skip(d.Random.Number(1, 10)).First() } })
+                    .RuleFor(x => x.HolidayEntitlement, d => d.Random.Decimal(12, 46))
                     .RuleFor(x => x.JobType, d => d.PickRandom(jobTypes))
-                    .RuleFor(x=>x.WorkingHoursStart, (d, u)=>d.Date.Timespan(u.WorkingHoursEnd))
+                    .RuleFor(x => x.WorkingHoursStart, (d, u) => d.Date.Timespan(u.WorkingHoursEnd))
                     .RuleFor(x => x.WorkingHoursEnd, d => d.Date.Timespan());
 
                 var bogusJobList = bogusJobs.Generate(200);
