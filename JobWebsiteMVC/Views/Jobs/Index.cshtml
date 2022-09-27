@@ -4,10 +4,10 @@
 }
 
 <h1>Index</h1>
-
 <p>
     <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
 </p>
+
 @using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "form-inline" }))
 {
     @*Need these to hold their values in the next and previous button clicks at the bottom*@
@@ -24,7 +24,7 @@
         @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-control form-control-sm" })
     </div>
     <div class="form-group mr-2">
-        <input type="submit" value="Search" />
+        <input type="submit" value="Search" id="filterSearch" />
     </div>
 }
 <table class="table table-hover">
@@ -156,7 +156,7 @@
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   asp-route-jobTypeId="jobTypeId"
+   asp-route-jobTypeId="@ViewData["jobTypeId"]"
    class="btn btn-outline-secondary @prevDisabled">
     Previous
 </a>
@@ -164,7 +164,7 @@
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   asp-route-jobTypeId="jobTypeId"
+   asp-route-jobTypeId="@ViewData["jobTypeId"]"
    class="btn btn-outline-secondary @nextDisabled">
     Next
 </a>
@@ -175,3 +175,7 @@
         overflow: auto;
     }
 </style>
+
+@section Scripts {
+    <script src="~/js/jobs/jobindex.js"></script>
+}

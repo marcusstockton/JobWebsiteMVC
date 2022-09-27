@@ -53,7 +53,7 @@ namespace JobWebsiteMVC.Services
             }
             if (showExpiredJobs)
             {
-                jobs = jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, DateTimeOffset.Now) < 0);
+                jobs = jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, DateTime.Now) < 0);
             }
             else
             {

@@ -40,6 +40,7 @@ namespace JobWebsiteMVC.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["MinSalarySortParm"] = sortOrder == "min_salary_asc" ? "min_salary_desc" : "min_salary_asc";
             ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
+            ViewData["jobTypeId"] = jobTypeId;
 
             if (searchString != null)
             {

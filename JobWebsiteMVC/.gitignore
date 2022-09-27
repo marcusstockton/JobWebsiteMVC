@@ -256,6 +256,3 @@ __pycache__/
 ../.vscode/launch.json
 ../.vscode/tasks.json
 
-bin/
-obj/
-*.vs
