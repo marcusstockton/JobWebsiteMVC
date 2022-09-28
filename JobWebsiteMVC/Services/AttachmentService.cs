@@ -43,9 +43,11 @@ namespace JobWebsiteMVC.Services
                             FileName = file.FileName,
                             Location = "~" + filePath.Split("wwwroot").Last().Replace(@"\", "/"),
                             FileType = file.FileName.Split('.').Last(),
-                            IsActive = true
+                            IsActive = true,
+                            UserId = user.Id
                         };
                         await _context.Attachments.AddAsync(attachment);
+                        await _context.SaveChangesAsync();
                         return attachment;
                     }
                 }

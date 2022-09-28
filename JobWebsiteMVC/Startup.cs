@@ -67,7 +67,7 @@ namespace JobWebsiteMVC
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                seeder.SeedDatabase(true).Wait();
+                seeder.SeedDatabase(false).Wait();
             }
             else
             {

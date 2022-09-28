@@ -1,4 +1,5 @@
 using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models;
 using Microsoft.AspNetCore.Identity;
@@ -90,11 +91,14 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             user.Attachments = _context.Attachments.Where(x => x.UserId == user.Id).ToList();
             var attachmentList = new List<Attachment>();
-            var file = Request.Form.Files[0];
+            if (Request.Form.Files.Any())
+            {
+                var file = Request.Form.Files[0];
 
-            var attachment = await _attachmentService.SaveAvatar(file, user);
-            user.Attachments.Add(attachment);
-
+                var attachment = await _attachmentService.SaveAvatar(file, user);
+                user.Attachments.Add(attachment);
+            }
+            
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -134,8 +138,8 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
+            //StatusMessage = "Your profile has been updated";
+            return RedirectToPage().WithSuccess("Success", "Your profile has been updated");
         }
     }
 }

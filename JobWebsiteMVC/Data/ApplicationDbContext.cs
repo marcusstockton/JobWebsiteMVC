@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace JobWebsiteMVC.Data
 {
@@ -23,6 +25,8 @@ namespace JobWebsiteMVC.Data
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<JobCategory> JobCategories { get; set; }
+        public DbSet<JobDetailsViewModel> JobDetailsViewModel { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -84,7 +88,53 @@ namespace JobWebsiteMVC.Data
                 }
             }
         }
+        public override int SaveChanges()
+        {
+            var entries = ChangeTracker
+                        .Entries()
+                        .Where(e => e.Entity is Base && (
+                                e.State == EntityState.Added
+                                || e.State == EntityState.Modified));
 
-        public DbSet<JobDetailsViewModel> JobDetailsViewModel { get; set; }
+            foreach (var entityEntry in entries)
+            {
+                if (entityEntry.State == EntityState.Modified)
+                {
+                    ((Base)entityEntry.Entity).UpdatedDate = DateTime.Now;
+                }
+                if (entityEntry.State == EntityState.Added)
+                {
+                    ((Base)entityEntry.Entity).CreatedDate = DateTime.Now;
+                    ((Base)entityEntry.Entity).UpdatedDate = DateTime.Now;
+                }
+            }
+
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker
+                        .Entries()
+                        .Where(e => e.Entity is Base && (
+                                e.State == EntityState.Added
+                                || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                if (entityEntry.State == EntityState.Modified)
+                {
+                    ((Base)entityEntry.Entity).UpdatedDate = DateTime.Now;
+                }
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    ((Base)entityEntry.Entity).CreatedDate = DateTime.Now;
+                    ((Base)entityEntry.Entity).UpdatedDate = DateTime.Now;
+                }
+            }
+
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
     }
 }

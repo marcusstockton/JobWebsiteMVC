@@ -109,7 +109,9 @@ namespace JobWebsiteMVC.Data
                     User = jobSeeker,
                 });
                 await _context.SaveChangesAsync();
+                jobOwner.Attachments.Add(_context.Attachments.First());
             }
+            
 
             if (!_context.JobTypes.Any())
             {

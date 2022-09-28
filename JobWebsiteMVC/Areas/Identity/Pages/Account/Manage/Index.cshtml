@@ -36,9 +36,11 @@
                 <input asp-for="Input.DateOfBirth" class="form-control" />
                 <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
             </div>
-            <img src="@Url.Content(Model.Input.ImageUrl)" alt="User Avatar" class="img-thumbnail" height="100" asp-append-version="true" />
+            @if (!string.IsNullOrEmpty(Model.Input.ImageUrl)){
+                <img src="@Url.Content(Model.Input.ImageUrl)" alt="User Avatar" style="max-height:200px;" ass="img-thumbnail" asp-append-version="true" />
+            }
             <div class="form-group">
-                <input type="file" name="Avatar" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                <input type="file" name="Avatar" value="@Model.Input.ImageUrl"id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
             </div>
 
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
