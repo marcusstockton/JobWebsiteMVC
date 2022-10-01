@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Controllers
@@ -83,6 +84,12 @@ namespace JobWebsiteMVC.Controllers
             int pageSize = 10;
 
             return View(await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
+        }
+
+        public JsonResult GetData()
+        {
+            var jobs = _service.GetJobs(null, false); //This method is returning the IEnumerable employee from database
+            return Json(new { data = JsonSerializer.Serialize(jobs) });
         }
 
         // GET: Jobs/Details/5

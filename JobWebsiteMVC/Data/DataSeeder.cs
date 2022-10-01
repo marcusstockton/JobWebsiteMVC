@@ -117,10 +117,10 @@ namespace JobWebsiteMVC.Data
             {
                 // Insert some job types:
                 await _context.JobTypes.AddRangeAsync(
-                    new JobType { Description = "Full Time", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = jobOwner },
-                    new JobType { Description = "Part-Time", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = jobOwner },
-                    new JobType { Description = "Contract", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = jobOwner },
-                    new JobType { Description = "Permanent", IsActive = true, CreatedDate = DateTime.Now, CreatedBy = adminUser }
+                    new JobType { Description = "Full Time", IsActive = true, CreatedBy = jobOwner },
+                    new JobType { Description = "Part-Time", IsActive = true, CreatedBy = jobOwner },
+                    new JobType { Description = "Contract", IsActive = true, CreatedBy = jobOwner },
+                    new JobType { Description = "Permanent", IsActive = true, CreatedBy = adminUser }
                 );
                 await _context.SaveChangesAsync();
             }
@@ -129,17 +129,17 @@ namespace JobWebsiteMVC.Data
             {
                 // Insert some job benefits:
                 await _context.AddRangeAsync(
-                    new Benefit { Description = "Cycle To Work Scheme", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Pension", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Work From Home", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Flexi-Time", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Health insurance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Childcare benefits", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Relocation assistance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Gym Membership", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Critical Illness Cover", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Death in Service Cover", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new Benefit { Description = "Private Medical Insurance", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true }
+                    new Benefit { Description = "Cycle To Work Scheme", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Pension", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Work From Home", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Flexi-Time", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Health insurance", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Childcare benefits", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Relocation assistance", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Gym Membership", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Critical Illness Cover", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Death in Service Cover", CreatedBy = adminUser, IsActive = true },
+                    new Benefit { Description = "Private Medical Insurance", CreatedBy = adminUser, IsActive = true }
                 );
                 await _context.SaveChangesAsync();
             }
@@ -148,17 +148,17 @@ namespace JobWebsiteMVC.Data
             {
                 // Insert some job benefits:
                 await _context.JobCategories.AddRangeAsync(
-                    new JobCategory { Description = "Administrator", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Compliance officer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Operational researcher", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Acupuncturist", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Agricultural consultant", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Oceanographer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "App developer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Web developer", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Architect", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Land surveyor", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true },
-                    new JobCategory { Description = "Cabinet maker", CreatedBy = adminUser, CreatedDate = DateTime.Now, IsActive = true }
+                    new JobCategory { Description = "Administrator", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Compliance officer", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Operational researcher", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Acupuncturist", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Agricultural consultant", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Oceanographer", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "App developer", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Web developer", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Architect", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Land surveyor", CreatedBy = adminUser, IsActive = true },
+                    new JobCategory { Description = "Cabinet maker", CreatedBy = adminUser, IsActive = true }
                 );
 
                 var bogusJobCats = new Faker<JobCategory>("en_GB")
@@ -183,8 +183,6 @@ namespace JobWebsiteMVC.Data
                         ClosingDate = DateTime.Now.AddMonths(1),
                         CreatedDate = DateTime.Now.AddDays(-1),
                         PublishDate = DateTime.Now,
-                        WorkingHoursStart = new TimeSpan(08, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(17, 00, 00),
                         Description = "Demolition workers perform varied daily job duties depending on the demolition work that needs to be done, the size of the construction crew they work with, and the machinery and tools available to them. These core job tasks, however, are essentially the same everywhere.",
                         IsActive = true,
                         CreatedBy = jobOwner,
@@ -209,8 +207,6 @@ namespace JobWebsiteMVC.Data
                         MaxSalary = 40000M,
                         MinSalary = 38000,
                         PublishDate = DateTime.Now,
-                        WorkingHoursStart = new TimeSpan(08, 30, 00),
-                        WorkingHoursEnd = new TimeSpan(16, 30, 00),
                         JobBenefits = new List<JobBenefit> { new JobBenefit { JobBenefitId = _context.Benefits.Skip(1).Take(2).First().Id } }
                     },
                     new Job
@@ -227,8 +223,6 @@ namespace JobWebsiteMVC.Data
                         MaxSalary = 28000M,
                         MinSalary = 24000,
                         PublishDate = DateTime.Now.AddDays(-2),
-                        WorkingHoursStart = new TimeSpan(09, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(16, 30, 00),
                         JobBenefits = new List<JobBenefit> { new JobBenefit { JobBenefitId = _context.Benefits.Skip(2).Take(1).First().Id } }
                     },
                     new Job
@@ -245,8 +239,6 @@ namespace JobWebsiteMVC.Data
                         MaxSalary = 20000M,
                         MinSalary = 18000,
                         PublishDate = DateTime.Now.AddDays(1),
-                        WorkingHoursStart = new TimeSpan(07, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(18, 30, 00),
                         JobBenefits = new List<JobBenefit> { new JobBenefit { JobBenefitId = _context.Benefits.Skip(3).Take(1).First().Id } }
                     },
                     new Job
@@ -263,8 +255,6 @@ namespace JobWebsiteMVC.Data
                         MaxSalary = 32000M,
                         MinSalary = 24000,
                         PublishDate = DateTime.Now.AddDays(-4),
-                        WorkingHoursStart = new TimeSpan(05, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(15, 30, 00)
                     },
                     new Job
                     {
@@ -279,9 +269,7 @@ namespace JobWebsiteMVC.Data
                         JobType = _context.JobTypes.First(),
                         MaxSalary = 22000M,
                         MinSalary = 2000,
-                        PublishDate = DateTime.Now,
-                        WorkingHoursStart = new TimeSpan(09, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(15, 30, 00)
+                        PublishDate = DateTime.Now
                     },
                     new Job
                     {
@@ -296,9 +284,7 @@ namespace JobWebsiteMVC.Data
                         JobType = _context.JobTypes.Take(1).First(),
                         MaxSalary = 220000M,
                         MinSalary = 180000,
-                        PublishDate = DateTime.Now.AddDays(-3),
-                        WorkingHoursStart = new TimeSpan(09, 00, 00),
-                        WorkingHoursEnd = new TimeSpan(15, 30, 00)
+                        PublishDate = DateTime.Now.AddDays(-3)
                     }
                 );
                 var users = await _context.Users.ToListAsync();
@@ -320,9 +306,7 @@ namespace JobWebsiteMVC.Data
                     .RuleFor(x => x.IsActive, true)
                     .RuleFor(x => x.JobBenefits, d => new List<JobBenefit> { new JobBenefit { Benefit = benefits.Skip(d.Random.Number(1, 10)).First() } })
                     .RuleFor(x => x.HolidayEntitlement, d => d.Random.Decimal(12, 46))
-                    .RuleFor(x => x.JobType, d => d.PickRandom(jobTypes))
-                    .RuleFor(x => x.WorkingHoursStart, (d, u) => d.Date.Timespan(u.WorkingHoursEnd))
-                    .RuleFor(x => x.WorkingHoursEnd, d => d.Date.Timespan());
+                    .RuleFor(x => x.JobType, d => d.PickRandom(jobTypes));
 
                 var bogusJobList = bogusJobs.Generate(200);
 

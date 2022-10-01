@@ -4,29 +4,16 @@
     ViewData["Title"] = "Details";
 }
 <div class="container">
-    <h1>Details</h1>
-
+    <h1>@Model.JobTitle</h1>
+    <h4>Details</h4>
     <div>
-        <h4>Job</h4>
         <hr />
         <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.JobTitle)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.JobTitle)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.JobTitle)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.JobTitle)
-            </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Description)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Description)
+                @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.IsDraft)
@@ -45,18 +32,6 @@
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.MaxSalary)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.WorkingHoursStart)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.WorkingHoursStart)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.WorkingHoursEnd)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.WorkingHoursEnd)
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.HoursPerWeek)

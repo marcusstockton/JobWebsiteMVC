@@ -9,12 +9,9 @@ namespace JobWebsiteMVC.Models.Job
     {
         public string JobTitle { get; set; }
         public string Description { get; set; }
-
         public bool IsDraft { get; set; }
         public decimal? MinSalary { get; set; }
         public decimal? MaxSalary { get; set; }
-        public TimeSpan? WorkingHoursStart { get; set; }
-        public TimeSpan? WorkingHoursEnd { get; set; }
         public decimal? HoursPerWeek { get; set; }
         public decimal? HolidayEntitlement { get; set; }
 
