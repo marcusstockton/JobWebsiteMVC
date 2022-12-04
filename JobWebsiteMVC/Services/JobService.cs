@@ -107,9 +107,30 @@ namespace JobWebsiteMVC.Services
             return application;
         }
 
-        public async Task<IList<Job>> GetMyJobs(string userId)
+        public async Task<IQueryable<Job>> GetMyJobs(string userId, string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
-            return await _context.Jobs.Where(x => x.CreatedBy.Id == userId).ToListAsync();
+            var jobs = _context.Jobs
+                .Include(x => x.JobType)
+                .Where(x => x.CreatedBy.Id == userId);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                jobs = jobs.Where(x => x.JobTitle.ToLower().Contains(searchString.ToLower()) || x.Description.ToLower().Contains(searchString.ToLower()));
+            }
+            if (jobTypeId.HasValue)
+            {
+                jobs = jobs.Where(x => x.JobTypeId == jobTypeId);
+            }
+            if (showExpiredJobs)
+            {
+                jobs = jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, DateTime.Now) < 0);
+            }
+            else
+            {
+                jobs = jobs.Where(x => DateTimeOffset.Compare(x.ClosingDate, DateTime.Now) > 0);
+            }
+
+            return jobs;
         }
 
         public async Task Save()

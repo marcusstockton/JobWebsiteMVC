@@ -265,12 +265,60 @@ namespace JobWebsiteMVC.Controllers
         }
 
         [Authorize(Roles = "Admin,JobOwner")]
-        public async Task<IActionResult> ViewMyJobs()
+        public async Task<IActionResult> ViewMyJobs(string sortOrder, string currentFilter, string searchString, bool showExpiredJobs, int? pageNumber, Guid? jobTypeId = null)
         {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["MinSalarySortParm"] = sortOrder == "min_salary_asc" ? "min_salary_desc" : "min_salary_asc";
+            ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
+            ViewData["jobTypeId"] = jobTypeId;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = await _service.GetMyJobs(userId);
-            var jobs = _mapper.Map<List<JobDetailsViewModel>>(result);
-            return View("MyJobs", jobs);
+            var jobList = await _service.GetMyJobs(userId, searchString, showExpiredJobs, jobTypeId);
+
+            var jobTypes = await _jobTypesService.GetJobTypes();
+            ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
+
+            switch (sortOrder)
+            {
+                case "min_salary_desc":
+                    jobList = jobList.OrderByDescending(x => x.MinSalary);
+                    break;
+
+                case "closing_date_desc":
+                    jobList = jobList.OrderByDescending(x => x.ClosingDate);
+                    break;
+
+                case "closing_date_asc":
+                    jobList = jobList.OrderBy(x => x.ClosingDate);
+                    break;
+
+                case "min_salary_asc":
+                    jobList = jobList.OrderBy(x => x.MinSalary);
+                    break;
+
+                default:
+                    break;
+            }
+            var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
+            int pageSize = 10;
+
+            return View("MyJobs", await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
+
+
+
+            //var jobs = _mapper.Map<List<JobDetailsViewModel>>(result);
+            //return View("MyJobs", jobs);
         }
     }
 }

@@ -1,55 +1,79 @@
-﻿@model IEnumerable<JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel>
+﻿@model PaginatedList<JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel>
 
 @{
     ViewData["Title"] = "My Jobs";
 }
 
-<h1>MyJobs</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New Listing</a>
 </p>
+
+@using (Html.BeginForm("ViewMyJobs", "Jobs", FormMethod.Post, new { @class = "form-inline" }))
+{
+    @*Need these to hold their values in the next and previous button clicks at the bottom*@
+    <div class="form-group mr-5">
+        @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
+    </div>
+    <div class="form-group mr-2">
+        @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
+        <label class="form-check-label" for="showExpiredJobs">
+            Show Expired Jobs
+        </label>
+    </div>
+    <div class="form-group mr-2">
+        @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-control form-control-sm" })
+    </div>
+    <div class="form-group mr-2">
+        <input type="submit" value="Search" id="filterSearch" />
+    </div>
+}
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.JobTitle)
+                @Html.DisplayNameFor(model => model.First().JobTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JobTitle)
+                @Html.DisplayNameFor(model => model.First().JobTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.First().Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDraft)
+                @Html.DisplayNameFor(model => model.First().IsDraft)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MinSalary)
+                @*@Html.DisplayNameFor(model => model.MinSalary)*@
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MinSalarySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].MinSalary)</a>
+
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaxSalary)
+                @Html.DisplayNameFor(model => model.First().MaxSalary)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HoursPerWeek)
+                @Html.DisplayNameFor(model => model.First().HoursPerWeek)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HolidayEntitlement)
+                @Html.DisplayNameFor(model => model.First().HolidayEntitlement)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+                @Html.DisplayNameFor(model => model.First().IsActive)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClosingDate)
+                @*@Html.DisplayNameFor(model => model.ClosingDate)*@
+                                <a asp-action="Index" asp-route-sortOrder="@ViewData["ClosingDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().ClosingDate)</a>
+
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PublishDate)
+                @Html.DisplayNameFor(model => model.First().PublishDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
+                @Html.DisplayNameFor(model => model.First().CreatedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedDate)
+                @Html.DisplayNameFor(model => model.First().UpdatedDate)
             </th>
             <th></th>
         </tr>
@@ -105,3 +129,33 @@
 }
     </tbody>
 </table>
+
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-jobTypeId="@ViewData["jobTypeId"]"
+   class="btn btn-outline-secondary @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-jobTypeId="@ViewData["jobTypeId"]"
+   class="btn btn-outline-secondary @nextDisabled">
+    Next
+</a>
+
+<style type="text/css">
+    .table {
+        max-height: 100vh;
+        overflow: auto;
+    }
+</style>

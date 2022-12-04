@@ -24,7 +24,7 @@ namespace JobWebsiteMVC.Interfaces
 
         Task<JobApplication> ApplyForJob(Guid jobId, string userId);
 
-        Task<IList<Job>> GetMyJobs(string userId);
+        Task<IQueryable<Job>> GetMyJobs(string userId, string searchString, bool showExpiredJobs, Guid? jobTypeId);
 
         Task Save();
     }
