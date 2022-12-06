@@ -58,6 +58,17 @@ namespace JobWebsiteMVC.Data
                 await _userManager.CreateAsync(jobOwner1, "P@55w0rd1");
                 await _userManager.AddToRoleAsync(jobOwner1, "JobOwner");
 
+                ApplicationUser jobOwner2 = new ApplicationUser()
+                {
+                    Email = "jobOwner@test.com",
+                    UserName = "JobOwner",
+                    DateOfBirth = new DateTime(1992, 4, 12),
+                    FirstName = "JobOwner",
+                    LastName = "TestUser",
+                };
+                await _userManager.CreateAsync(jobOwner2, "P@55w0rd1");
+                await _userManager.AddToRoleAsync(jobOwner2, "JobOwner");
+
                 ApplicationUser jobSeeker1 = new ApplicationUser()
                 {
                     Email = "test2@test.com",
@@ -90,11 +101,15 @@ namespace JobWebsiteMVC.Data
                 };
                 await _userManager.CreateAsync(adminUser1, "P@55w0rd1");
                 await _userManager.AddToRoleAsync(adminUser1, "Admin");
+
+
+                await _context.SaveChangesAsync();
             }
 
-            var jobOwner = await _context.Users.FindAsync("TestUser");
-            var adminUser = await _context.Users.FindAsync("AdminTestUser2");
-            var jobSeeker = await _context.Users.FindAsync("TestUser2");
+            var jobOwner = await _userManager.FindByNameAsync("TestUser");
+            //var jobOwner2 = await _context.Users.FindAsync("JobOwner");
+            var adminUser = await _context.Users.SingleAsync(x=>x.UserName == "AdminTestUser2");
+            var jobSeeker = await _context.Users.SingleAsync(x=>x.UserName == "TestUser2");
 
             if (!_context.Attachments.Any())
             {
@@ -106,10 +121,11 @@ namespace JobWebsiteMVC.Data
                     Location = "~/Uploads/Example/examplePic.jpg",
                     FileType = "jpg",
                     IsActive = true,
-                    User = jobSeeker,
+                    UserId = jobSeeker.Id,
                 });
                 await _context.SaveChangesAsync();
-                jobOwner.Attachments.Add(_context.Attachments.First());
+                //var attachment = _context.Attachments.FirstOrDefault();
+                //jobOwner.Attachments.Add(attachment);
             }
             
 

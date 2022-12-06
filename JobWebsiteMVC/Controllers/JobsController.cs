@@ -82,6 +82,7 @@ namespace JobWebsiteMVC.Controllers
             }
             var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
             int pageSize = 10;
+            ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
             return View(await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
         }
@@ -310,8 +311,11 @@ namespace JobWebsiteMVC.Controllers
                 default:
                     break;
             }
+
             var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
+            
             int pageSize = 10;
+            ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
             return View("MyJobs", await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
 

@@ -45,9 +45,7 @@
                 @Html.DisplayNameFor(model => model.First().IsDraft)
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.MinSalary)*@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["MinSalarySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].MinSalary)</a>
-
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.First().MaxSalary)
@@ -62,9 +60,7 @@
                 @Html.DisplayNameFor(model => model.First().IsActive)
             </th>
             <th>
-                @*@Html.DisplayNameFor(model => model.ClosingDate)*@
-                                <a asp-action="Index" asp-route-sortOrder="@ViewData["ClosingDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().ClosingDate)</a>
-
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ClosingDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().ClosingDate)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.First().PublishDate)
@@ -136,7 +132,7 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<a asp-action="Index"
+<a asp-action="ViewMyJobs"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -144,7 +140,7 @@
    class="btn btn-outline-secondary @prevDisabled">
     Previous
 </a>
-<a asp-action="Index"
+<a asp-action="ViewMyJobs"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -152,6 +148,9 @@
    class="btn btn-outline-secondary @nextDisabled">
     Next
 </a>
+<p>
+    Page @Model.PageIndex of @ViewData["totalPages"]
+</p>
 
 <style type="text/css">
     .table {
