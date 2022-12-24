@@ -8,7 +8,7 @@ namespace JobWebsiteMVC.Interfaces
 {
     public interface IJobService
     {
-        Task<IQueryable<Job>> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null);
+        IQueryable<Job> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null);
 
         Task<Job> GetJobById(Guid jobId);
 
@@ -24,7 +24,7 @@ namespace JobWebsiteMVC.Interfaces
 
         Task<JobApplication> ApplyForJob(Guid jobId, string userId);
 
-        Task<IQueryable<Job>> GetMyJobs(string userId, string searchString, bool showExpiredJobs, Guid? jobTypeId);
+        IQueryable<Job> GetMyJobs(string userId, string searchString, bool showExpiredJobs, Guid? jobTypeId);
 
         Task Save();
     }

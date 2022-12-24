@@ -54,7 +54,7 @@ namespace JobWebsiteMVC.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var jobList = await _service.GetJobs(searchString, showExpiredJobs, jobTypeId);
+            var jobList = _service.GetJobs(searchString, showExpiredJobs, jobTypeId);
 
             var jobTypes = await _jobTypesService.GetJobTypes();
             ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
@@ -285,7 +285,7 @@ namespace JobWebsiteMVC.Controllers
             ViewData["CurrentFilter"] = searchString;
 
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var jobList = await _service.GetMyJobs(userId, searchString, showExpiredJobs, jobTypeId);
+            var jobList = _service.GetMyJobs(userId, searchString, showExpiredJobs, jobTypeId);
 
             var jobTypes = await _jobTypesService.GetJobTypes();
             ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
