@@ -8,10 +8,9 @@
     <h1>@ViewData["Title"]</h1>
 </div>
 <div class="row">
-    <div class="col-md-4 offset-md-4">
+    <div class="col-md-4 offset-md-4" card>
         <section>
             <form id="account" method="post">
-                <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Input.Username"></label>
@@ -52,26 +51,34 @@
 
 <div class="row">
     <div class="col-md-4 offset-md-4">
-        @if (Model.JobOwnerUsernames == null) { <p> Loading Users....</p>}
-        <fieldset>
-            <legend>Job Owners</legend>
-            @foreach(var username in Model.JobOwnerUsernames){
-                <p>@username</p>
-            }
-        </fieldset>
-        <fieldset>
-            <legend>Job Seekers</legend>
-            @foreach(var username in Model.JobSeekerUsernames){
-                <p>@username</p>
-            }
-        </fieldset>
-        <fieldset>
-            <legend>Admins</legend>
-            @foreach(var username in Model.AdminUsernames){
-                <p>@username</p>
-            }
-        </fieldset>
-        <p>P@55w0rd1</p>
+        @if (Model.JobOwnerUsernames == null)
+        {
+            <p> Loading Users....</p>
+        }
+        <section>
+            <fieldset>
+                <legend>Job Owners</legend>
+                @foreach (var username in Model.JobOwnerUsernames)
+                {
+                    <p>@username</p>
+                }
+            </fieldset>
+            <fieldset>
+                <legend>Job Seekers</legend>
+                @foreach (var username in Model.JobSeekerUsernames)
+                {
+                    <p>@username</p>
+                }
+            </fieldset>
+            <fieldset>
+                <legend>Admins</legend>
+                @foreach (var username in Model.AdminUsernames)
+                {
+                    <p>@username</p>
+                }
+            </fieldset>
+            <p>P@55w0rd1</p>
+        </section>
     </div>
 </div>
 
@@ -84,8 +91,26 @@
         border: 1px solid darkgray;
         padding-left: 10px;
     }
-    legend{
-        width:auto;
+
+    legend {
+        width: auto;
+    }
+
+    body {
+        /*background-image: url('/Images/download.jpeg');*/
+        background: url('/Images/london-skyline.jpg') no-repeat center center fixed;
+        height: 90%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+
+    section {
+        background-color: whitesmoke;
+        opacity: 0.8;
+        border-radius: 10px;
+        padding: 10px 5px;
     }
 
 </style>
