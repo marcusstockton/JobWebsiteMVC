@@ -28,12 +28,16 @@
         "themes/base/images/ui-icons_cc0000_256x240.png",
         "themes/base/images/ui-icons_ffffff_256x240.png"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "Chart.js@3.9.1",
+      "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/"
     }
-  ,
-{
-  "provider": "cdnjs",
-  "library": "Chart.js@3.9.1",
-  "destination": "wwwroot/lib/Chart.js/"
-}
-]
+  ]
 }
