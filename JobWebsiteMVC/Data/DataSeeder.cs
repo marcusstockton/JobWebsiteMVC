@@ -108,8 +108,8 @@ namespace JobWebsiteMVC.Data
 
             var jobOwner = await _userManager.FindByNameAsync("TestUser");
             //var jobOwner2 = await _context.Users.FindAsync("JobOwner");
-            var adminUser = await _context.Users.SingleAsync(x=>x.UserName == "AdminTestUser2");
-            var jobSeeker = await _context.Users.SingleAsync(x=>x.UserName == "TestUser2");
+            var adminUser = await _context.Users.SingleAsync(x => x.UserName == "AdminTestUser2");
+            var jobSeeker = await _context.Users.SingleAsync(x => x.UserName == "TestUser2");
 
             if (!_context.Attachments.Any())
             {
@@ -127,7 +127,7 @@ namespace JobWebsiteMVC.Data
                 //var attachment = _context.Attachments.FirstOrDefault();
                 //jobOwner.Attachments.Add(attachment);
             }
-            
+
 
             if (!_context.JobTypes.Any())
             {
@@ -204,6 +204,8 @@ namespace JobWebsiteMVC.Data
                         CreatedBy = jobOwner,
                         MaxSalary = 12000M,
                         MinSalary = 10000M,
+                        WorkingHoursStart = new TimeOnly(09, 0, 0),
+                        WorkingHoursEnd = new TimeOnly(17, 0, 0),
                         HolidayEntitlement = 21,
                         HoursPerWeek = 40,
                         JobType = _context.JobTypes.First(),
@@ -319,6 +321,8 @@ namespace JobWebsiteMVC.Data
                     .RuleFor(x => x.MaxSalary, (d, u) => d.Random.Decimal(u.MinSalary.Value, 100000))
                     .RuleFor(x => x.ClosingDate, d => d.Date.FutureOffset())
                     .RuleFor(x => x.HoursPerWeek, d => d.Random.Number(24, 40))
+                    .RuleFor(x => x.WorkingHoursStart, d => new TimeOnly(08, 0, 0 ))
+                    .RuleFor(x => x.WorkingHoursEnd, d => new TimeOnly(16, 30, 0))
                     .RuleFor(x => x.IsActive, true)
                     .RuleFor(x => x.JobBenefits, d => new List<JobBenefit> { new JobBenefit { Benefit = benefits.Skip(d.Random.Number(1, 10)).First() } })
                     .RuleFor(x => x.HolidayEntitlement, d => d.Random.Decimal(12, 46))

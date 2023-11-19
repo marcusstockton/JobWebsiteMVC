@@ -40,6 +40,16 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name = "Hours per Week")]
         public decimal HoursPerWeek { get; set; }
 
+        [Display(Name = "Start Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH\\:mm}", ApplyFormatInEditMode = true)]
+        public TimeOnly WorkingHoursStart { get; set; }
+
+        [Display(Name = "End Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH\\:mm}", ApplyFormatInEditMode = true)]
+        public TimeOnly WorkingHoursEnd { get; set; }
+
         [Display(Name = "Holiday")]
         public decimal HolidayEntitlement { get; set; }
 

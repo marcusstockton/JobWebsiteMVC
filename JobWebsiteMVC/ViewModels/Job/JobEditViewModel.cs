@@ -28,13 +28,13 @@ namespace JobWebsiteMVC.ViewModels.Job
 
         [Display(Name = "Start Time")]
         [DataType(DataType.Time)]
-        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
-        public TimeSpan WorkingHoursStart { get; set; }
+        [DisplayFormat(DataFormatString = "{0:HH\\:mm}", ApplyFormatInEditMode = true)]
+        public TimeOnly WorkingHoursStart { get; set; }
 
         [Display(Name = "End Time")]
         [DataType(DataType.Time)]
-        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
-        public TimeSpan WorkingHoursEnd { get; set; }
+        [DisplayFormat(DataFormatString = "{0:HH\\:mm}", ApplyFormatInEditMode = true)]
+        public TimeOnly WorkingHoursEnd { get; set; }
 
         [Display(Name = "Hours Per Week")]
         public decimal HoursPerWeek { get; set; }

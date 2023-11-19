@@ -3,14 +3,6 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "aspnet-signalr@1.1.4",
-      "destination": "wwwroot/lib/aspnet-signalr/",
-      "files": [
-        "signalr.min.js",
-        "signalr.js"
-      ]
-    },
-    {
       "provider": "cdnjs",
       "library": "jqueryui@1.13.2",
       "destination": "wwwroot/lib/jqueryui/",
@@ -31,13 +23,18 @@
     },
     {
       "provider": "cdnjs",
-      "library": "Chart.js@3.9.1",
+      "library": "Chart.js@4.4.0",
       "destination": "wwwroot/lib/Chart.js/"
     },
     {
       "provider": "cdnjs",
       "library": "jquery@3.7.1",
       "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "microsoft-signalr@8.0.0",
+      "destination": "wwwroot/lib/microsoft-signalr/"
     }
   ]
 }

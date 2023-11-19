@@ -76,11 +76,12 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            user.Attachments = _context.Attachments.Where(x => x.UserId == user.Id).ToList();
+           
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+            user.Attachments = _context.Attachments.Where(x => x.UserId == user.Id).ToList();
 
             await LoadAsync(user);
             return Page();

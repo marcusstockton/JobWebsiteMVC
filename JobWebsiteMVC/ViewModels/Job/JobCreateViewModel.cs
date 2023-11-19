@@ -29,11 +29,11 @@ namespace JobWebsiteMVC.ViewModels.Job
 
         [Display(Name = "Start Time"), Required]
         [DataType(DataType.Time)]
-        public TimeSpan WorkingHoursStart { get; set; }
+        public TimeOnly WorkingHoursStart { get; set; }
 
         [Display(Name = "End Time"), Required]
         [DataType(DataType.Time)]
-        public TimeSpan WorkingHoursEnd { get; set; }
+        public TimeOnly WorkingHoursEnd { get; set; }
 
         [Display(Name = "Hours Per Week"), Required]
         public decimal HoursPerWeek { get; set; }
