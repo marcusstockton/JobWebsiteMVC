@@ -1,3 +1,4 @@
+using AutoMapper;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models;
@@ -39,7 +40,7 @@ namespace JobWebsiteMVC
                     .AddDefaultUI()
                     .AddDefaultTokenProviders();
 
-            services.AddAutoMapper(typeof(JobProfile));
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -58,7 +58,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Email Address")]
             public string Email { get; set; }
 
             [Required]
@@ -72,6 +72,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            [DataType(DataType.Date)]
             public DateTime? DateOfBirth { get; set; }
 
             [Display(Name = "First Name")]
@@ -109,7 +110,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    var role = await _context.Roles.FindAsync(Input.UserTypeId);
+                    var role = await _context.Roles.FindAsync(Input.UserTypeId.ToString());
                     await _userManager.AddToRoleAsync(user, role.Name);
                     _context.SaveChanges();
 
