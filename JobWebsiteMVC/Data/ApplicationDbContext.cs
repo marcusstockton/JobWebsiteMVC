@@ -36,8 +36,6 @@ namespace JobWebsiteMVC.Data
             builder.Entity<Job>()
                 .HasKey(x => x.Id);
 
-            //builder.Entity<Job>().Property(x => x.MinSalary).HasConversion<double>(); // for sorting...
-
             builder.Entity<Job>()
                 .HasOne<JobType>()
                 .WithMany();
@@ -45,6 +43,14 @@ namespace JobWebsiteMVC.Data
             builder.Entity<Job>()
                 .HasOne<JobType>()
                 .WithMany();
+
+            builder.Entity<JobTitle>()
+                .HasKey(x => x.Id);
+            builder.Entity<JobTitle>()
+                .HasIndex(x => x.Description)
+                .IsUnique();
+            builder.Entity<JobTitle>()
+                .Property(x => x.IsActive).HasDefaultValue(true);
 
             builder.Entity<ApplicationUser>()
                 .HasMany(c => c.Attachments)
@@ -53,11 +59,11 @@ namespace JobWebsiteMVC.Data
 
             builder.Entity<JobBenefit>().HasKey(bc => new { bc.JobId, bc.JobBenefitId });
             builder.Entity<JobBenefit>()
-                    .HasOne<Job>(bc => bc.Job)
+                    .HasOne(bc => bc.Job)
                     .WithMany(b => b.JobBenefits)
                     .HasForeignKey(bc => bc.JobId);
             builder.Entity<JobBenefit>()
-                    .HasOne<Benefit>(bc => bc.Benefit)
+                    .HasOne(bc => bc.Benefit)
                     .WithMany(c => c.Job_JobBenefits)
                     .HasForeignKey(bc => bc.JobBenefitId);
 
