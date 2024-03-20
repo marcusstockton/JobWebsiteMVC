@@ -22,6 +22,7 @@ namespace JobWebsiteMVC.Data
         public DbSet<Benefit> Benefits { get; set; }
         public DbSet<JobBenefit> JobBenefits { get; set; }
         public DbSet<JobType> JobTypes { get; set; }
+        public DbSet<JobTitle> JobTitles { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
         public DbSet<JobCategory> JobCategories { get; set; }
