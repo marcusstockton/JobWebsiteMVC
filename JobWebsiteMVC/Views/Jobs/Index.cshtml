@@ -12,23 +12,23 @@
 }
 
 
-@using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "form-inline" }))
+@using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3 align-items-cente" }))
 {
     @*Need these to hold their values in the next and previous button clicks at the bottom*@
-    <div class="form-group mr-5">
+    <div class="col-sm-4">
         @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
     </div>
-    <div class="form-group mr-2">
+    <div class="col-auto">
         @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
         <label class="form-check-label" for="showExpiredJobs">
             Show Expired Jobs
         </label>
     </div>
-    <div class="form-group mr-2">
-        @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-control form-control-sm" })
+    <div class="col-auto">
+        @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-select form-select-sm" })
     </div>
-    <div class="form-group mr-2">
-        <input type="submit" value="Search" id="filterSearch" />
+    <div class="col-auto">
+        <input type="submit" value="Search" id="filterSearch" class="btn btn-primary btn-sm" />
     </div>
 }
 <table class="table table-hover" id="jobsTable">

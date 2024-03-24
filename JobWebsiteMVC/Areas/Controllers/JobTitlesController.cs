@@ -28,7 +28,8 @@ namespace JobWebsiteMVC.Areas.Controllers
         [HttpGet("{description}")]
         public async Task<ActionResult<List<JobTitle>>> GetJobTitle(string description)
         {
-            return await _context.JobTitles.Where(x => x.Description.StartsWith(description)).ToListAsync();
+            var results = await _context.JobTitles.Where(x => x.Description.StartsWith(description)).Take(100).ToListAsync();
+            return Ok(results);
         }
 
         //// PUT: api/JobTitles/5

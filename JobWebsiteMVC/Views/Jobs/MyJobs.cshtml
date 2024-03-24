@@ -10,23 +10,23 @@
     <a asp-action="Create" class="btn btn-primary">Create New Listing</a>
 </p>
 
-@using (Html.BeginForm("ViewMyJobs", "Jobs", FormMethod.Post, new { @class = "form-inline" }))
+@using (Html.BeginForm("ViewMyJobs", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3 align-items-cente" }))
 {
     @*Need these to hold their values in the next and previous button clicks at the bottom*@
-    <div class="form-group mr-5">
+    <div class="col-sm-4">
         @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
     </div>
-    <div class="form-group mr-2">
+    <div class="col-auto">
         @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
         <label class="form-check-label" for="showExpiredJobs">
             Show Expired Jobs
         </label>
     </div>
-    <div class="form-group mr-2">
-        @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-control form-control-sm" })
+    <div class="col-auto">
+        @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-select form-select-sm" })
     </div>
-    <div class="form-group mr-2">
-        <input type="submit" value="Search" id="filterSearch" />
+    <div class="col-auto">
+        <input type="submit" value="Search" id="filterSearch" class="btn btn-primary btn-sm" />
     </div>
 }
 <table class="table">
@@ -75,54 +75,65 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JobTitle)
-            </td>
-            <td>
-                @Html.Raw(Markdig.Markdown.ToPlainText(item.DescriptionShort))
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDraft)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinSalary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxSalary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HoursPerWeek)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HolidayEntitlement)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClosingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobTitle)
+                </td>
+                <td>
+                    @Html.Raw(Markdig.Markdown.ToPlainText(item.DescriptionShort))
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsDraft)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinSalary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxSalary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoursPerWeek)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HolidayEntitlement)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClosingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedDate)
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a type="button" class="btn btn-info" asp-action="Edit" asp-route-id="@item.Id" title="Edit"><span class="material-icons">edit</span></a>
+                        <a type="button" class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id" title="View">
+                            <span class="material-icons">
+                                info
+                            </span>
+                        </a>
+                        <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id" title="Delete">
+                            <span class="material-icons">
+                                delete
+                            </span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 

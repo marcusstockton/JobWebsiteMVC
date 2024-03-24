@@ -94,7 +94,7 @@
             <span class="col-sm-10">
                 @foreach (var item in Model.JobBenefits)
                 {
-                    <li>
+                    <li class="badge rounded-pill bg-info p-2">
                         @Html.DisplayFor(model => item.Benefit.Description)
                     </li>
                 }
