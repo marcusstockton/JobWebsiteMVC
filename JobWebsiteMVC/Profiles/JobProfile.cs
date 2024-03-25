@@ -9,6 +9,7 @@ namespace JobWebsiteMVC.Profiles
         public JobProfile()
         {
             CreateMap<Job, JobCreateViewModel>().ReverseMap();
+            CreateMap<Job, JobListViewModel>().ReverseMap();
             CreateMap<Job, JobDetailsViewModel>()
                 .ReverseMap();
             CreateMap<Job, JobEditViewModel>()

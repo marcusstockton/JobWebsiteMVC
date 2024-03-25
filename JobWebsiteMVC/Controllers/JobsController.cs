@@ -39,8 +39,8 @@ namespace JobWebsiteMVC.Controllers
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, bool showExpiredJobs, int? pageNumber, Guid? jobTypeId = null)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["MinSalarySortParm"] = sortOrder == "min_salary_asc" ? "min_salary_desc" : "min_salary_asc";
-            ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
+            //ViewData["MinSalarySortParm"] = sortOrder == "min_salary_asc" ? "min_salary_desc" : "min_salary_asc";
+            //ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
             ViewData["jobTypeId"] = jobTypeId;
 
             if (searchString != null)
@@ -59,32 +59,32 @@ namespace JobWebsiteMVC.Controllers
             var jobTypes = await _jobTypesService.GetJobTypes();
             ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
 
-            switch (sortOrder)
-            {
-                case "min_salary_desc":
-                    jobList = jobList.OrderByDescending(x => x.MinSalary);
-                    break;
+            //switch (sortOrder)
+            //{
+            //    case "min_salary_desc":
+            //        jobList = jobList.OrderByDescending(x => x.MinSalary);
+            //        break;
 
-                case "closing_date_desc":
-                    jobList = jobList.OrderByDescending(x => x.ClosingDate);
-                    break;
+            //    case "closing_date_desc":
+            //        jobList = jobList.OrderByDescending(x => x.ClosingDate);
+            //        break;
 
-                case "closing_date_asc":
-                    jobList = jobList.OrderBy(x => x.ClosingDate);
-                    break;
+            //    case "closing_date_asc":
+            //        jobList = jobList.OrderBy(x => x.ClosingDate);
+            //        break;
 
-                case "min_salary_asc":
-                    jobList = jobList.OrderBy(x => x.MinSalary);
-                    break;
+            //    case "min_salary_asc":
+            //        jobList = jobList.OrderBy(x => x.MinSalary);
+            //        break;
 
-                default:
-                    break;
-            }
-            var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
+            //    default:
+            //        break;
+            //}
+            var collection = jobList.ProjectTo<JobListViewModel>(_mapper.ConfigurationProvider);
             int pageSize = 10;
             ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
-            return View(await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<JobListViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
         }
 
         public IActionResult IndexDT()

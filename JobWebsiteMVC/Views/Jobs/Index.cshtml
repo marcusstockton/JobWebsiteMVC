@@ -1,183 +1,161 @@
-﻿@model PaginatedList<JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel>
+﻿@model PaginatedList<JobWebsiteMVC.ViewModels.Job.JobListViewModel>
 @{
     ViewData["Title"] = "Index";
 }
 
-<div class="d-flex justify-content-between">
-    <div class="p-2 flex-grow-1">
-        <h1>Index</h1>
-        @if (User.IsInRole("JobOwner"))
-        {
-            <a asp-action="Create" class="btn btn-success" style="display: inline-flex;">
-                <span class="material-icons" style="padding-right: 10px;">
-                    add_box
-                </span> Create New
-            </a>
-        }
-   </div>
-    <div class="p-2">
-        <a asp-controller="Jobs" asp-action="IndexDT" class="btn-info btn">Show me the Datatable View</a>
+<div class="container">
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <div class="p-2 flex-grow-1">
+                <h1>Index</h1>
+            </div>
+            <div class="p-2">
+                @if (User.IsInRole("JobOwner"))
+                {
+                    <a asp-action="Create" class="btn btn-success" style="display: inline-flex;">
+                        <span class="material-icons" style="padding-right: 10px;">
+                            add_box
+                        </span> Create New
+                    </a>
+                }
+            </div>
+            <div class="p-2">
+                <a asp-controller="Jobs" asp-action="IndexDT" class="btn-info btn" style="display: inline-flex;">
+                    <span class="material-icons" style="padding-right: 10px;">
+                        table_rows
+                    </span> Show me the Datatable View
+                </a>
+            </div>
+        </div>
     </div>
+
+    <div class="row p-2" style="border: 1px solid grey; background-color:lightgray;">
+        @using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3", @style = "justify-content: space-between;align-items:center;" }))
+        {
+            @*Need these to hold their values in the next and previous button clicks at the bottom*@
+            <div class="col-sm-6">
+                @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
+            </div>
+            <div class="col-auto">
+                @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
+                <label class="form-check-label" for="showExpiredJobs">
+                    Show Expired Jobs
+                </label>
+            </div>
+            <div class="col-auto">
+                @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-select form-select-sm" })
+            </div>
+            <div class="col-auto">
+                <input type="submit" value="Search" id="filterSearch" class="btn btn-primary btn-sm" />
+            </div>
+        }
+    </div>
+
+    <table class="table table-bordered table-striped table-hover" id="jobsTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().JobTitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Description)
+                </th>
+                @*             <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MinSalarySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].MinSalary)</a>
+                </th> *@
+
+                <th>
+                    @Html.DisplayNameFor(model => model.First().HolidayEntitlement)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.First().JobType)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="@item.Id">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.JobTitle)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.DescriptionShort)*@
+                        @Html.Raw(Markdig.Markdown.ToPlainText(item.DescriptionShort))
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HolidayEntitlement)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.JobType.Description)
+                    </td>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("JobOwner") || User.IsInRole("Admin"))
+                        {
+                            <td width="1%">
+                                <a asp-action="Edit" asp-route-id="@item.Id" title="Edit" type="button" class="btn btn-info">
+                                    <span class="material-icons">edit</span>
+                                </a>
+                            </td>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <td width="1%">
+                                <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" type="button" class="btn btn-danger">
+                                    <span class="material-icons">
+                                        delete
+                                    </span>
+                                </a>
+                            </td>
+                        }
+                    }
+                    <td width="1%">
+                        <a asp-action="Details" asp-route-id="@item.Id" title="Details" type="button" class="btn btn-primary">
+                            <span class="material-icons">
+                                info
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-jobTypeId="@ViewData["jobTypeId"]"
+       class="btn btn-outline-secondary @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-jobTypeId="@ViewData["jobTypeId"]"
+       class="btn btn-outline-secondary @nextDisabled">
+        Next
+    </a>
+    <p>
+        Page @Model.PageIndex of @ViewData["totalPages"]
+    </p>
 </div>
 
-@using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3 align-items-cente" }))
-{
-    @*Need these to hold their values in the next and previous button clicks at the bottom*@
-    <div class="col-sm-4">
-        @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
-    </div>
-    <div class="col-auto">
-        @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
-        <label class="form-check-label" for="showExpiredJobs">
-            Show Expired Jobs
-        </label>
-    </div>
-    <div class="col-auto">
-        @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-select form-select-sm" })
-    </div>
-    <div class="col-auto">
-        <input type="submit" value="Search" id="filterSearch" class="btn btn-primary btn-sm" />
-    </div>
-}
-<table class="table table-hover" id="jobsTable">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().JobTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().IsDraft)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["MinSalarySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].MinSalary)</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().MaxSalary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().HoursPerWeek)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().HolidayEntitlement)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ClosingDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().ClosingDate)</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().PublishDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().UpdatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().JobType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr id="@item.Id">
-                <td>
-                    @Html.DisplayFor(modelItem => item.JobTitle)
-                </td>
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.DescriptionShort)*@
-                    @Html.Raw(Markdig.Markdown.ToPlainText(item.DescriptionShort))
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsDraft)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MinSalary)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaxSalary)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HoursPerWeek)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HolidayEntitlement)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClosingDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PublishDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdatedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.JobType.Description)
-                </td>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    @if (User.IsInRole("JobOwner") || User.IsInRole("Admin")){
-                        <td width="1%">
-                            <a asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fas fa-edit"></i> </a>
-                        </td>
-                    }
-                    
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <td width="1%">
-                            <a asp-action="Delete" asp-route-id="@item.Id" title="Delete"><i class="fas fa-trash-alt"></i> </a>
-                        </td>
-                    }
-                }
-                <td width="1%">
-                    <a asp-action="Details" asp-route-id="@item.Id" title="Details"><i class="fas fa-info-circle"></i> </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex - 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   asp-route-jobTypeId="@ViewData["jobTypeId"]"
-   class="btn btn-outline-secondary @prevDisabled">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-pageNumber="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   asp-route-jobTypeId="@ViewData["jobTypeId"]"
-   class="btn btn-outline-secondary @nextDisabled">
-    Next
-</a>
-<p>
-    Page @Model.PageIndex of @ViewData["totalPages"]
-</p>
 
 <style type="text/css">
-    .table{
+    #jobsTable {
         max-height: 100vh;
         overflow: auto;
     }

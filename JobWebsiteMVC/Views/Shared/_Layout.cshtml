@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body class="d-flex flex-column h-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -56,7 +56,7 @@
         </nav>
     </header>
     <div class="container-fluid">
-        <main role="main" class="pb-3 main-body">
+        <main role="main" class="flex-shrink-0">
             @await Html.PartialAsync("_StatusMessages")
             @RenderBody()
         </main>
