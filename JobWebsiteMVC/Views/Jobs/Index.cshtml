@@ -3,14 +3,22 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-@if (User.IsInRole("JobOwner"))
-{
-    <p>
-        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Create New</a>
-    </p>
-}
-
+<div class="d-flex justify-content-between">
+    <div class="p-2 flex-grow-1">
+        <h1>Index</h1>
+        @if (User.IsInRole("JobOwner"))
+        {
+            <a asp-action="Create" class="btn btn-success" style="display: inline-flex;">
+                <span class="material-icons" style="padding-right: 10px;">
+                    add_box
+                </span> Create New
+            </a>
+        }
+   </div>
+    <div class="p-2">
+        <a asp-controller="Jobs" asp-action="IndexDT" class="btn-info btn">Show me the Datatable View</a>
+    </div>
+</div>
 
 @using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3 align-items-cente" }))
 {

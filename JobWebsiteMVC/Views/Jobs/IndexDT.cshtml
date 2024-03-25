@@ -1,75 +1,27 @@
-﻿@section styles{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.12.1/b-2.2.3/date-1.1.2/r-2.3.0/datatables.min.css" />
-}
+﻿
+<div class="container-xxl">
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped table-hover" id="tblStudent" style="width:100%">
+            <thead>
+                <tr>
+                    <th scope="col">Job Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Draft?</th>
+                    <th scope="col">Min Salary</th>
+                    <th scope="col">Max Salary</th>
+                    <th scope="col">Hours per week</th>
+                    <th scope="col">Holiday</th>
+                    <th scope="col">Job Type</th>
+                    <th scope="col">Active?</th>
+                </tr>
+            </thead>
 
-    <div class="row">
-        <div class="col-sm-12">
-            <table class="table table-bordered table-striped" id="tblStudent">
-                <thead>
-                    <tr>
-                        <th scope="col">JobTitle</th>
-                       @* <th scope="col">Position</th>
-                        <th scope="col">Location</th>
-                        <th scope="col">Age</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">Salary</th>*@
-                    </tr>
-                </thead>
-            </table>
-        </div>
+        </table>
     </div>
+</div>
 
-    @section scripts{
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.12.1/b-2.2.3/date-1.1.2/r-2.3.0/datatables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            bindDatatable();
-        });
-
-        function bindDatatable() {
-            datatable = $('#tblStudent')
-                .DataTable({
-                    "sAjaxSource": "/Employee/GetData",
-                    "bServerSide": true,
-                    "bProcessing": true,
-                    "bSearchable": true,
-                    "order": [[1, 'asc']],
-                    "language": {
-                        "emptyTable": "No record found.",
-                        "processing":
-                            '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
-                    },
-                    "columns": [
-                        {
-                            "data": "JobTitle",
-                            "autoWidth": true,
-                            "searchable": true
-                        },
-                        //{
-                        //    "data": "Position",
-                        //    "autoWidth": true,
-                        //    "searchable": true
-                        //},
-                        //{
-                        //    "data": "Location",
-                        //    "autoWidth": true,
-                        //    "searchable": true
-                        //},
-                        //{
-                        //    "data": "Age",
-                        //    "autoWidth": true,
-                        //    "searchable": true
-                        //}, {
-                        //    "data": "StartDateString",
-                        //    "autoWidth": true,
-                        //    "searchable": true
-                        //}, {
-                        //    "data": "Salary",
-                        //    "autoWidth": true,
-                        //    "searchable": true
-                        //},
-                    ]
-                });
-        }
-    </script>
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js" defer="true"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.min.js" defer="true"></script>
+    <script src="~/js/jobs/jobdatatable.js" asp-append-version="true" defer="true"></script>
 }

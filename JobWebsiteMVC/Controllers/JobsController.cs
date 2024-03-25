@@ -87,10 +87,9 @@ namespace JobWebsiteMVC.Controllers
             return View(await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
         }
 
-        public JsonResult GetData()
+        public IActionResult IndexDT()
         {
-            var jobs = _service.GetJobs(null, false); //This method is returning the IEnumerable employee from database
-            return Json(new { data = JsonSerializer.Serialize(jobs) });
+            return View();
         }
 
         // GET: Jobs/Details/5

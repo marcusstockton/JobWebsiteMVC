@@ -28,8 +28,11 @@ namespace JobWebsiteMVC.Areas.Controllers
         [HttpGet("{description}")]
         public async Task<ActionResult<List<JobTitle>>> GetJobTitle(string description)
         {
-            var results = await _context.JobTitles.Where(x => x.Description.StartsWith(description)).Take(100).ToListAsync();
-            return Ok(results);
+            return Ok(await _context.JobTitles
+                .Where(x => x.Description.StartsWith(description))
+                .Where(x=>x.IsActive)
+                .Take(100)
+                .ToListAsync());
         }
 
         //// PUT: api/JobTitles/5
@@ -90,9 +93,9 @@ namespace JobWebsiteMVC.Areas.Controllers
         //    return NoContent();
         //}
 
-        private bool JobTitleExists(int id)
-        {
-            return _context.JobTitles.Any(e => e.Id == id);
-        }
+        //private bool JobTitleExists(int id)
+        //{
+        //    return _context.JobTitles.Any(e => e.Id == id);
+        //}
     }
 }
