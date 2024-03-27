@@ -39,7 +39,7 @@ namespace JobWebsiteMVC.Controllers
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, bool showExpiredJobs, int? pageNumber, Guid? jobTypeId = null)
         {
             ViewData["CurrentSort"] = sortOrder;
-            //ViewData["MinSalarySortParm"] = sortOrder == "min_salary_asc" ? "min_salary_desc" : "min_salary_asc";
+            ViewData["JobTitleSortParm"] = sortOrder == "job_title_asc" ? "job_title_desc" : "job_title_asc";
             //ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
             ViewData["jobTypeId"] = jobTypeId;
 
@@ -61,8 +61,12 @@ namespace JobWebsiteMVC.Controllers
 
             switch (sortOrder)
             {
-                case "min_salary_desc":
-                    jobList = jobList.OrderByDescending(x => x.MinSalary);
+                case "job_title_desc":
+                    jobList = jobList.OrderByDescending(x => x.JobTitle);
+                    break;
+
+                case "job_title_asc":
+                    jobList = jobList.OrderBy(x => x.JobTitle);
                     break;
 
                 case "closing_date_desc":
@@ -73,9 +77,7 @@ namespace JobWebsiteMVC.Controllers
                     jobList = jobList.OrderBy(x => x.ClosingDate);
                     break;
 
-                case "min_salary_asc":
-                    jobList = jobList.OrderBy(x => x.MinSalary);
-                    break;
+
 
                 default:
                     break;

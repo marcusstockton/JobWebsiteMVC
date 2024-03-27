@@ -38,7 +38,7 @@ namespace JobWebsiteMVC.Models.Job
 
         public Guid JobTypeId { get; set; }
 
-        [ForeignKey("JobTypeId")]
+        //[ForeignKey("JobTypeId")]
         public virtual JobType JobType { get; set; }
 
         public virtual ICollection<JobCategory> JobCategories { get; set; }

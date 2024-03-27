@@ -13,4 +13,19 @@
         $(location).attr('href', url);
     });
 
+
+    // Keep the search value between clicks:
+    var currentPageURL = window.location.search;
+    var readParam = "currentFilter";
+
+    var urlParams = new URLSearchParams(currentPageURL);
+
+    // Check parameter exists and read value
+    var paramValue = "";
+    if (urlParams.has(readParam)) {
+        paramValue = urlParams.get(readParam);
+    }
+    if (paramValue) {
+        $('#SearchString').val(paramValue);
+    }
 });

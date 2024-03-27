@@ -37,15 +37,13 @@ namespace JobWebsiteMVC.Data
                 .HasKey(x => x.Id);
 
             builder.Entity<Job>()
-                .HasOne<JobType>()
-                .WithMany();
-
-            builder.Entity<Job>()
-                .HasOne<JobType>()
-                .WithMany();
+                .HasOne(x=>x.JobType)
+                .WithMany()
+                .HasForeignKey(x=>x.JobTypeId);
 
             builder.Entity<JobTitle>()
                 .HasKey(x => x.Id);
+
             builder.Entity<JobTitle>()
                 .HasIndex(x => x.Description)
                 .IsUnique();

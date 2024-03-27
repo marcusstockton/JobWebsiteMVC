@@ -5,11 +5,6 @@
     <UserSecretsId>aspnet-JobWebsiteMVC-5ED1B5A3-D5F4-4631-B3A8-64ED9E7908A8</UserSecretsId>
   </PropertyGroup>
 
-
-  <ItemGroup>
-    <None Update="app.db" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Bogus" Version="35.5.0" />

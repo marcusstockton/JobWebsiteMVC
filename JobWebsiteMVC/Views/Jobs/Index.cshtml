@@ -23,45 +23,55 @@
         </div>
     </div>
 
-    <div class="row p-2" style="border: 1px solid grey; background-color:lightgray;">
-        @using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3", @style = "justify-content: space-between;align-items:center;" }))
-        {
-            @*Need these to hold their values in the next and previous button clicks at the bottom*@
-            <div class="col-sm-6">
-                @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
-            </div>
-            <div class="col-auto">
-                @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
-                <label class="form-check-label" for="showExpiredJobs">
-                    Show Expired Jobs
-                </label>
-            </div>
-            <div class="col-auto">
-                @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-select form-select-sm" })
-            </div>
-            <div class="col-auto">
-                <input type="submit" value="Search" id="filterSearch" class="btn btn-primary btn-sm" />
-            </div>
-        }
+    <div class="card mb-4 rounded-3 shadow-sm">
+        <div class="card-header py-1">
+            <h5 class="my-0 fw-normal">Filter</h5>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Index", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3", @style = "justify-content: space-between;align-items:center;" }))
+            {
+                @*Need these to hold their values in the next and previous button clicks at the bottom*@
+                <div class="col-sm-6">
+                    @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
+
+@*                     <div class="form-floating">
+                        <input type="text" class="form-control" id="SearchString" name="SearchString" placeholder="Search jobs">
+                        <label for="SearchString">Search jobs</label>
+                    </div> *@
+                </div>
+                <div class="col-auto">
+                    @Html.CheckBox("showExpiredJobs", null, new { @class = "form-check-input" })
+                    <label class="form-check-label" for="showExpiredJobs">
+                        Show Expired Jobs
+                    </label>
+                </div>
+                <div class="col-auto">
+                    @Html.DropDownList("jobTypeId", new SelectList((System.Collections.IEnumerable)ViewData["JobTypes"], "Id", "Description"), "All", new { @class = "form-select form-select-sm" })
+                    @* <div class="form-floating">
+                        <select class="form-select" id="jobTypeId" asp-items="@ViewBag.JobTypes"></select>
+                        <label for="jobTypeId">Job Type</label>
+                    </div> *@
+                </div>
+                <div class="col-auto">
+                    <input type="submit" value="Search" id="filterSearch" class="btn btn-primary btn-sm" />
+                </div>
+            }
+        </div>
+        
     </div>
 
     <table class="table table-bordered table-striped table-hover" id="jobsTable">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().JobTitle)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["JobTitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].JobTitle)</a>
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.First().Description)
                 </th>
-                @*             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["MinSalarySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].MinSalary)</a>
-                </th> *@
-
                 <th>
                     @Html.DisplayNameFor(model => model.First().HolidayEntitlement)
                 </th>
-
                 <th>
                     @Html.DisplayNameFor(model => model.First().JobType)
                 </th>
@@ -152,5 +162,5 @@
 </style>
 
 @section Scripts {
-    <script src="~/js/jobs/jobindex.js"></script>
+    <script src="~/js/jobs/jobindex.js" asp-append-version="true"></script>
 }
