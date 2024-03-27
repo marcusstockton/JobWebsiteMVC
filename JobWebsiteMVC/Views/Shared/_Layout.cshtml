@@ -55,15 +55,15 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid">
-        <main role="main" class="flex-shrink-0">
+    <div class="container">
+        <main role="main" class="pb-3">
             @await Html.PartialAsync("_StatusMessages")
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container-fluid">
+        <div class="container">
             &copy; @year - JobWebsiteMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>

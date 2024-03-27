@@ -19,13 +19,7 @@
                     </a>
                 }
             </div>
-            <div class="p-2">
-                <a asp-controller="Jobs" asp-action="IndexDT" class="btn-info btn" style="display: inline-flex;">
-                    <span class="material-icons" style="padding-right: 10px;">
-                        table_rows
-                    </span> Show me the Datatable View
-                </a>
-            </div>
+            
         </div>
     </div>
 
@@ -108,18 +102,14 @@
                         {
                             <td width="1%">
                                 <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" type="button" class="btn btn-danger">
-                                    <span class="material-icons">
-                                        delete
-                                    </span>
+                                    <span class="material-icons">delete</span>
                                 </a>
                             </td>
                         }
                     }
                     <td width="1%">
                         <a asp-action="Details" asp-route-id="@item.Id" title="Details" type="button" class="btn btn-primary">
-                            <span class="material-icons">
-                                info
-                            </span>
+                            <span class="material-icons">info</span>
                         </a>
                     </td>
                 </tr>

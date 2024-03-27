@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.Interfaces;
+using System.Security.Claims;
 
 namespace JobWebsiteMVC.Areas.Controllers
 {
@@ -23,10 +24,11 @@ namespace JobWebsiteMVC.Areas.Controllers
         }
 
         // GET: api/Jobs
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Job>>> GetJobs()
+        [HttpGet, Route("GetMyJobs")]
+        public async Task<ActionResult<IEnumerable<Job>>> GetMyJobs()
         {
-            return await _jobService.GetJobs(null, false)
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await _jobService.GetMyJobs(userId, null, false, null)
                 .OrderByDescending(x=>x.CreatedDate)
                 .ThenByDescending(x=>x.UpdatedDate)
                 .ToListAsync();

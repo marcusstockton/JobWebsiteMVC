@@ -3,16 +3,41 @@
 @{
     ViewData["Title"] = "My Jobs";
 }
-
+<div class="container">
 <h1>@ViewData["Title"]</h1>
+
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New Listing</a>
 </p>
 
+
+<table class="table table-bordered table-striped table-hover" id="tblJobs" style="width:100%">
+    <thead>
+        <tr>
+            <th scope="col">Job Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Draft?</th>
+            <th scope="col">Min Salary</th>
+            <th scope="col">Max Salary</th>
+            <th scope="col">Hours per week</th>
+            <th scope="col">Holiday</th>
+            <th scope="col">Job Type</th>
+            <th scope="col">Active?</th>
+            <th></th>
+        </tr>
+    </thead>
+
+</table>
+</div>
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js" defer="true"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.min.js" defer="true"></script>
+    <script src="~/js/jobs/jobdatatable.js" asp-append-version="true" defer="true"></script>
+}
+@* 
 @using (Html.BeginForm("ViewMyJobs", "Jobs", FormMethod.Post, new { @class = "row gy-2 gx-3 align-items-cente" }))
 {
-    @*Need these to hold their values in the next and previous button clicks at the bottom*@
     <div class="col-sm-4">
         @Html.TextBox("SearchString", null, new { @class = "form-control form-control-sm", @placeholder = "Search jobs" })
     </div>
@@ -168,4 +193,4 @@
         max-height: 100vh;
         overflow: auto;
     }
-</style>
+</style> *@
