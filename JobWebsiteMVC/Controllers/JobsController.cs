@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Controllers
@@ -76,8 +75,6 @@ namespace JobWebsiteMVC.Controllers
                 case "closing_date_asc":
                     jobList = jobList.OrderBy(x => x.ClosingDate);
                     break;
-
-
 
                 default:
                     break;
@@ -309,13 +306,11 @@ namespace JobWebsiteMVC.Controllers
             }
 
             var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
-            
+
             int pageSize = 10;
             ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
             return View("MyJobs", await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
-
-
 
             //var jobs = _mapper.Map<List<JobDetailsViewModel>>(result);
             //return View("MyJobs", jobs);

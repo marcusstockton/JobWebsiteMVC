@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using JobWebsiteMVC.Models.Job;
 using System;
-using JobWebsiteMVC.Models.Job;
+using System.ComponentModel.DataAnnotations;
 
 namespace JobWebsiteMVC.ViewModels.Job
 {
@@ -24,6 +24,7 @@ namespace JobWebsiteMVC.ViewModels.Job
                 return Description;
             }
         }
+
         [Display(Name = "Holiday")]
         public decimal HolidayEntitlement { get; set; }
 

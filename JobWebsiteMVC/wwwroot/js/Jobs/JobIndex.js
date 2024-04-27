@@ -1,18 +1,15 @@
-﻿$(document).ready(function () {
-
-    $('#jobTypeId, #showExpiredJobs').change(function () {
+﻿$(function () {
+    $('#jobTypeId, #showExpiredJobs').on("change")(function () {
         $('#filterSearch').click();
     });
 
-
-    $('#jobsTable tr').click(function () {
+    $('#jobsTable tr').on("click")(function () {
         var id = $(this).attr('id');
         console.log("Row Id clicked: " + id);
 
         var url = window.location.href = '/Jobs/details/' + id; //relative to domain
         $(location).attr('href', url);
     });
-
 
     // Keep the search value between clicks:
     var currentPageURL = window.location.search;

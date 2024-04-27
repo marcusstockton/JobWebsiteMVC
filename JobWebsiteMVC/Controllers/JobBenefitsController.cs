@@ -22,7 +22,7 @@ namespace JobWebsiteMVC.Controllers
         // GET: JobBenefits
         public async Task<IActionResult> Index()
         {
-            return View(await _context.JobBenefits.ToListAsync());
+            return View(await _context.Benefits.ToListAsync());
         }
 
         // GET: JobBenefits/Details/5

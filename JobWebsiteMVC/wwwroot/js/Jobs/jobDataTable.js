@@ -19,7 +19,6 @@
                     }
                     return data;
                 }
-
             },
             {
                 data: 'isDraft',
@@ -28,7 +27,6 @@
                     if (type === 'display') {
                         if (data === true) {
                             return '<span class="material-icons text-success"> done </span>';
-
                         } else {
                             return '<span class="material-icons text-danger"> close </span>'
                         }
@@ -63,11 +61,10 @@
             {
                 data: 'isActive',
                 className: "text-center",
-                render: function(data, type){
+                render: function (data, type) {
                     if (type === 'display') {
                         if (data === true) {
                             return '<span class="material-icons text-success"> done </span>';
-
                         } else {
                             return '<span class="material-icons text-danger"> close </span>'
                         }
@@ -80,18 +77,15 @@
                 data: null,
                 orderable: false,
                 render: function (data, type, row, meta) {
-
                     return '<div class="btn-group" role="group">' +
-                        '<button type="button" class="btn btn-primary view" id=v-"' + meta.row + '"><span class="material-icons">info</span></button>'+
-                        '<button type="button" class="btn btn-info edit" id=e-"' + meta.row + '"><span class="material-icons">edit</span></button>'+
-                        '<button type="button" class="btn btn-danger delete" id=d-"' + meta.row + '"><span class="material-icons">delete</span></button>'+
-                    '</div>'
+                        '<button type="button" class="btn btn-primary view" id=v-"' + meta.row + '"><span class="material-icons">info</span></button>' +
+                        '<button type="button" class="btn btn-info edit" id=e-"' + meta.row + '"><span class="material-icons">edit</span></button>' +
+                        '<button type="button" class="btn btn-danger delete" id=d-"' + meta.row + '"><span class="material-icons">delete</span></button>' +
+                        '</div>'
                 }
-                
             }
         ],
         processing: true,
-        
     });
 
     table.on('click', '.view', function (e) {

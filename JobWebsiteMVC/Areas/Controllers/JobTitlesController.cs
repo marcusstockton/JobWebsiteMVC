@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Models.Job;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using JobWebsiteMVC.Data;
-using JobWebsiteMVC.Models.Job;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Areas.Controllers
 {
@@ -30,7 +30,7 @@ namespace JobWebsiteMVC.Areas.Controllers
         {
             return Ok(await _context.JobTitles
                 .Where(x => x.Description.StartsWith(description))
-                .Where(x=>x.IsActive)
+                .Where(x => x.IsActive)
                 .Take(100)
                 .ToListAsync());
         }

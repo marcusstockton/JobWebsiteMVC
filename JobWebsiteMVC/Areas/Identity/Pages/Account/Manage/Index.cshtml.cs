@@ -76,7 +76,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-           
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -99,7 +99,7 @@ namespace JobWebsiteMVC.Areas.Identity.Pages.Account.Manage
                 var attachment = await _attachmentService.SaveAvatar(file, user);
                 user.Attachments.Add(attachment);
             }
-            
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");

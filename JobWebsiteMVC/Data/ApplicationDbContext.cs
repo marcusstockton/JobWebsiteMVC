@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Data
 {
@@ -28,7 +28,6 @@ namespace JobWebsiteMVC.Data
         public DbSet<JobCategory> JobCategories { get; set; }
         public DbSet<JobDetailsViewModel> JobDetailsViewModel { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -37,9 +36,9 @@ namespace JobWebsiteMVC.Data
                 .HasKey(x => x.Id);
 
             builder.Entity<Job>()
-                .HasOne(x=>x.JobType)
+                .HasOne(x => x.JobType)
                 .WithMany()
-                .HasForeignKey(x=>x.JobTypeId);
+                .HasForeignKey(x => x.JobTypeId);
 
             builder.Entity<JobTitle>()
                 .HasKey(x => x.Id);
@@ -93,6 +92,7 @@ namespace JobWebsiteMVC.Data
                 }
             }
         }
+
         public override int SaveChanges()
         {
             var entries = ChangeTracker

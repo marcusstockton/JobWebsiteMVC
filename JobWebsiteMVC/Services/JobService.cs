@@ -107,7 +107,7 @@ namespace JobWebsiteMVC.Services
             return application;
         }
 
-        public  IQueryable<Job> GetMyJobs(string userId, string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
+        public IQueryable<Job> GetMyJobs(string userId, string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
             var jobs = _context.Jobs
                 .Include(x => x.JobType)

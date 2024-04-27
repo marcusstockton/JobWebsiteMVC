@@ -1,4 +1,4 @@
-﻿@model IEnumerable<JobWebsiteMVC.Models.Job.Benefit>
+﻿@model List<JobWebsiteMVC.Models.Job.Benefit>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,16 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.First().Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
+                @Html.DisplayNameFor(model => model.First().CreatedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedDate)
+                @Html.DisplayNameFor(model => model.First().UpdatedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsActive)
+                @Html.DisplayNameFor(model => model.First().IsActive)
             </th>
             <th></th>
         </tr>

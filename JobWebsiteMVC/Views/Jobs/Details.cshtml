@@ -109,7 +109,7 @@
         </dl>
     </div>
     <div>
-        <a asp-action="JobApplication" asp-route-jobId="@Model.Id" class="btn btn-info">Apply</a>
+        <a asp-action="JobApplication" asp-route-jobId="@Model.Id" class="btn btn-success">Apply</a>
         @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("JobOwner")))
         {
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info">Edit</a>

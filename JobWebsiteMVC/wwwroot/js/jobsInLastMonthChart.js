@@ -1,5 +1,4 @@
 ﻿$(function () {
-
     $.get("Home/JobsCreatedInLastMonth", function (res) {
         var ctx = document.getElementById('myChart').getContext('2d');
         new Chart(ctx, {
@@ -7,8 +6,8 @@
             data: {
                 labels: $.map(res, function (i, v) { return i.item1 }),
                 datasets: [{
-                    label: '# of Jobs Created Last Month',
-                    fill: false,
+                    label: '# of Jobs Created in Last 12 Months',
+                    fill: true,
                     tension: 0.1,
                     data: $.map(res, function (i, v) { return i.item2 }),
                     backgroundColor: [
@@ -81,6 +80,16 @@
                 }]
             },
             options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'New Jobs created'
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -90,5 +99,4 @@
             }
         });
     });
-
 });
