@@ -1,4 +1,5 @@
 ﻿using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Models.Job;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,9 +63,9 @@ namespace JobWebsiteMVC.Controllers
                 jobBenefit.CreatedDate = DateTime.Now;
                 _context.Add(jobBenefit);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Benefit successfully created");
             }
-            return View(jobBenefit);
+            return View(jobBenefit).WithWarning("Warning", "Invalid data submitted");
         }
 
         // GET: JobBenefits/Edit/5
@@ -114,9 +115,9 @@ namespace JobWebsiteMVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Benefit updated successfully");
             }
-            return View(jobBenefit);
+            return View(jobBenefit).WithWarning("Warning", "Invalid data submitted");
         }
 
         // GET: JobBenefits/Delete/5
@@ -145,7 +146,7 @@ namespace JobWebsiteMVC.Controllers
             var jobBenefit = await _context.JobBenefits.FindAsync(id);
             _context.JobBenefits.Remove(jobBenefit);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)).WithSuccess("Success", "Benefit successfully deleted");
         }
 
         private bool JobBenefitExists(Guid id)
