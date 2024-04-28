@@ -1,6 +1,6 @@
 ﻿$(function () {
-    $('#jobTypeId, #showExpiredJobs').on("change")(function () {
-        $('#filterSearch').click();
+    $('#jobTypeId, #showExpiredJobs').on("change", function () {
+        $('#filterSearch').trigger("click");
     });
 
     $('#jobsTable tr').on("click")(function () {
