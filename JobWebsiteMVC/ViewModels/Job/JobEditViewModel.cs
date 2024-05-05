@@ -9,12 +9,11 @@ namespace JobWebsiteMVC.ViewModels.Job
     public class JobEditViewModel
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
 
-        [Display(Name = "Job Title")]
+        [Display(Name = "Job Title"), Required, MinLength(5)]
         public string JobTitle { get; set; }
 
-        [DataType(DataType.MultilineText)]
+        [DataType(DataType.MultilineText), Required, MinLength(20)]
         public string Description { get; set; }
 
         [Display(Name = "Draft?")]
@@ -69,7 +68,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name = "Job Benefits")]
         public List<Guid> JobBenefitsIds { get; set; }
 
-        [Display(Name = "Job Type")]
+        [Display(Name = "Job Type"), Required]
         public Guid JobTypeId { get; set; }
 
         public virtual List<SelectListItem> JobTypesList { get; set; }

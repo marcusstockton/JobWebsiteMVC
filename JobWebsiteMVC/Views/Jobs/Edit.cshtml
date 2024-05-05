@@ -1,7 +1,9 @@
-﻿@model JobWebsiteMVC.ViewModels.Job.JobEditViewModel
+﻿@using Markdig
+@model JobWebsiteMVC.ViewModels.Job.JobEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
+    var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
 }
 <div class="container">
     <h1>Edit</h1>
@@ -17,17 +19,30 @@
                 <input type="hidden" asp-for="CreatedDate" />
                 <input type="hidden" asp-for="UpdatedDate" />
 
-                <div class="form-group">
-                    <label asp-for="JobTitle" class="control-label"></label>
-                    <input asp-for="JobTitle" class="form-control" />
+                <div class="form-floating">
+                    <input asp-for="JobTitle" class="form-control" id="JobTitle" placeholder="Accountant" />
+                    <label asp-for="JobTitle" class="control-label" for="JobTitle"></label>
                     <span asp-validation-for="JobTitle" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
-                    <i class="fa-sharp fa-solid fa-circle-info" title="Markdown is supported" style="color:blue"></i>
-                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+
+                <span class="material-icons" style="color:blue" data-bs-toggle="tooltip" data-bs-title="Markdown is supported">
+                    info
+                </span>
+
+                <div class="form-floating">
+                    <textarea asp-for="Description" class="form-control" style="height: 200px" id="descriptionInput"></textarea>
+                    <label asp-for="Description" class="control-label" for="descriptionInput"></label>
                     <span asp-validation-for="Description" class="text-danger"></span>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="previewMarkdownSwitch">
+                        <label class="form-check-label" for="previewMarkdownSwitch">Preview</label>
+                    </div>
                 </div>
+
+                <div id="preview" style="display: none; background-color:aliceblue; padding:10px; border: 1px dotted grey" >
+                    
+                </div>
+
                 <div class="form-group form-check">
                     <label class="form-check-label">
                         <input class="form-check-input" asp-for="IsDraft" /> @Html.DisplayNameFor(model => model.IsDraft)
@@ -35,50 +50,51 @@
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <label asp-for="MinSalary" class="control-label"></label>
-                        <input asp-for="MinSalary" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="MinSalary" class="form-control" id="minSalaryInput"/>
+                        <label asp-for="MinSalary" class="control-label" for="minSalaryInput"></label>
                         <span asp-validation-for="MinSalary" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="MaxSalary" class="control-label"></label>
-                        <input asp-for="MaxSalary" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="MaxSalary" class="form-control" id="maxSalaryInput" />
+                        <label asp-for="MaxSalary" class="control-label" for="maxSalaryInput"></label>
                         <span asp-validation-for="MaxSalary" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <label asp-for="WorkingHoursStart" class="control-label"></label>
-                        <input asp-for="WorkingHoursStart" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="WorkingHoursStart" class="form-control" id="workingHoursStartInput"/>
+                        <label asp-for="WorkingHoursStart" class="control-label" for="workingHoursStartInput"></label>
                         <span asp-validation-for="WorkingHoursStart" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="WorkingHoursEnd" class="control-label"></label>
-                        <input asp-for="WorkingHoursEnd" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="WorkingHoursEnd" class="form-control" id="workingHoursEndInput" />
+                        <label asp-for="WorkingHoursEnd" class="control-label" for="workingHoursEndInput"></label>
                         <span asp-validation-for="WorkingHoursEnd" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <label asp-for="HoursPerWeek" class="control-label"></label>
-                        <input asp-for="HoursPerWeek" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="HoursPerWeek" class="form-control" id="hoursPerWeekInput"/>
+                        <label asp-for="HoursPerWeek" class="control-label" for="hoursPerWeekInput"></label>
                         <span asp-validation-for="HoursPerWeek" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="HolidayEntitlement" class="control-label"></label>
-                        <input asp-for="HolidayEntitlement" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="HolidayEntitlement" class="form-control" id="holidayEntitlementInput"/>
+                        <label asp-for="HolidayEntitlement" class="control-label" for="holidayEntitlementInput"></label>
+                        
                         <span asp-validation-for="HolidayEntitlement" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <label asp-for="ClosingDate" class="control-label"></label>
-                        <input asp-for="ClosingDate" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="ClosingDate" class="form-control" id="closingDateInput"/>
+                        <label asp-for="ClosingDate" class="control-label" for="closingDateInput"></label>
                         <span asp-validation-for="ClosingDate" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="PublishDate" class="control-label"></label>
-                        <input asp-for="PublishDate" class="form-control" />
+                    <div class="form-floating col-md-6">
+                        <input asp-for="PublishDate" class="form-control" id="publishDateInput" />
+                        <label asp-for="PublishDate" class="control-label" for="publishDateInput"></label>
                         <span asp-validation-for="PublishDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -95,10 +111,10 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label asp-for="JobTypeId"></label>
-                        <select asp-for="JobTypeId" asp-items="Model.JobTypesList" class="form-control">
+                    <div class="form-floating col-md-6">
+                        <select asp-for="JobTypeId" asp-items="Model.JobTypesList" class="form-select" id="jobTypeInput">
                         </select>
+                        <label asp-for="JobTypeId" for="jobTypeInput"></label>
                     </div>
                 </div>
 
@@ -116,5 +132,6 @@
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/Jobs/jobTitleAutocomplete.js"></script>
+    <script src="~/js/Jobs/jobTitleAutocomplete.js" asp-append-version="true" defer></script>
+    <script src="~/js/jobs/jobedit.js" asp-append-version="true" defer></script>
 }

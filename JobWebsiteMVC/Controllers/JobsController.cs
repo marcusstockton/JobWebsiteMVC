@@ -194,6 +194,13 @@ namespace JobWebsiteMVC.Controllers
                     return View(jobVM).WithDanger("Error", ex.Message);
                 }
             }
+
+            var jobTypes = await _jobTypesService.GetJobTypes();
+            var jobBenefits = await _jobBenefitsService.GetJobBenefits();
+            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits?.Select(s => s.JobBenefitId).ToList();
+            jobVM.JobTypesList = jobTypes.Select(x => new SelectListItem { Text = x.Description, Value = x.Id.ToString() }).ToList();
+
+            ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description }).ToList();
             return View(jobVM).WithDanger("Error", "Some Errors Occured");
         }
 

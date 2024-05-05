@@ -1,7 +1,9 @@
-﻿@model JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel
+﻿@using Markdig
+@model JobWebsiteMVC.ViewModels.Job.JobDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
+    var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
 }
 <div class="container">
     <h1>@Model.JobTitle</h1>
@@ -13,7 +15,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </dt>
             <dd class="col-sm-10">
-                @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))
+                @Html.Raw(Markdig.Markdown.ToHtml(Model.Description, pipeline))
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.IsDraft)
