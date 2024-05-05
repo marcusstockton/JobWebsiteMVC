@@ -8,10 +8,6 @@ namespace JobWebsiteMVC.ViewModels.Job
     {
         [Required]
         [StringLength(100)]
-        public string Title { get; set; }
-
-        [Required]
-        [StringLength(100)]
         public string JobTitle { get; set; }
 
         [Required]

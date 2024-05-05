@@ -1,5 +1,4 @@
 ﻿$(function () {
-
     var descriptionPreviewString = $('#descriptionInput').val();
     document.getElementById('preview').innerHTML =
         marked.parse(descriptionPreviewString);

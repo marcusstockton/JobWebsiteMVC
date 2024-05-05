@@ -10,35 +10,35 @@ namespace JobWebsiteMVC.ViewModels.Job
     {
         public Guid Id { get; set; }
 
-        [Display(Name = "Job Title"), Required, MinLength(5)]
+        [Display(Name = "Job Title"), Required, MinLength(5), StringLength(100)]
         public string JobTitle { get; set; }
 
-        [DataType(DataType.MultilineText), Required, MinLength(20)]
+        [DataType(DataType.MultilineText), Required, MinLength(20), StringLength(1000)]
         public string Description { get; set; }
 
         [Display(Name = "Draft?")]
         public bool IsDraft { get; set; }
 
-        [Display(Name = "Min Salary")]
+        [Display(Name = "Min Salary"), Required]
         public decimal MinSalary { get; set; }
 
-        [Display(Name = "Max Salary")]
+        [Display(Name = "Max Salary"), Required]
         public decimal MaxSalary { get; set; }
 
-        [Display(Name = "Start Time")]
+        [Display(Name = "Start Time"), Required]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH\\:mm}", ApplyFormatInEditMode = true)]
         public TimeOnly WorkingHoursStart { get; set; }
 
-        [Display(Name = "End Time")]
+        [Display(Name = "End Time"), Required]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH\\:mm}", ApplyFormatInEditMode = true)]
         public TimeOnly WorkingHoursEnd { get; set; }
 
-        [Display(Name = "Hours Per Week")]
+        [Display(Name = "Hours Per Week"), Required]
         public decimal HoursPerWeek { get; set; }
 
-        [Display(Name = "Holiday Allowance")]
+        [Display(Name = "Holiday Allowance"), Required]
         public decimal HolidayEntitlement { get; set; }
 
         [Display(Name = "Active?")]
@@ -49,7 +49,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTimeOffset ClosingDate { get; set; }
 
-        [Display(Name = "Publish Date")]
+        [Display(Name = "Publish Date"), Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTimeOffset PublishDate { get; set; }

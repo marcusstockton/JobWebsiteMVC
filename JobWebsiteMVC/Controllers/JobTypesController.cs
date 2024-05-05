@@ -61,7 +61,7 @@ namespace JobWebsiteMVC.Controllers
             {
                 jobType.CreatedDate = DateTime.Now;
                 await _jobTypeService.CreateJobType(jobType);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", $"Job Type {jobType.Description} created.");
             }
             var query = ModelState.Values.SelectMany(v => v.Errors);
             var errorList = query.ToList();
