@@ -22,6 +22,7 @@ namespace JobWebsiteMVC.Data
 
         public async Task CompleteAsync()
         {
+
             await _context.SaveChangesAsync();
         }
 

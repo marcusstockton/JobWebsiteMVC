@@ -67,18 +67,22 @@ namespace JobWebsiteMVC.Services
             return jobs;
         }
 
-        public async Task Post(Job job)
+        public async Task Post(Job job, string creatorId)
         {
-            job.CreatedDate = DateTime.Now;
-            await _context.Jobs.AddAsync(job);
-            await Save();
+            var user = await _context.Users.FindAsync(creatorId);
+            job.CreatedBy = user;
+            await _unitOfWork.Jobs.Add(job);
+            await _unitOfWork.CompleteAsync();
+            //await _context.Jobs.AddAsync(job);
+            //await Save();
         }
 
         public async Task Put(Job job)
         {
-            job.UpdatedDate = DateTime.Now;
-            _context.Entry(job).State = EntityState.Modified;
-            await Save();
+            _unitOfWork.Jobs.Update(job);
+            await _unitOfWork.CompleteAsync();
+            //_context.Entry(job).State = EntityState.Modified;
+            //await Save();
         }
 
         public async Task<List<JobApplication>> GetJobApplicationsForJob(Guid jobId)

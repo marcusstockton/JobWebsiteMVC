@@ -56,7 +56,7 @@ namespace JobWebsiteMVC.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var jobList = _service.GetJobs(searchString, showExpiredJobs, jobTypeId);
+            var jobList = _service.GetJobs(searchString, showExpiredJobs, jobTypeId).OrderByDescending(x=>x.CreatedDate);
 
             var jobTypes = await _jobTypesService.GetJobTypes();
             ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
@@ -133,7 +133,9 @@ namespace JobWebsiteMVC.Controllers
             if (ModelState.IsValid)
             {
                 var job = _mapper.Map<Job>(jobVM);
-                await _service.Post(job);
+                var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                await _service.Post(job, userid);
                 await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, new List<JobBenefit>(), jobVM.JobBenefitsIds);
 
                 return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job sucessfully created!");

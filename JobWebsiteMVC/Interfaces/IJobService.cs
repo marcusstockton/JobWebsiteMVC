@@ -12,7 +12,7 @@ namespace JobWebsiteMVC.Interfaces
 
         Task<Job> GetJobById(Guid jobId);
 
-        Task Post(Job job);
+        Task Post(Job job, string creatorId);
 
         Task Put(Job job);
 
