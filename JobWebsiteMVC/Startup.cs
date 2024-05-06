@@ -50,6 +50,7 @@ namespace JobWebsiteMVC
             });
 
             // Register DI
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<IJobTypesService, JobTypesService>();
             services.AddScoped<IJobBenefitsService, JobBenefitsService>();

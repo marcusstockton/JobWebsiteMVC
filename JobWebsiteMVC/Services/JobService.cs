@@ -12,36 +12,40 @@ namespace JobWebsiteMVC.Services
 {
     public class JobService : IJobService, IDisposable
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailService;
 
-        public JobService(ApplicationDbContext context, IEmailSender emailService)
+        public JobService(ApplicationDbContext context, IUnitOfWork unitOfWork, IEmailSender emailService)
         {
-            _context = context;
+            _context = context; 
+            _unitOfWork = unitOfWork;
             _emailService = emailService;
         }
 
         public async Task Delete(Guid id)
         {
-            var job = await _context.Jobs.FindAsync(id);
-            _context.Jobs.Remove(job);
-            await Save();
+            var job = await _unitOfWork.Jobs.GetById(id);
+            _unitOfWork.Jobs.Delete(job.Id);
+            //await Save();
         }
 
         public async Task<Job> GetJobById(Guid id)
         {
-            return await _context.Jobs
-                .Include(x => x.JobBenefits)
-                    .ThenInclude(x => x.Benefit)
-                .Include(x => x.JobType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            return await _unitOfWork.Jobs.GetById(id);
+            //return await _context.Jobs
+            //    .Include(x => x.JobBenefits)
+            //        .ThenInclude(x => x.Benefit)
+            //    .Include(x => x.JobType)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public IQueryable<Job> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
-            var jobs = _context.Jobs
-                .Include(x => x.JobType)
-                .Where(x => x.IsActive);
+            var jobs = _unitOfWork.Jobs.Get(includeProperties: "JobType", filter: x => x.IsActive);
+            //var jobs = _context.Jobs
+            //    .Include(x => x.JobType)
+            //    .Where(x => x.IsActive);
 
             if (!string.IsNullOrEmpty(searchString))
             {

@@ -3,10 +3,14 @@ using JobWebsiteMVC.Controllers;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.Profiles;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace UnitTests
 {
@@ -40,7 +44,7 @@ namespace UnitTests
         //    // Arrange
         //    _mockService.Setup(x => x.GetJobs(It.IsAny<string>(), It.IsAny<bool>(), null)).ReturnsAsync(
         //        new IQueryable<Job> {
-        //            new Job { Id = new Guid(), JobTitle = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40 },
+        //            new Job { Id = new Guid(), JobTitle = "Test title", JobType = new JobType{ Id = new Guid(), Description = "JobType"}, IsDraft=false, MinSalary = 1234M, MaxSalary = 4321M, Description = "Test", IsActive = true, ClosingDate = DateTime.Now.AddDays(7), CreatedDate = DateTime.Now, HolidayEntitlement = 21, HoursPerWeek = 40, },
         //            new Job { Id = new Guid(), JobTitle = "Test title two", JobType = new JobType{ Id = new Guid(), Description = "JobType2"}, IsDraft=false, MinSalary = 12344M, MaxSalary = 34321M, Description = "Test2", IsActive = true, ClosingDate = DateTime.Now.AddDays(8), CreatedDate = DateTime.Now, HolidayEntitlement = 20, HoursPerWeek = 37.5M  }
         //        });
 
@@ -48,7 +52,7 @@ namespace UnitTests
         //    var controller = new JobsController(mapper, _mockLogger.Object, _mockService.Object, _mockJobTypesService.Object, _mockJobBenefitsService.Object);
 
         //    // Assert
-        //    var result = await controller.Index(It.IsAny<string>(), It.IsAny<string>(),It.IsAny<string>(), It.IsAny<bool>(), null) as ViewResult;
+        //    var result = await controller.Index(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), null) as ViewResult;
 
         //    Assert.IsNotNull(result);
         //}

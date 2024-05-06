@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Helpers;
 using JobWebsiteMVC.Interfaces;
@@ -24,14 +25,16 @@ namespace JobWebsiteMVC.Controllers
         private readonly IJobService _service;
         private readonly IJobTypesService _jobTypesService;
         private readonly IJobBenefitsService _jobBenefitsService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public JobsController(IMapper mapper, ILogger<JobsController> logger, IJobService service, IJobTypesService jobTypesService, IJobBenefitsService jobBenefitsService)
+        public JobsController(IMapper mapper, ILogger<JobsController> logger, IJobService service, IJobTypesService jobTypesService, IJobBenefitsService jobBenefitsService, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;
             _service = service;
             _jobTypesService = jobTypesService;
             _jobBenefitsService = jobBenefitsService;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Jobs
@@ -79,7 +82,7 @@ namespace JobWebsiteMVC.Controllers
                 default:
                     break;
             }
-            var collection = jobList.ProjectTo<JobListViewModel>(_mapper.ConfigurationProvider);
+            var collection = jobList.ProjectTo<JobListViewModel>(_mapper.ConfigurationProvider).AsQueryable();
             int pageSize = 10;
             ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
