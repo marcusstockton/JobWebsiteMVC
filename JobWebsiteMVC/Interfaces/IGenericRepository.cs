@@ -10,7 +10,12 @@ namespace JobWebsiteMVC.Interfaces
     {
         Task<IEnumerable<T>> All();
         Task<T> GetById(Guid id);
-        IQueryable<T> Get(
+        IQueryable<T> GetAsQueryable(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            string includeProperties = "");
+
+        IEnumerable<T> GetAsEnumerable(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = "");

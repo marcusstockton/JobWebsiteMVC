@@ -42,7 +42,7 @@ namespace JobWebsiteMVC.Services
 
         public IQueryable<Job> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
-            var jobs = _unitOfWork.Jobs.Get(includeProperties: "JobType", filter: x => x.IsActive);
+            var jobs = _unitOfWork.Jobs.GetAsQueryable(includeProperties: "JobType", filter: x => x.IsActive);
             //var jobs = _context.Jobs
             //    .Include(x => x.JobType)
             //    .Where(x => x.IsActive);

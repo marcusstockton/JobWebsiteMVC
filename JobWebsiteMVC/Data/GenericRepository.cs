@@ -29,7 +29,7 @@ namespace JobWebsiteMVC.Data
             return await dbSet.FindAsync(id);
         }
 
-        public virtual IQueryable<T> Get(
+        public virtual IQueryable<T> GetAsQueryable(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = "")
@@ -54,6 +54,31 @@ namespace JobWebsiteMVC.Data
             else
             {
                 return query;
+            }
+        }
+
+        public virtual IEnumerable<T> GetAsEnumerable(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
+        {
+            IQueryable<T> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+            else
+            {
+                return query.ToList();
             }
         }
 
