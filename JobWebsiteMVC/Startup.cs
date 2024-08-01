@@ -1,4 +1,5 @@
 using JobWebsiteMVC.Data;
+using JobWebsiteMVC.Hubs;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models;
 using JobWebsiteMVC.Services;
@@ -58,6 +59,8 @@ namespace JobWebsiteMVC
 
             services.AddTransient<IEmailSender, EmailService>();
             services.AddTransient<DataSeeder>();
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeeder seeder)
@@ -86,12 +89,16 @@ namespace JobWebsiteMVC
             app.UseAuthentication();
             app.UseAuthorization();
 
+            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+
+                endpoints.MapHub<NotificationsHub>("/notificationHub");
             });
         }
     }

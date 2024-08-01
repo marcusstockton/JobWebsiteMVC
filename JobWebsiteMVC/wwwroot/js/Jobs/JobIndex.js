@@ -3,7 +3,7 @@
         $('#filterSearch').trigger("click");
     });
 
-    $('#jobsTable tr').on("click")(function () {
+    $('#jobsTable tr').on("click", function () {
         var id = $(this).attr('id');
         console.log("Row Id clicked: " + id);
 

@@ -3,12 +3,15 @@ using AutoMapper.QueryableExtensions;
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Helpers;
+using JobWebsiteMVC.Hubs;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.ViewModels.Job;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -27,7 +30,10 @@ namespace JobWebsiteMVC.Controllers
         private readonly IJobBenefitsService _jobBenefitsService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public JobsController(IMapper mapper, ILogger<JobsController> logger, IJobService service, IJobTypesService jobTypesService, IJobBenefitsService jobBenefitsService, IUnitOfWork unitOfWork)
+        private readonly IHubContext<NotificationsHub, INotificationsHub> _hubContext;
+
+        public JobsController(IMapper mapper, ILogger<JobsController> logger, IJobService service, IJobTypesService jobTypesService, 
+            IJobBenefitsService jobBenefitsService, IUnitOfWork unitOfWork, IHubContext<NotificationsHub, INotificationsHub> hubContext)
         {
             _mapper = mapper;
             _logger = logger;
@@ -35,6 +41,7 @@ namespace JobWebsiteMVC.Controllers
             _jobTypesService = jobTypesService;
             _jobBenefitsService = jobBenefitsService;
             _unitOfWork = unitOfWork;
+            _hubContext = hubContext;
         }
 
         // GET: Jobs
@@ -85,6 +92,8 @@ namespace JobWebsiteMVC.Controllers
             var collection = jobList.ProjectTo<JobListViewModel>(_mapper.ConfigurationProvider).AsQueryable();
             int pageSize = 10;
             ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
+
+            await _hubContext.Clients.All.SendMessage(User.FindFirstValue(ClaimTypes.NameIdentifier).ToString(), "This is a Test");
 
             return View(await PaginatedList<JobListViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
         }
