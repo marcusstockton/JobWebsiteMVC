@@ -93,8 +93,6 @@ namespace JobWebsiteMVC.Controllers
             int pageSize = 10;
             ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
-            await _hubContext.Clients.All.SendMessage(User.FindFirstValue(ClaimTypes.NameIdentifier).ToString(), "This is a Test");
-
             return View(await PaginatedList<JobListViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
         }
 
@@ -201,6 +199,9 @@ namespace JobWebsiteMVC.Controllers
                     await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, currentJobBenefits, jobVM.JobBenefitsIds);
 
                     await _service.Put(job);
+
+                    await _hubContext.Clients.All.SendMessage(User.FindFirstValue(ClaimTypes.NameIdentifier).ToString(), "This is a Test");
+
                     return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job Updated Sucessfully!");
                 }
                 catch (Exception ex)
@@ -215,6 +216,7 @@ namespace JobWebsiteMVC.Controllers
             jobVM.JobTypesList = jobTypes.Select(x => new SelectListItem { Text = x.Description, Value = x.Id.ToString() }).ToList();
 
             ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description }).ToList();
+
             return View(jobVM).WithDanger("Error", "Some Errors Occured");
         }
 
