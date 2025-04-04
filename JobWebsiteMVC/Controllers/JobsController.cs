@@ -23,19 +23,16 @@ namespace JobWebsiteMVC.Controllers
 {
     public class JobsController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<JobsController> _logger;
         private readonly IJobService _service;
         private readonly IJobTypesService _jobTypesService;
         private readonly IJobBenefitsService _jobBenefitsService;
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly IHubContext<NotificationsHub, INotificationsHub> _hubContext;
 
-        public JobsController(IMapper mapper, ILogger<JobsController> logger, IJobService service, IJobTypesService jobTypesService, 
+        public JobsController(ILogger<JobsController> logger, IJobService service, IJobTypesService jobTypesService,
             IJobBenefitsService jobBenefitsService, IUnitOfWork unitOfWork, IHubContext<NotificationsHub, INotificationsHub> hubContext)
         {
-            _mapper = mapper;
             _logger = logger;
             _service = service;
             _jobTypesService = jobTypesService;
@@ -49,7 +46,6 @@ namespace JobWebsiteMVC.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["JobTitleSortParm"] = sortOrder == "job_title_asc" ? "job_title_desc" : "job_title_asc";
-            //ViewData["ClosingDateSortParm"] = sortOrder == "closing_date_asc" ? "closing_date_desc" : "closing_date_asc";
             ViewData["jobTypeId"] = jobTypeId;
 
             if (searchString != null)
@@ -63,7 +59,7 @@ namespace JobWebsiteMVC.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var jobList = _service.GetJobs(searchString, showExpiredJobs, jobTypeId).OrderByDescending(x=>x.CreatedDate);
+            var jobList = _service.GetJobs(searchString, showExpiredJobs, jobTypeId).OrderByDescending(x => x.CreatedDate);
 
             var jobTypes = await _jobTypesService.GetJobTypes();
             ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
@@ -89,11 +85,20 @@ namespace JobWebsiteMVC.Controllers
                 default:
                     break;
             }
-            var collection = jobList.ProjectTo<JobListViewModel>(_mapper.ConfigurationProvider).AsQueryable();
+
+            var jobListViewModels = jobList.Select(job => new JobListViewModel
+            {
+                Id = job.Id,
+                JobTitle = job.JobTitle,
+                Description = job.Description,
+                HolidayEntitlement = job.HolidayEntitlement.GetValueOrDefault(),
+                JobType = job.JobType,
+            }).AsQueryable();
+
             int pageSize = 10;
             ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
-            return View(await PaginatedList<JobListViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<JobListViewModel>.CreateAsync(jobListViewModels, pageNumber ?? 1, pageSize));
         }
 
         // GET: Jobs/Details/5
@@ -112,7 +117,27 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobVM = _mapper.Map<JobDetailsViewModel>(job);
+            var jobVM = new JobDetailsViewModel
+            {
+                Id = job.Id,
+                JobTitle = job.JobTitle,
+                Description = job.Description,
+                MinSalary = job.MinSalary.GetValueOrDefault(),
+                MaxSalary = job.MaxSalary.GetValueOrDefault(),
+                WorkingHoursStart = job.WorkingHoursStart,
+                WorkingHoursEnd = job.WorkingHoursEnd,
+                HoursPerWeek = job.HoursPerWeek.GetValueOrDefault(),
+                HolidayEntitlement = job.HolidayEntitlement.GetValueOrDefault(),
+                ClosingDate = job.ClosingDate,
+                PublishDate = job.PublishDate,
+                CreatedDate = job.CreatedDate,
+                IsActive = job.IsActive,
+                JobType = job.JobType,
+                IsDraft = job.IsDraft,
+                JobBenefits = job.JobBenefits.ToList(),
+                UpdatedDate = job.UpdatedDate,
+            };
+
             return View(jobVM);
         }
 
@@ -130,24 +155,40 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: Jobs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,JobOwner")]
-        public async Task<IActionResult> Create(JobCreateViewModel jobVM) // [Bind("Title,Description,IsDraft,MinSalary,MaxSalary,WorkingHoursStart,WorkingHoursEnd,HoursPerWeek,HolidayEntitlement,ClosingDate,PublishDate,Id,CreatedDate,UpdatedDate,IsActive")]
+        public async Task<IActionResult> Create(JobCreateViewModel jobVM)
         {
             if (ModelState.IsValid)
             {
-                var job = _mapper.Map<Job>(jobVM);
+                var job = new Job
+                {
+                    Id = Guid.NewGuid(),
+                    JobTitle = jobVM.JobTitle,
+                    Description = jobVM.Description,
+                    IsDraft = jobVM.IsDraft,
+                    MinSalary = jobVM.MinSalary,
+                    MaxSalary = jobVM.MaxSalary,
+                    WorkingHoursStart = jobVM.WorkingHoursStart,
+                    WorkingHoursEnd = jobVM.WorkingHoursEnd,
+                    HoursPerWeek = jobVM.HoursPerWeek,
+                    HolidayEntitlement = jobVM.HolidayEntitlement,
+                    ClosingDate = jobVM.ClosingDate,
+                    PublishDate = jobVM.PublishDate,
+                    CreatedDate = DateTime.UtcNow,
+                    IsActive = jobVM.IsActive,
+                    JobTypeId = jobVM.JobTypeId
+                };
+
                 var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 await _service.Post(job, userid);
                 await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, new List<JobBenefit>(), jobVM.JobBenefitsIds);
 
-                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job sucessfully created!");
+                return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job successfully created!");
             }
-            return View(jobVM).WithDanger("Error", "Some errors occured creating the job");
+            return View(jobVM).WithDanger("Error", "Some errors occurred creating the job");
         }
 
         // GET: Jobs/Edit/5
@@ -166,10 +207,28 @@ namespace JobWebsiteMVC.Controllers
                 return NotFound();
             }
 
-            var jobVM = _mapper.Map<JobEditViewModel>(job);
+            var jobVM = new JobEditViewModel
+            {
+                Id = job.Id,
+                JobTitle = job.JobTitle,
+                Description = job.Description,
+                IsDraft = job.IsDraft,
+                MinSalary = job.MinSalary.GetValueOrDefault(),
+                MaxSalary = job.MaxSalary.GetValueOrDefault(),
+                WorkingHoursStart = job.WorkingHoursStart,
+                WorkingHoursEnd = job.WorkingHoursEnd,
+                HoursPerWeek = job.HoursPerWeek.GetValueOrDefault(),
+                HolidayEntitlement = job.HolidayEntitlement.GetValueOrDefault(),
+                ClosingDate = job.ClosingDate,
+                PublishDate = job.PublishDate,
+                CreatedDate = job.CreatedDate,
+                IsActive = job.IsActive,
+                JobTypeId = job.JobTypeId,
+                JobBenefitsIds = job.JobBenefits?.Select(s => s.JobBenefitId).ToList()
+            };
+
             var jobTypes = await _jobTypesService.GetJobTypes();
             var jobBenefits = await _jobBenefitsService.GetJobBenefits();
-            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits?.Select(s => s.JobBenefitId).ToList();
             jobVM.JobTypesList = jobTypes.Select(x => new SelectListItem { Text = x.Description, Value = x.Id.ToString() }).ToList();
 
             ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description }).ToList();
@@ -177,8 +236,6 @@ namespace JobWebsiteMVC.Controllers
         }
 
         // POST: Jobs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,JobOwner")]
@@ -193,16 +250,34 @@ namespace JobWebsiteMVC.Controllers
             {
                 try
                 {
-                    var job = _mapper.Map<Job>(jobVM);
+                    var job = await _service.GetJobById(id);
+                    if (job == null)
+                    {
+                        return NotFound();
+                    }
+
+                    job.JobTitle = jobVM.JobTitle;
+                    job.Description = jobVM.Description;
+                    job.IsDraft = jobVM.IsDraft;
+                    job.MinSalary = jobVM.MinSalary;
+                    job.MaxSalary = jobVM.MaxSalary;
+                    job.WorkingHoursStart = jobVM.WorkingHoursStart;
+                    job.WorkingHoursEnd = jobVM.WorkingHoursEnd;
+                    job.HoursPerWeek = jobVM.HoursPerWeek;
+                    job.HolidayEntitlement = jobVM.HolidayEntitlement;
+                    job.ClosingDate = jobVM.ClosingDate;
+                    job.PublishDate = jobVM.PublishDate;
+                    job.IsActive = jobVM.IsActive;
+                    job.JobTypeId = jobVM.JobTypeId;
+
                     var currentJobBenefits = await _jobBenefitsService.GetJobBenefitsForJobId(job.Id);
-                    // Update JobBenefits:
                     await _jobBenefitsService.CreateOrUpdateJobBenefitsForJob(job.Id, currentJobBenefits, jobVM.JobBenefitsIds);
 
                     await _service.Put(job);
 
                     await _hubContext.Clients.All.SendMessage(User.FindFirstValue(ClaimTypes.NameIdentifier).ToString(), "This is a Test");
 
-                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job Updated Sucessfully!");
+                    return RedirectToAction(nameof(Index)).WithSuccess("Success", "Job Updated Successfully!");
                 }
                 catch (Exception ex)
                 {
@@ -212,12 +287,11 @@ namespace JobWebsiteMVC.Controllers
 
             var jobTypes = await _jobTypesService.GetJobTypes();
             var jobBenefits = await _jobBenefitsService.GetJobBenefits();
-            jobVM.JobBenefitsIds = jobVM.Job_JobBenefits?.Select(s => s.JobBenefitId).ToList();
             jobVM.JobTypesList = jobTypes.Select(x => new SelectListItem { Text = x.Description, Value = x.Id.ToString() }).ToList();
 
             ViewBag.JobBenefits = jobBenefits.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Description }).ToList();
 
-            return View(jobVM).WithDanger("Error", "Some Errors Occured");
+            return View(jobVM).WithDanger("Error", "Some Errors Occurred");
         }
 
         // GET: Jobs/Delete/5
@@ -230,11 +304,16 @@ namespace JobWebsiteMVC.Controllers
             }
 
             var job = await _service.GetJobById(id.Value);
-            var jobToDelete = _mapper.Map<JobDeleteViewModel>(job);
             if (job == null)
             {
                 return NotFound();
             }
+
+            var jobToDelete = new JobDeleteViewModel
+            {
+                Id = job.Id,
+                Title = job.JobTitle
+            };
 
             return View(jobToDelete);
         }
@@ -328,15 +407,24 @@ namespace JobWebsiteMVC.Controllers
                     break;
             }
 
-            var collection = jobList.ProjectTo<JobDetailsViewModel>(_mapper.ConfigurationProvider);
+            var jobDetailsViewModels = jobList.Select(job => new JobDetailsViewModel
+            {
+                Id = job.Id,
+                JobTitle = job.JobTitle,
+                Description = job.Description,
+                MinSalary = job.MinSalary.GetValueOrDefault(),
+                MaxSalary = job.MaxSalary.GetValueOrDefault(),
+                ClosingDate = job.ClosingDate,
+                PublishDate = job.PublishDate,
+                CreatedDate = job.CreatedDate,
+                IsActive = job.IsActive,
+                JobType = job.JobType
+            }).AsQueryable();
 
             int pageSize = 10;
             ViewData["totalPages"] = (jobList.Count() / pageSize) + 1;
 
-            return View("MyJobs", await PaginatedList<JobDetailsViewModel>.CreateAsync(collection, pageNumber ?? 1, pageSize));
-
-            //var jobs = _mapper.Map<List<JobDetailsViewModel>>(result);
-            //return View("MyJobs", jobs);
+            return View("MyJobs", await PaginatedList<JobDetailsViewModel>.CreateAsync(jobDetailsViewModels, pageNumber ?? 1, pageSize));
         }
     }
 }
