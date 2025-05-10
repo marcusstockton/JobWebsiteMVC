@@ -3,12 +3,14 @@
         $('#filterSearch').trigger("click");
     });
 
-    $('#jobsTable tr').on("click", function () {
+    $('#jobsTable tbody tr').on("click", function () {
         var id = $(this).attr('id');
-        console.log("Row Id clicked: " + id);
+        if (id != undefined) {
+            console.log("Row Id clicked: " + id);
 
-        var url = window.location.href = '/Jobs/details/' + id; //relative to domain
-        $(location).attr('href', url);
+            var url = window.location.href = '/Jobs/details/' + id; //relative to domain
+            $(location).attr('href', url);
+        }
     });
 
     // Keep the search value between clicks:

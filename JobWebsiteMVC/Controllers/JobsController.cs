@@ -46,6 +46,7 @@ namespace JobWebsiteMVC.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["JobTitleSortParm"] = sortOrder == "job_title_asc" ? "job_title_desc" : "job_title_asc";
+            ViewData["JobCreatedSortParm"] = sortOrder == "job_created_asc" ? "job_created_desc" : "job_created_asc";
             ViewData["jobTypeId"] = jobTypeId;
 
             if (searchString != null)
@@ -81,7 +82,12 @@ namespace JobWebsiteMVC.Controllers
                 case "closing_date_asc":
                     jobList = jobList.OrderBy(x => x.ClosingDate);
                     break;
-
+                case "job_created_asc":
+                    jobList = jobList.OrderBy(x => x.CreatedDate);
+                    break;
+                case "job_created_desc":
+                    jobList = jobList.OrderByDescending(x => x.CreatedDate);
+                    break;
                 default:
                     break;
             }
@@ -93,6 +99,7 @@ namespace JobWebsiteMVC.Controllers
                 Description = job.Description,
                 HolidayEntitlement = job.HolidayEntitlement.GetValueOrDefault(),
                 JobType = job.JobType,
+                CreatedDate = job.CreatedDate.DateTime
             }).AsQueryable();
 
             int pageSize = 10;

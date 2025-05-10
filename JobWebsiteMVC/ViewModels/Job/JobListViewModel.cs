@@ -30,5 +30,8 @@ namespace JobWebsiteMVC.ViewModels.Job
 
         [Display(Name = "Job Type")]
         public virtual JobType JobType { get; set; }
+
+        [Display(Name = "Created On")]
+        public DateTime CreatedDate { get; set; }
     }
 }

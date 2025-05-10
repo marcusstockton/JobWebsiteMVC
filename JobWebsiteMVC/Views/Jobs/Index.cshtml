@@ -75,6 +75,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.First().JobType)
                 </th>
+                <th>
+                    @* @Html.DisplayNameFor(model => model.First().CreatedDate) *@
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["JobCreatedSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model[0].CreatedDate)</a>
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -96,6 +100,9 @@
 
                     <td>
                         @Html.DisplayFor(modelItem => item.JobType.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
                     </td>
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -158,6 +165,12 @@
     #jobsTable {
         max-height: 100vh;
         overflow: auto;
+    }
+
+    thead a {
+        text-decoration: none;
+        color: inherit;
+        cursor: grab;
     }
 </style>
 
