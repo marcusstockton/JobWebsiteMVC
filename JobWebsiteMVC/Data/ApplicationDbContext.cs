@@ -33,7 +33,10 @@ namespace JobWebsiteMVC.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Job>()
-                .HasKey(x => x.Id);
+                .Property(x => x.IsActive).HasDefaultValue(true);
+
+            builder.Entity<Job>()
+                .Property(x => x.Description).HasMaxLength(10000);
 
             builder.Entity<Job>()
                 .HasOne(x => x.JobType)
@@ -69,28 +72,28 @@ namespace JobWebsiteMVC.Data
             builder.Entity<Benefit>().Property(x => x.Description).IsRequired().HasMaxLength(100);
 
             // Do some conversions to handle how lame SqlLite is..
-            foreach (var entityType in builder.Model.GetEntityTypes())
-            {
-                var dateTimeOffsetProperties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(DateTimeOffset)
-                                                                            || p.PropertyType == typeof(DateTimeOffset?));
-                foreach (var property in dateTimeOffsetProperties)
-                {
-                    builder
-                        .Entity(entityType.Name)
-                        .Property(property.Name)
-                        .HasConversion(new DateTimeOffsetToBinaryConverter()); // The converter!
-                }
-                // convert all decimals to doubles for sqlite
-                var decimalProperties = entityType.ClrType.GetProperties().Where(x => x.PropertyType == typeof(decimal)
-                                                                                || x.PropertyType == typeof(decimal?));
-                foreach (var property in decimalProperties)
-                {
-                    builder
-                        .Entity(entityType.Name)
-                        .Property(property.Name)
-                        .HasConversion<double>();
-                }
-            }
+            // foreach (var entityType in builder.Model.GetEntityTypes())
+            // {
+            //     var dateTimeOffsetProperties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(DateTimeOffset)
+            //                                                                 || p.PropertyType == typeof(DateTimeOffset?));
+            //     foreach (var property in dateTimeOffsetProperties)
+            //     {
+            //         builder
+            //             .Entity(entityType.Name)
+            //             .Property(property.Name)
+            //             .HasConversion(new DateTimeOffsetToBinaryConverter()); // The converter!
+            //     }
+            //     // convert all decimals to doubles for sqlite
+            //     var decimalProperties = entityType.ClrType.GetProperties().Where(x => x.PropertyType == typeof(decimal)
+            //                                                                     || x.PropertyType == typeof(decimal?));
+            //     foreach (var property in decimalProperties)
+            //     {
+            //         builder
+            //             .Entity(entityType.Name)
+            //             .Property(property.Name)
+            //             .HasConversion<double>();
+            //     }
+            // }
         }
 
         public override int SaveChanges()

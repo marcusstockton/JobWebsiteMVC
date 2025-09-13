@@ -1,0 +1,53 @@
+services:
+  jobwebsitemvc:
+    image: ${DOCKER_REGISTRY-}jobwebsitemvc
+    container_name: jobwebsitemvc
+    build:
+      context: .
+      dockerfile: JobWebsiteMVC/Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app/
+    depends_on:
+      postgresdb:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=jobwebsitemvc.db;Username=postgres;Port=5432;Password=postgres;Database=Jobsaight;Pooling=true;
+    networks:
+    - api
+    - db
+  postgresdb:
+    image: postgres
+    container_name: jobwebsitemvc.db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Jobsaight
+      - PGUSER=postgres
+      - PGPORT=5432
+    shm_size: 128mb
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5 
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - db
+
+
+networks:
+  api:
+    driver: bridge
+  db:
+    driver: bridge
+
+
+
+volumes:
+  pgdata: {}

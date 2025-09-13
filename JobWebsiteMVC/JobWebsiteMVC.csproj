@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <UserSecretsId>aspnet-JobWebsiteMVC-5ED1B5A3-D5F4-4631-B3A8-64ED9E7908A8</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="wwwroot\js\notifications.js" />
@@ -12,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Bogus" Version="35.6.3" />
-    <PackageReference Include="Markdig" Version="0.41.3" />
+    <PackageReference Include="Markdig" Version="0.42.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.9" />
@@ -22,7 +24,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />

@@ -6,7 +6,7 @@
             data: {
                 labels: $.map(res, function (i, v) { return i.item1 }),
                 datasets: [{
-                    label: '# of Jobs Created in Last 12 Months',
+                    label: '# of jobs created in the last month',
                     fill: true,
                     tension: 0.1,
                     data: $.map(res, function (i, v) { return i.item2 }),

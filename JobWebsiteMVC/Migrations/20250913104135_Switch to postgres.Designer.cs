@@ -3,87 +3,90 @@ using System;
 using JobWebsiteMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace JobWebsiteMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250913104135_Switch to postgres")]
+    partial class Switchtopostgres
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("JobWebsiteMVC.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
-                    b.Property<long?>("LockoutEnd")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -92,8 +95,7 @@ namespace JobWebsiteMVC.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -102,34 +104,34 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("CreatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("FileType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long?>("UpdatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -146,27 +148,27 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("CreatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long?>("UpdatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -181,58 +183,61 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<long>("ClosingDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("ClosingDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("CreatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10000)
+                        .HasColumnType("character varying(10000)");
 
-                    b.Property<double?>("HolidayEntitlement")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("HolidayEntitlement")
+                        .HasColumnType("numeric");
 
-                    b.Property<double?>("HoursPerWeek")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("HoursPerWeek")
+                        .HasColumnType("numeric");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsDraft")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("JobTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("JobTypeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<double?>("MaxSalary")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("MaxSalary")
+                        .HasColumnType("numeric");
 
-                    b.Property<double?>("MinSalary")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("MinSalary")
+                        .HasColumnType("numeric");
 
-                    b.Property<long>("PublishDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("PublishDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long?>("UpdatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<TimeOnly>("WorkingHoursEnd")
-                        .HasColumnType("time");
+                        .HasColumnType("time without time zone");
 
                     b.Property<TimeOnly>("WorkingHoursStart")
-                        .HasColumnType("time");
+                        .HasColumnType("time without time zone");
 
                     b.HasKey("Id");
 
@@ -249,28 +254,28 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ApplicantId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("CreatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<Guid>("JobId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long?>("UpdatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -288,13 +293,13 @@ namespace JobWebsiteMVC.Migrations
             modelBuilder.Entity("JobWebsiteMVC.Models.Job.JobBenefit", b =>
                 {
                     b.Property<Guid>("JobId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("JobBenefitId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("JobDetailsViewModelId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("JobId", "JobBenefitId");
 
@@ -309,30 +314,30 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("CreatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<Guid?>("JobId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long?>("UpdatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -349,23 +354,22 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Description")
-                        .IsUnique()
-                        .HasFilter("[Description] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("JobTitles");
                 });
@@ -374,27 +378,27 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long>("CreatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UpdatedById")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
-                    b.Property<long?>("UpdatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -409,52 +413,52 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<long>("ClosingDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("ClosingDate")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("CreatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<double>("HolidayEntitlement")
-                        .HasColumnType("float");
+                    b.Property<decimal>("HolidayEntitlement")
+                        .HasColumnType("numeric");
 
-                    b.Property<double>("HoursPerWeek")
-                        .HasColumnType("float");
+                    b.Property<decimal>("HoursPerWeek")
+                        .HasColumnType("numeric");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDraft")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("JobTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("JobTypeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.Property<double>("MaxSalary")
-                        .HasColumnType("float");
+                    b.Property<decimal>("MaxSalary")
+                        .HasColumnType("numeric");
 
-                    b.Property<double>("MinSalary")
-                        .HasColumnType("float");
+                    b.Property<decimal>("MinSalary")
+                        .HasColumnType("numeric");
 
-                    b.Property<long>("PublishDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset>("PublishDate")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<long?>("UpdatedDate")
-                        .HasColumnType("bigint");
+                    b.Property<DateTimeOffset?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<TimeOnly>("WorkingHoursEnd")
-                        .HasColumnType("time");
+                        .HasColumnType("time without time zone");
 
                     b.Property<TimeOnly>("WorkingHoursStart")
-                        .HasColumnType("time");
+                        .HasColumnType("time without time zone");
 
                     b.HasKey("Id");
 
@@ -466,26 +470,25 @@ namespace JobWebsiteMVC.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -494,19 +497,19 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -519,19 +522,19 @@ namespace JobWebsiteMVC.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -543,17 +546,17 @@ namespace JobWebsiteMVC.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -565,10 +568,10 @@ namespace JobWebsiteMVC.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -580,16 +583,16 @@ namespace JobWebsiteMVC.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 

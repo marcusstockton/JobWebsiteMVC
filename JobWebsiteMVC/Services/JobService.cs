@@ -18,7 +18,7 @@ namespace JobWebsiteMVC.Services
 
         public JobService(ApplicationDbContext context, IUnitOfWork unitOfWork, IEmailSender emailService)
         {
-            _context = context; 
+            _context = context;
             _unitOfWork = unitOfWork;
             _emailService = emailService;
         }

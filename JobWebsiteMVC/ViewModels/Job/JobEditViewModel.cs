@@ -13,7 +13,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         [Display(Name = "Job Title"), Required, MinLength(5), StringLength(100)]
         public string JobTitle { get; set; }
 
-        [DataType(DataType.MultilineText), Required, MinLength(20), StringLength(1000)]
+        [DataType(DataType.MultilineText), Required, MinLength(20), StringLength(10000)]
         public string Description { get; set; }
 
         [Display(Name = "Draft?")]

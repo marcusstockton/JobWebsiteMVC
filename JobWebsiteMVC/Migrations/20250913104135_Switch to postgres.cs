@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace JobWebsiteMVC.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCommit : Migration
+    public partial class Switchtopostgres : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,10 +16,10 @@ namespace JobWebsiteMVC.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,24 +30,24 @@ namespace JobWebsiteMVC.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<long>(type: "bigint", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,10 +58,10 @@ namespace JobWebsiteMVC.Migrations
                 name: "JobTitles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -71,11 +72,11 @@ namespace JobWebsiteMVC.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,11 +93,11 @@ namespace JobWebsiteMVC.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,10 +114,10 @@ namespace JobWebsiteMVC.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -133,8 +134,8 @@ namespace JobWebsiteMVC.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -157,10 +158,10 @@ namespace JobWebsiteMVC.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -177,16 +178,16 @@ namespace JobWebsiteMVC.Migrations
                 name: "Attachments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FileType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedDate = table.Column<long>(type: "bigint", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: true),
+                    Location = table.Column<string>(type: "text", nullable: true),
+                    FileType = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    CreatedById = table.Column<string>(type: "text", nullable: true),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -212,13 +213,13 @@ namespace JobWebsiteMVC.Migrations
                 name: "Benefits",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedDate = table.Column<long>(type: "bigint", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    CreatedById = table.Column<string>(type: "text", nullable: true),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -239,13 +240,13 @@ namespace JobWebsiteMVC.Migrations
                 name: "JobTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedDate = table.Column<long>(type: "bigint", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    CreatedById = table.Column<string>(type: "text", nullable: true),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -266,22 +267,22 @@ namespace JobWebsiteMVC.Migrations
                 name: "JobDetailsViewModel",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDraft = table.Column<bool>(type: "bit", nullable: false),
-                    MinSalary = table.Column<double>(type: "float", nullable: false),
-                    MaxSalary = table.Column<double>(type: "float", nullable: false),
-                    HoursPerWeek = table.Column<double>(type: "float", nullable: false),
-                    WorkingHoursStart = table.Column<TimeOnly>(type: "time", nullable: false),
-                    WorkingHoursEnd = table.Column<TimeOnly>(type: "time", nullable: false),
-                    HolidayEntitlement = table.Column<double>(type: "float", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    ClosingDate = table.Column<long>(type: "bigint", nullable: false),
-                    PublishDate = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedDate = table.Column<long>(type: "bigint", nullable: true),
-                    JobTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    JobTitle = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsDraft = table.Column<bool>(type: "boolean", nullable: false),
+                    MinSalary = table.Column<decimal>(type: "numeric", nullable: false),
+                    MaxSalary = table.Column<decimal>(type: "numeric", nullable: false),
+                    HoursPerWeek = table.Column<decimal>(type: "numeric", nullable: false),
+                    WorkingHoursStart = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    WorkingHoursEnd = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    HolidayEntitlement = table.Column<decimal>(type: "numeric", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    ClosingDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    PublishDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    JobTypeId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -297,24 +298,24 @@ namespace JobWebsiteMVC.Migrations
                 name: "Jobs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDraft = table.Column<bool>(type: "bit", nullable: false),
-                    MinSalary = table.Column<double>(type: "float", nullable: true),
-                    MaxSalary = table.Column<double>(type: "float", nullable: true),
-                    HoursPerWeek = table.Column<double>(type: "float", nullable: true),
-                    WorkingHoursStart = table.Column<TimeOnly>(type: "time", nullable: false),
-                    WorkingHoursEnd = table.Column<TimeOnly>(type: "time", nullable: false),
-                    HolidayEntitlement = table.Column<double>(type: "float", nullable: true),
-                    ClosingDate = table.Column<long>(type: "bigint", nullable: false),
-                    PublishDate = table.Column<long>(type: "bigint", nullable: false),
-                    JobTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedDate = table.Column<long>(type: "bigint", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    JobTitle = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "character varying(10000)", maxLength: 10000, nullable: true),
+                    IsDraft = table.Column<bool>(type: "boolean", nullable: false),
+                    MinSalary = table.Column<decimal>(type: "numeric", nullable: true),
+                    MaxSalary = table.Column<decimal>(type: "numeric", nullable: true),
+                    HoursPerWeek = table.Column<decimal>(type: "numeric", nullable: true),
+                    WorkingHoursStart = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    WorkingHoursEnd = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    HolidayEntitlement = table.Column<decimal>(type: "numeric", nullable: true),
+                    ClosingDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    PublishDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    JobTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedById = table.Column<string>(type: "text", nullable: true),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -341,14 +342,14 @@ namespace JobWebsiteMVC.Migrations
                 name: "JobApplications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ApplicantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedDate = table.Column<long>(type: "bigint", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    JobId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ApplicantId = table.Column<string>(type: "text", nullable: true),
+                    CreatedById = table.Column<string>(type: "text", nullable: true),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -380,9 +381,9 @@ namespace JobWebsiteMVC.Migrations
                 name: "JobBenefits",
                 columns: table => new
                 {
-                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    JobBenefitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    JobDetailsViewModelId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    JobId = table.Column<Guid>(type: "uuid", nullable: false),
+                    JobBenefitId = table.Column<Guid>(type: "uuid", nullable: false),
+                    JobDetailsViewModelId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -410,14 +411,14 @@ namespace JobWebsiteMVC.Migrations
                 name: "JobCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedDate = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedDate = table.Column<long>(type: "bigint", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    JobId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<string>(type: "text", nullable: true),
+                    UpdatedById = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -448,8 +449,7 @@ namespace JobWebsiteMVC.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -475,8 +475,7 @@ namespace JobWebsiteMVC.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attachments_CreatedById",
@@ -572,8 +571,7 @@ namespace JobWebsiteMVC.Migrations
                 name: "IX_JobTitles_Description",
                 table: "JobTitles",
                 column: "Description",
-                unique: true,
-                filter: "[Description] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobTypes_CreatedById",

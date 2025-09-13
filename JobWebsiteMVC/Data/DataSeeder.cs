@@ -303,7 +303,7 @@ namespace JobWebsiteMVC.Data
                         ClosingDate = DateTime.Now.AddMonths(10),
                         CreatedDate = DateTime.Now.AddDays(-2),
                         CreatedBy = jobOwner,
-                        Description = "Are you intrigued by the advances in big data? Are you excited by the opportunity to develop a company’s technological backbone from the ground up? If so, we can’t wait to hear from you. Our start-up marketing company needs a CTO (Chief Technology Officer) who can provide technical leadership and training for the rest of the company. The ideal applicant will have an organised and creative mindset that drives him or her to find innovative solutions to common problems. If you have a background in marketing and have the skills necessary to fulfil the obligations of a C-level position, we want to hear from you.",
+                        Description = "Are you intrigued by the advances in big data? Are you excited by the opportunity to develop a companyï¿½s technological backbone from the ground up? If so, we canï¿½t wait to hear from you. Our start-up marketing company needs a CTO (Chief Technology Officer) who can provide technical leadership and training for the rest of the company. The ideal applicant will have an organised and creative mindset that drives him or her to find innovative solutions to common problems. If you have a background in marketing and have the skills necessary to fulfil the obligations of a C-level position, we want to hear from you.",
                         HolidayEntitlement = 62,
                         HoursPerWeek = 20,
                         IsActive = true,

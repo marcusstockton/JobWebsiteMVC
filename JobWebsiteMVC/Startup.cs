@@ -30,7 +30,7 @@ namespace JobWebsiteMVC
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -65,6 +65,7 @@ namespace JobWebsiteMVC
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeeder seeder)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -89,7 +90,7 @@ namespace JobWebsiteMVC
             app.UseAuthentication();
             app.UseAuthorization();
 
-            
+
 
             app.UseEndpoints(endpoints =>
             {

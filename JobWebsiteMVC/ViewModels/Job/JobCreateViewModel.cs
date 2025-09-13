@@ -11,7 +11,7 @@ namespace JobWebsiteMVC.ViewModels.Job
         public string JobTitle { get; set; }
 
         [Required]
-        [StringLength(1000)]
+        [StringLength(10000)]
         public string Description { get; set; }
 
         [Display(Name = "Draft?")]
