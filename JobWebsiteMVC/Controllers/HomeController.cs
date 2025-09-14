@@ -44,31 +44,23 @@ namespace JobWebsiteMVC.Controllers
 
         public IActionResult JobsCreatedInLastMonth()
         {
-            var today = DateTime.Now;
+            var today = DateTime.Today;
             var start = today.AddMonths(-1);
-            var end = today;
-            var monthArray = Enumerable.Range(0, 1 + end.Subtract(start).Days)
-                                        .Select(offset => start.AddDays(offset))
-                                        .ToArray();
 
-            var jobCreatedByDateList = _context.Jobs
-                .GroupBy(y => y.CreatedDate)
-                .Select(x => new { Date = x.Key, Count = x.Count() })
-                .ToList();
+            // Group jobs by date (ignoring time)
+            var jobCounts = _context.Jobs
+                .Where(j => j.CreatedDate.Date >= start && j.CreatedDate.Date <= today)
+                .GroupBy(j => j.CreatedDate.Date)
+                .ToDictionary(g => g.Key, g => g.Count());
 
-            var jobCreatedByDate = new List<Tuple<string, int>>();
-            foreach (var day in monthArray)
+            var result = new List<Tuple<string, int>>();
+            for (var date = start; date <= today; date = date.AddDays(1))
             {
-                foreach (var user in jobCreatedByDateList)
-                {
-                    if (user.Date.Date == day.Date.Date)
-                    {
-                        jobCreatedByDate.Add(new Tuple<string, int>(day.ToString("dd MMM yy"), user.Count));
-                    }
-                }
-                jobCreatedByDate.Add(new Tuple<string, int>(day.ToString("dd MMM yy"), 0));
+                var count = jobCounts.TryGetValue(date, out var c) ? c : 0;
+                result.Add(new Tuple<string, int>(date.ToString("dd MMM yy"), count));
             }
-            return Json(jobCreatedByDate);
+
+            return Json(result);
         }
 
         public IActionResult Privacy()
