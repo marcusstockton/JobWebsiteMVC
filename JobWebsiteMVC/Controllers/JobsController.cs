@@ -1,17 +1,14 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using JobWebsiteMVC.Data;
-using JobWebsiteMVC.Extensions.Alerts;
+﻿using JobWebsiteMVC.Extensions.Alerts;
 using JobWebsiteMVC.Helpers;
 using JobWebsiteMVC.Hubs;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
 using JobWebsiteMVC.ViewModels.Job;
+using Markdig;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -70,15 +67,12 @@ namespace JobWebsiteMVC.Controllers
                 case "job_title_desc":
                     jobList = jobList.OrderByDescending(x => x.JobTitle);
                     break;
-
                 case "job_title_asc":
                     jobList = jobList.OrderBy(x => x.JobTitle);
                     break;
-
                 case "closing_date_desc":
                     jobList = jobList.OrderByDescending(x => x.ClosingDate);
                     break;
-
                 case "closing_date_asc":
                     jobList = jobList.OrderBy(x => x.ClosingDate);
                     break;
@@ -96,7 +90,7 @@ namespace JobWebsiteMVC.Controllers
             {
                 Id = job.Id,
                 JobTitle = job.JobTitle,
-                Description = job.Description,
+                Description = Markdown.ToPlainText(job.Description, null, null),
                 HolidayEntitlement = job.HolidayEntitlement.GetValueOrDefault(),
                 JobType = job.JobType,
                 CreatedDate = job.CreatedDate.DateTime
