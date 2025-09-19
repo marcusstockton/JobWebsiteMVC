@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/JobWebsiteMVC/bin/Debug/JobWebsiteMVC.dll",
+            "program": "${workspaceFolder}/JobWebsiteMVC/bin/Debug/dotnet9.0/JobWebsiteMVC.dll",
             "args": [],
             "cwd": "${workspaceFolder}/JobWebsiteMVC",
             "stopAtEntry": false,
