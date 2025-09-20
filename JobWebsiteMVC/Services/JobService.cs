@@ -1,11 +1,13 @@
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Services
@@ -43,9 +45,6 @@ namespace JobWebsiteMVC.Services
         public IQueryable<Job> GetJobs(string searchString, bool showExpiredJobs, Guid? jobTypeId = null)
         {
             var jobs = _unitOfWork.Jobs.GetAsQueryable(includeProperties: "JobType", filter: x => x.IsActive);
-            //var jobs = _context.Jobs
-            //    .Include(x => x.JobType)
-            //    .Where(x => x.IsActive);
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -73,16 +72,12 @@ namespace JobWebsiteMVC.Services
             job.CreatedBy = user;
             await _unitOfWork.Jobs.Add(job);
             await _unitOfWork.CompleteAsync();
-            //await _context.Jobs.AddAsync(job);
-            //await Save();
         }
 
         public async Task Put(Job job)
         {
             _unitOfWork.Jobs.Update(job);
             await _unitOfWork.CompleteAsync();
-            //_context.Entry(job).State = EntityState.Modified;
-            //await Save();
         }
 
         public async Task<List<JobApplication>> GetJobApplicationsForJob(Guid jobId)
@@ -139,6 +134,56 @@ namespace JobWebsiteMVC.Services
             }
 
             return jobs;
+        }
+
+        public async Task<List<JobDetailsDTO>> JobFullTextSearchWithRank(string searchTerm)
+        {
+            var jobs = _context.Jobs
+                .Where(
+                    b => EF.Functions.ToTsVector("english", b.JobTitle + " " + b.Description)
+                    .Matches(EF.Functions.PhraseToTsQuery("english", searchTerm)))
+                    .Select(b => new
+                    {
+                        b.Id,
+                        b.CreatedDate,
+                        b.Description,
+                        b.HolidayEntitlement,
+                        b.HoursPerWeek,
+                        b.IsActive,
+                        b.IsDraft,
+                        b.JobTitle,
+                        b.MaxSalary,
+                        b.MinSalary,
+                        b.PublishDate,
+                        b.ClosingDate,
+                        b.WorkingHoursEnd,
+                        b.WorkingHoursStart,
+                        b.CreatedBy,
+                        b.UpdatedDate,
+                        b.JobCategories,
+                        b.JobBenefits,
+                        Rank = EF.Functions.ToTsVector("english", b.Description)
+                            .Rank(EF.Functions.PhraseToTsQuery("english", searchTerm))
+                    })
+                    .OrderByDescending(x => x.Rank)
+                    .ToList()
+                    .Select(b => new JobDetailsDTO
+                    {
+                        Id = b.Id,
+                        HolidayEntitlement = b.HolidayEntitlement,
+                        HoursPerWeek = b.HoursPerWeek,
+                        IsDraft = b.IsDraft,
+                        JobTitle = b.JobTitle,
+                        MaxSalary = b.MaxSalary,
+                        MinSalary = b.MinSalary,
+                        PublishDate = b.PublishDate,
+                        ClosingDate = b.ClosingDate,
+                        WorkingHoursEnd = b.WorkingHoursEnd,
+                        Description = b.Description,
+                        JobBenefits = _context.JobBenefits.Include(x => x.Benefit).Where(x => x.JobId == b.Id).ToList(),
+                        WorkingHoursStart = b.WorkingHoursStart,
+                    }).ToList();
+            return await Task.FromResult(jobs);
         }
 
         public async Task Save()
