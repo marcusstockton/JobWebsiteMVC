@@ -59,6 +59,11 @@ namespace JobWebsiteMVC.Controllers
 
             var jobList = _service.GetJobs(searchString, showExpiredJobs, jobTypeId).OrderByDescending(x => x.CreatedDate);
 
+            //if (!string.IsNullOrEmpty(searchString))
+            //{
+            //    jobList = _service.JobFullTextSearchWithRank(searchString);
+            //}
+            
             var jobTypes = await _jobTypesService.GetJobTypes();
             ViewData["JobTypes"] = jobTypes.OrderBy(x => x.Description).Where(x => x.IsActive).ToList();
 

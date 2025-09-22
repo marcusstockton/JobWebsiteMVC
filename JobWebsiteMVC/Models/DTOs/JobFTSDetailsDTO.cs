@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JobWebsiteMVC.Models.Job;
 
-public class JobDetailsDTO
+public class JobFTSDetailsDTO
 {
     public Guid Id { get; set; }
     public string JobTitle { get; set; }
@@ -40,5 +40,7 @@ public class JobDetailsDTO
     public virtual JobType JobType { get; set; }
 
     public virtual ICollection<JobCategory> JobCategories { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
+
 
 }

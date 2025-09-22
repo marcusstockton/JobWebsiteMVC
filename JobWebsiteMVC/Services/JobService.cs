@@ -1,13 +1,11 @@
 using JobWebsiteMVC.Data;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace JobWebsiteMVC.Services
@@ -136,7 +134,7 @@ namespace JobWebsiteMVC.Services
             return jobs;
         }
 
-        public async Task<List<JobDetailsDTO>> JobFullTextSearchWithRank(string searchTerm)
+        public IQueryable<JobFTSDetailsDTO> JobFullTextSearchWithRank(string searchTerm)
         {
             var jobs = _context.Jobs
                 .Where(
@@ -161,16 +159,19 @@ namespace JobWebsiteMVC.Services
                         b.CreatedBy,
                         b.UpdatedDate,
                         b.JobCategories,
+                        b.JobTypeId,
+                        b.JobType,
                         b.JobBenefits,
-                        Rank = EF.Functions.ToTsVector("english", b.Description)
+                        Rank = EF.Functions.ToTsVector("english", b.JobTitle + " " + b.Description)
                             .Rank(EF.Functions.PhraseToTsQuery("english", searchTerm))
                     })
                     .OrderByDescending(x => x.Rank)
-                    .ToList()
-                    .Select(b => new JobDetailsDTO
+                    .AsQueryable()
+                    .Select(b => new JobFTSDetailsDTO
                     {
                         Id = b.Id,
                         HolidayEntitlement = b.HolidayEntitlement,
+                        JobCategories = b.JobCategories,
                         HoursPerWeek = b.HoursPerWeek,
                         IsDraft = b.IsDraft,
                         JobTitle = b.JobTitle,
@@ -182,8 +183,13 @@ namespace JobWebsiteMVC.Services
                         Description = b.Description,
                         JobBenefits = _context.JobBenefits.Include(x => x.Benefit).Where(x => x.JobId == b.Id).ToList(),
                         WorkingHoursStart = b.WorkingHoursStart,
-                    }).ToList();
-            return await Task.FromResult(jobs);
+                        CreatedDate = b.CreatedDate,
+                        JobTypeId = b.JobTypeId,
+                        JobType = b.JobType,
+                        
+                    })
+                    .AsQueryable();
+            return jobs;
         }
 
         public async Task Save()
