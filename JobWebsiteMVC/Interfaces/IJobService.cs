@@ -25,7 +25,7 @@ namespace JobWebsiteMVC.Interfaces
         Task<JobApplication> ApplyForJob(Guid jobId, string userId);
 
         IQueryable<Job> GetMyJobs(string userId, string searchString, bool showExpiredJobs, Guid? jobTypeId);
-        IQueryable<JobFTSDetailsDTO> JobFullTextSearchWithRank(string searchTerm);
+        IQueryable<Job> JobFullTextSearchWithRank(string searchTerm);
 
         Task Save();
     }
