@@ -46,7 +46,8 @@ namespace JobWebsiteMVC.Services
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                jobs = jobs.Where(x => x.JobTitle.ToLower().Contains(searchString.ToLower()) || x.Description.ToLower().Contains(searchString.ToLower()));
+                // jobs = jobs.Where(x => x.JobTitle.ToLower().Contains(searchString.ToLower()) || x.Description.ToLower().Contains(searchString.ToLower()));
+                jobs = JobFullTextSearchWithRank(searchString);
             }
             if (jobTypeId.HasValue)
             {
@@ -134,7 +135,7 @@ namespace JobWebsiteMVC.Services
             return jobs;
         }
 
-        public IQueryable<JobFTSDetailsDTO> JobFullTextSearchWithRank(string searchTerm)
+        public IQueryable<Job> JobFullTextSearchWithRank(string searchTerm)
         {
             var jobs = _context.Jobs
                 .Where(
@@ -167,7 +168,7 @@ namespace JobWebsiteMVC.Services
                     })
                     .OrderByDescending(x => x.Rank)
                     .AsQueryable()
-                    .Select(b => new JobFTSDetailsDTO
+                    .Select(b => new Job
                     {
                         Id = b.Id,
                         HolidayEntitlement = b.HolidayEntitlement,
@@ -186,7 +187,9 @@ namespace JobWebsiteMVC.Services
                         CreatedDate = b.CreatedDate,
                         JobTypeId = b.JobTypeId,
                         JobType = b.JobType,
-                        
+                        CreatedBy = b.CreatedBy,
+                        IsActive = b.IsActive,
+                        UpdatedDate = b.UpdatedDate
                     })
                     .AsQueryable();
             return jobs;
