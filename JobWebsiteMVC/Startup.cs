@@ -38,8 +38,6 @@ namespace JobWebsiteMVC
                     .AddDefaultUI()
                     .AddDefaultTokenProviders();
 
-            services.AddAutoMapper(typeof(Startup));
-
             services.AddControllersWithViews();
             services.AddRazorPages();
 

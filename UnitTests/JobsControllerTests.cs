@@ -1,23 +1,17 @@
-using AutoMapper;
 using JobWebsiteMVC.Controllers;
 using JobWebsiteMVC.Interfaces;
 using JobWebsiteMVC.Models.Job;
-using JobWebsiteMVC.Profiles;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace UnitTests
 {
     [TestClass]
     public class JobsControllerTests
     {
-        private Mapper mapper;
+        //private Mapper mapper;
         private Mock<ILogger<JobsController>> _mockLogger;
         private Mock<IJobService> _mockService;
         private Mock<IJobTypesService> _mockJobTypesService;
@@ -30,10 +24,6 @@ namespace UnitTests
             _mockService = new Mock<IJobService>();
             _mockJobTypesService = new Mock<IJobTypesService>();
             _mockJobBenefitsService = new Mock<IJobBenefitsService>();
-
-            var myProfile = new JobProfile();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
-            mapper = new Mapper(configuration);
 
             _mockJobTypesService.Setup(x => x.GetJobTypes()).ReturnsAsync(new List<JobType> { new JobType { Description = "Job Type 1" } });
         }
