@@ -22,3 +22,13 @@ Claim Types:
 Wire in SignalR to update the admin panel when stuff happens (new users, new jobs etc)
 
 Added markdown (https://github.com/xoofx/markdig) - implement with preview when creating/editing jobs
+
+
+``docker build -t flaskpropertymanager .``\
+``docker run -it -p 5000:5000 flaskpropertymanager``\
+``docker exec -it <container name> bash`` # to load up the docker image to navigate in linux\
+``docker compose build`` # builds all images\
+``docker compose build flask_app`` # Builds specific image\
+``docker compose up -d`` # runs all images in detached mode\
+``docker compose up -d --build``
+``docker compose up -d flask_app`` # runs one particular image in detached mode

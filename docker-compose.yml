@@ -7,17 +7,15 @@ services:
       dockerfile: JobWebsiteMVC/Dockerfile
     ports:
       - 8080:8080
-    volumes:
-      - .:/app/
+      - 8081:8081
     depends_on:
-      postgresdb:
-        condition: service_healthy
+      - postgresdb
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=jobwebsitemvc.db;Username=postgres;Port=5432;Password=postgres;Database=Jobsaight;Pooling=true;
+      - ConnectionStrings__DefaultConnection=Host=postgresdb;Username=postgres;Port=5432;Password=postgres;Database=Jobsaight;Pooling=true;
     networks:
-    - api
-    - db
+      - api
+      - db
 
 
   postgresdb:
@@ -28,13 +26,11 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=Jobsaight
       - PGUSER=postgres
-      - PGPORT=5432
-    shm_size: 128mb
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5 
+      retries: 5
     ports:
       - "5432:5432"
     volumes:
