@@ -25,9 +25,20 @@ namespace JobWebsiteMVC.Helpers
 
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {
-            var count = await source.CountAsync();
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+            // If the source's provider supports EF Core async, use the async methods.
+            // Otherwise fall back to synchronous LINQ so in-memory or mocked IQueryables work in tests.
+            if (source?.Provider is Microsoft.EntityFrameworkCore.Query.IAsyncQueryProvider)
+            {
+                var count = await source.CountAsync();
+                var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                return new PaginatedList<T>(items, count, pageIndex, pageSize);
+            }
+            else
+            {
+                var count = source.Count();
+                var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                return new PaginatedList<T>(items, count, pageIndex, pageSize);
+            }
         }
     }
 }
