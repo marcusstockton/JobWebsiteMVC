@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
     @{
         var year = DateTime.Now.Year;
@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @* Datatables *@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body class="d-flex flex-column h-100">
     <header>
@@ -64,9 +64,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer mt-auto py-3 bg-body-tertiary">
         <div class="container">
-            &copy; @year - JobWebsiteMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <span class="text-body-secondary">&copy; @year - JobWebsiteMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></span>
         </div>
     </footer>
     @* JQuery *@

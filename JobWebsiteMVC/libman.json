@@ -4,19 +4,32 @@
   "libraries": [
     {
       "provider": "unpkg",
-      "library": "@microsoft/signalr@latest",
+      "library": "@microsoft/signalr@9.0.6",
       "destination": "wwwroot/lib/signalr/",
       "files": [
         "dist/browser/signalr.js",
-        "dist/browser/signalr.js.map",
-        "dist/browser/signalr.min.js",
-        "dist/browser/signalr.min.js.map"
+        "dist/browser/signalr.min.js"
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "jquery@3.7.1",
       "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "jquery-validate@1.21.0",
+      "destination": "wwwroot/lib/jquery-validation/",
+      "files": [
+        "jquery.validate.js",
+        "jquery.validate.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "files": [
+        "jquery.validate.unobtrusive.js",
+        "jquery.validate.unobtrusive.min.js"
+      ]
     }
   ]
 }

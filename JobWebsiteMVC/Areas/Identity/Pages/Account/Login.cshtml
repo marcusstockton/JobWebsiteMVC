@@ -2,9 +2,9 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Log In";
 }
-<div class="col-md-4 offset-md-4">
+<div class="col-md-5 offset-md-5">
     <h1>@ViewData["Title"]</h1>
 </div>
 <div class="row">
@@ -22,16 +22,15 @@
                     <input asp-for="Input.Password" class="form-control" value="P@55w0rd1" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label asp-for="Input.RememberMe">
-                            <input asp-for="Input.RememberMe" />
+                <div class="form-group d-flex align-items-center justify-content-between">
+                    <div class="form-check mb-0">
+                        <input asp-for="Input.RememberMe" class="form-check-input" id="Input_RememberMe" />
+                        <label asp-for="Input.RememberMe" class="form-check-label ms-2" for="Input_RememberMe">
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
                         </label>
                     </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
+
+                    <button type="submit" class="btn btn-primary">@ViewData["Title"]</button>
                 </div>
                 <div class="form-group">
                     <p>
@@ -77,7 +76,6 @@
                     <p>@username</p>
                 }
             </fieldset>
-            <p>P@55w0rd1</p>
         </section>
     </div>
 </div>
@@ -97,7 +95,6 @@
     }
 
     body {
-        /*background-image: url('/Images/download.jpeg');*/
         background: url('/Images/london-skyline.jpg') no-repeat center center fixed;
         height: 90%;
         -webkit-background-size: cover;
