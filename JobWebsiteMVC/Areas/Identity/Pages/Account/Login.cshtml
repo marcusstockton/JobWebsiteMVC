@@ -11,7 +11,7 @@
     <div class="col-md-4 offset-md-4" card>
         <section>
             <form id="account" method="post">
-                <div asp-validation-summary="All" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Input.Username"></label>
                     <input asp-for="Input.Username" class="form-control" />
@@ -32,15 +32,15 @@
 
                     <button type="submit" class="btn btn-primary">@ViewData["Title"]</button>
                 </div>
-                <div class="form-group">
+                <div class="btn-group">
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" class="btn btn-outline-info btn-sm" asp-page="./ForgotPassword">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a asp-page="./Register" class="btn btn-outline-primary btn-sm" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                     </p>
                     <p>
-                        <button type="submit" asp-page-handler="SendVerificationEmail" class="btn-link" style="padding:0px;margin:0px;border:0px">Resend email confirmation</button>
+                        <button type="submit" class="btn btn-outline-info btn-sm" asp-page-handler="SendVerificationEmail" class="btn-link" style="padding:0px;margin:0px;border:0px">Resend email confirmation</button>
                     </p>
                 </div>
             </form>
@@ -48,35 +48,41 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row mt-3">
     <div class="col-md-4 offset-md-4">
         @if (Model.JobOwnerUsernames == null)
         {
-            <p> Loading Users....</p>
+            <section>
+                <p> Loading Users....</p>
+            </section>
         }
-        <section>
-            <fieldset>
-                <legend>Job Owners</legend>
-                @foreach (var username in Model.JobOwnerUsernames)
-                {
-                    <p>@username</p>
-                }
-            </fieldset>
-            <fieldset>
-                <legend>Job Seekers</legend>
-                @foreach (var username in Model.JobSeekerUsernames)
-                {
-                    <p>@username</p>
-                }
-            </fieldset>
-            <fieldset>
-                <legend>Admins</legend>
-                @foreach (var username in Model.AdminUsernames)
-                {
-                    <p>@username</p>
-                }
-            </fieldset>
-        </section>
+        else
+        {
+            <section>
+                <fieldset>
+                    <legend>Job Owners</legend>
+                    @foreach (var username in Model.JobOwnerUsernames)
+                    {
+                        <p>@username</p>
+                    }
+                </fieldset>
+                <fieldset>
+                    <legend>Job Seekers</legend>
+                    @foreach (var username in Model.JobSeekerUsernames)
+                    {
+                        <p>@username</p>
+                    }
+                </fieldset>
+                <fieldset>
+                    <legend>Admins</legend>
+                    @foreach (var username in Model.AdminUsernames)
+                    {
+                        <p>@username</p>
+                    }
+                </fieldset>
+            </section>
+        }
+        
     </div>
 </div>
 
