@@ -1,3 +1,5 @@
+version: "2.4"
+
 services:
   jobwebsitemvc:
     image: ${DOCKER_REGISTRY-}jobwebsitemvc
@@ -6,38 +8,61 @@ services:
       context: .
       dockerfile: JobWebsiteMVC/Dockerfile
     ports:
-      - 8080:8080
-      - 8081:8081
+      - "8080:8080"
+      - "8081:8081"
     depends_on:
       - postgresdb
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgresdb;Username=postgres;Port=5432;Password=postgres;Database=Jobsaight;Pooling=true;
+    restart: on-failure
+    mem_reservation: 256m
+    mem_limit: 1g
+    cpus: 0.50
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     networks:
       - api
       - db
 
-
   postgresdb:
-    image: postgres
+    image: postgres:16
     container_name: jobwebsitemvc.db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=Jobsaight
       - PGUSER=postgres
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -q -d Jobsaight -U postgres"]
+      interval: 30s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    mem_reservation: 256m
+    mem_limit: 512m
+    cpus: 0.50
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - db
-
 
 networks:
   api:
@@ -45,7 +70,5 @@ networks:
   db:
     driver: bridge
 
-
-
 volumes:
-  pgdata: {}
+  pgdata:
