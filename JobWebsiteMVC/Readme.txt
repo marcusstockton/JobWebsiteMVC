@@ -22,6 +22,7 @@ Claim Types:
 Wire in SignalR to update the admin panel when stuff happens (new users, new jobs etc)
 
 Added markdown (https://github.com/xoofx/markdig) - implement with preview when creating/editing jobs
+Consider adding in https://github.com/jefago/tiny-markdown-editor for markdown editing
 
 
 ``docker build -t flaskpropertymanager .``\
